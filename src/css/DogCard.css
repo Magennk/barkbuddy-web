@@ -1,0 +1,96 @@
+/* Card Styling */
+.dog-card {
+  border-radius: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  max-width: 300px; /* Ensure consistent width */
+  margin: 10px; /* Reduce spacing */
+}
+
+.dog-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.dog-image {
+  width: 250px; /* Uniform image size */
+  height: 250px;
+  object-fit: cover; /* Crop and scale the image */
+  margin: auto;
+  border-radius: 16px;
+}
+
+.dog-name {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.dog-details {
+  color: #555;
+  margin-top: 8px;
+}
+
+/* Card actions (Add friend and View Profile) */
+.dog-card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.add-friend-icon {
+  transform: scale(0.85); /* Slightly larger icon */
+}
+
+.view-profile-button {
+  border-radius: 20px; /* Rounded button */
+  padding: 8px 16px;
+  font-weight: bold;
+  text-transform: none;
+}
+
+/* Dialog Styling */
+.dialog-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.dialog-content {
+  font-size: 1rem;
+  text-align: center;
+  color: #555;
+}
+
+.dialog-cancel-button {
+  background-color: #d3d3d3 !important; /* Light grey background */
+  color: black !important; /* Black text */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.dialog-cancel-button:hover {
+  background-color: #b0b0b0 !important; /* Darker grey on hover */
+}
+
+.dialog-confirm-button {
+  background-color: #4caf50 !important; /* Green background */
+  color: black !important; /* Black text */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.dialog-confirm-button:hover {
+  background-color: #43a047 !important; /* Darker green on hover */
+}
+
+/* Dog sex icons */
+.male-icon {
+  color: #2148f3; /* Blue for male */
+}
+
+.female-icon {
+  color: #de12e6; /* Pink for female */
+}

@@ -1,0 +1,44 @@
+/* Main wrapper for the page */
+.meet-new-buddies {
+  padding: 20px; /* Add padding around the page */
+  text-align: center; /* Center the title */
+}
+
+/* Styling for the page title */
+.page-title {
+  margin-bottom: 20px; /* Space below the title */
+  font-size: 2rem; /* Larger font for the title */
+  font-weight: bold; /* Make the title bold */
+}
+
+/* Container for the list of dog cards */
+.dog-list {
+  display: flex; /* Use flexbox for layout */
+  flex-wrap: wrap; /* Allow items to wrap onto the next row */
+  justify-content: center; /* Center the cards horizontally */
+  gap: 15px; /* Space between cards */
+  margin: 0 auto; /* Center the container on the page */
+  align-items: flex-start; /* Align cards to the top */
+}
+
+/* Wrapper for each individual card */
+.dog-card-container {
+  flex: 1 1 35%; /* By default, 4 cards per row (25% width each) */
+  max-width: 300px; /* Prevent the cards from becoming too wide */
+  margin: 10px; /* Add spacing between cards */
+  box-sizing: border-box; /* Include padding and borders in size calculation */
+}
+
+/* Media query for medium screens (2 cards per row) */
+@media (max-width: 900px) {
+  .dog-card-container {
+    flex: 1 1 45%; /* Two cards per row (45% width each) */
+  }
+}
+
+/* Media query for small screens (1 card per row) */
+@media (max-width: 600px) {
+  .dog-card-container {
+    flex: 1 1 100%; /* One card per row (full width) */
+  }
+}

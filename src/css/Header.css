@@ -1,0 +1,92 @@
+/* Header Styling */
+.app-bar {
+  flex-direction: column;
+}
+
+.part-a {
+  background-color: #1976d2; /* Modern blue */
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  flex-grow: 1;
+  font-weight: bold;
+  color: #fff;
+}
+
+.icons-container {
+  display: flex;
+  gap: 10px;
+}
+
+.logout-icon:hover {
+  color: red;
+}
+
+.part-b {
+  background-color: #1e88e5; /* Slightly lighter blue */
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation Buttons */
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Center alignment */
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.nav-button {
+  background-color: #fff !important; /* White background */
+  color: #000; /* Black text */
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  text-transform: none;
+  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  border-radius: 8px; /* Rounded edges */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-button:hover {
+  background-color: #e0e0e0; /* Light grey on hover */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px); /* Subtle lift on hover */
+}
+
+.nav-button.active {
+  background-color: #88caf0 !important; /* Highlight active button */
+  color: rgb(0, 0, 0) !important; /* White text for active button */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Dialog Buttons */
+.dialog-container .dialog-no {
+  background-color: #4caf50; /* Green */
+  color: white;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.dialog-no:hover {
+  background-color: #43a047; /* Darker green on hover */
+}
+
+.dialog-yes {
+  background-color: #f44336; /* Red */
+  color: white;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.dialog-yes:hover {
+  background-color: #d32f2f; /* Darker red on hover */
+}
