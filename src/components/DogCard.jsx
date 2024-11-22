@@ -13,20 +13,22 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom"; // Import React Router's navigate function
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt"; // Icon for adding a friend
-import "../css/DogCard.css"; // CSS for card styling
+import "../css/DogCard.css"; // Import CSS for card styling
 
 function DogCard({ dog }) {
   const [openDialog, setOpenDialog] = useState(false); // State for confirmation dialog
+  const navigate = useNavigate(); // React Router's navigation function
 
-  // Function to open the confirmation dialog
+  // Open the confirmation dialog
   const handleRequestClick = () => {
     setOpenDialog(true);
   };
 
-  // Function to handle dialog close
+  // Close the dialog
   const handleDialogClose = (confirm) => {
     if (confirm) {
       console.log(`Friend request sent to ${dog.name}`); // Placeholder for sending request
@@ -34,12 +36,17 @@ function DogCard({ dog }) {
     setOpenDialog(false);
   };
 
+  // Navigate to Dog's Profile Page
+  const handleViewProfile = () => {
+    navigate(`/dog-profile/${dog.id}`);
+  };
+
   return (
     <Card className="dog-card">
       {/* Dog image */}
       <CardMedia
         component="img"
-        image={dog.image} // Dog image path
+        image={dog.image}
         alt={`${dog.name}`}
         className="dog-image"
       />
@@ -76,10 +83,12 @@ function DogCard({ dog }) {
             </IconButton>
           </Tooltip>
 
+          {/* Navigate to Dog Profile */}
           <Button
             variant="contained"
             color="primary"
             className="view-profile-button"
+            onClick={handleViewProfile}
           >
             View Profile
           </Button>

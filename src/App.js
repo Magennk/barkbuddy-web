@@ -3,7 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Im
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
-import MeetNewBuddies from "./pages/MeetNewBuddies"; // Import the new page
+import MeetNewBuddies from "./pages/MeetNewBuddies"; // Import the MeetNewBuddies page
+import DogProfile from "./pages/DogProfile"; // DogProfile page
+import "./css/global.css"; // Import globa  CSS
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         {/* Define basic routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/meet-buddies" element={<MeetNewBuddies />} />{" "}
+        <Route path="/dog-profile/:id" element={<DogProfile />} />{" "}
+        {/* Dog Profile */}
         {/* Add route */}
       </Routes>
       <Footer />
