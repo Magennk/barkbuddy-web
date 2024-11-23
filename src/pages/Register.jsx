@@ -17,6 +17,7 @@ import {
   Alert,
 } from "@mui/material";
 import "../css/Register.css";
+import TermsConditions from "../components/TermsConditions"; // Import the new TermsConditions component
 
 // Steps titles
 const steps = [
@@ -117,8 +118,7 @@ const Register = () => {
       if (!currentStepData.breed) stepErrors.breed = "Breed is required.";
       if (!currentStepData.city) stepErrors.city = "City is required.";
     } else if (activeStep === 3) {
-      if (!formData.termsAccepted)
-        stepErrors.termsAccepted = "You must accept the terms and conditions.";
+      return <TermsConditions />; // Render the TermsConditions component in Step 4
     }
 
     setErrors(stepErrors);
@@ -349,14 +349,14 @@ const Register = () => {
                 <Checkbox
                   checked={formData.termsAccepted}
                   onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
+                    setFormData({
+                      ...formData,
                       termsAccepted: e.target.checked,
-                    }))
+                    })
                   }
                 />
               }
-              label="I accept the terms and conditions."
+              label="I agree to the terms and conditions"
             />
             {errors.termsAccepted && (
               <Typography className="error-text">
@@ -404,6 +404,7 @@ const Register = () => {
                 message: "Registration Complete!",
               })
             }
+            disabled={!formData.termsAccepted} // Disable if terms are not accepted
           >
             Finish
           </Button>

@@ -1,0 +1,30 @@
+.terms-container {
+  margin-top: 20px;
+}
+
+.terms-header {
+  color: #1565c0;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.terms-text {
+  margin-bottom: 15px;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.terms-list {
+  padding-left: 20px;
+  margin-bottom: 15px;
+}
+
+.terms-list li {
+  margin-bottom: 10px;
+}
+
+.terms-footer {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #555;
+}

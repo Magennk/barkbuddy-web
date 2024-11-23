@@ -41,3 +41,23 @@
 button {
   min-width: 100px;
 }
+
+/* Style for asterisk in required field labels */
+.required-field {
+  color: red;
+  font-size: 0.9em;
+  margin-left: 4px;
+}
+
+/* Highlight error fields */
+.Mui-error {
+  border-color: red !important;
+}
+
+/* Validation error text */
+.error-text {
+  color: red;
+  font-size: 0.85em;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
