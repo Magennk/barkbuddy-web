@@ -2,15 +2,15 @@ import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import NotFound from "./components/NotFound";
-import Login from "./pages/Login";
-import ProtectedRoute from "./components/ProtectedRoute"; // Import ProtectedRoute
-import { UserProvider } from "./context/UserContext"; // Import UserProvider
-import Register from "./pages/Register";
-import "./css/global.css";
-import "./css/Spinner.css";
+import NotFound from "./components/NotFound"; // Page Not Found Component
+import Login from "./pages/Login"; // Login Page
+import ProtectedRoute from "./components/ProtectedRoute"; // Route Protection
+import { UserProvider } from "./context/UserContext"; // User Context for Global State
+import Register from "./pages/Register"; // Registration Page
+import "./css/global.css"; // Global Styles
+import "./css/Spinner.css"; // Modern Spinner Styles
 
-// Lazy load components for better performance
+// Lazy load components for performance optimization
 const HomePage = React.lazy(() => import("./pages/HomePage"));
 const MeetNewBuddies = React.lazy(() => import("./pages/MeetNewBuddies"));
 const DogProfile = React.lazy(() => import("./pages/DogProfile"));
@@ -21,14 +21,17 @@ function App() {
     <UserProvider>
       <Router>
         <Routes>
-          {/* Public Route */}
+          {/* Public Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/not-found" element={<NotFound />} />
+
           {/* Protected Routes */}
           <Route
             path="/*"
             element={
               <ProtectedRoute>
+                {/* Components available only to authenticated users */}
                 <Header />
                 <Suspense
                   fallback={

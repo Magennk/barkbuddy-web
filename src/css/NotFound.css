@@ -1,35 +1,37 @@
-.notfound-container {
+.not-found-container {
+  text-align: center;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background */
+  height: 100vh; /* Full viewport height */
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-color: #f8f9fa;
-  text-align: center;
+  align-items: center;
 }
 
-.notfound-title {
-  font-size: 3rem;
-  color: #dc3545; /* Bootstrap Danger Red */
-  margin-bottom: 1rem;
+.not-found-container h1 {
+  font-size: 5rem;
+  color: #3f51b5; /* Primary color */
 }
 
-.notfound-message {
+.not-found-container p {
   font-size: 1.5rem;
-  color: #6c757d; /* Bootstrap Secondary Gray */
-  margin-bottom: 2rem;
+  color: #666;
+  margin-bottom: 20px;
 }
 
-.notfound-button {
+.back-button {
   padding: 10px 20px;
   font-size: 1rem;
+  background-color: #3f51b5; /* Primary color */
   color: #fff;
-  background-color: #007bff; /* Bootstrap Primary Blue */
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.notfound-button:hover {
-  background-color: #0056b3; /* Darker Blue on Hover */
+.back-button:hover {
+  background-color: #283593; /* Darker primary */
 }
