@@ -21,6 +21,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import GroupIcon from "@mui/icons-material/Group";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 import "../css/Header.css";
 
 function Header() {
@@ -29,6 +31,7 @@ function Header() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const location = useLocation();
+  const { user, setUser } = useContext(UserContext); // Access UserContext
 
   // Handle menu click
   const handleMenuClick = (event) => {
@@ -47,6 +50,7 @@ function Header() {
 
   const handleLogoutDialogClose = (confirm) => {
     if (confirm) {
+      setUser(null); // Clear user context (simulate logout)
       console.log("User logged out"); // Replace with actual logout logic
     }
     setLogoutDialogOpen(false);
@@ -60,7 +64,7 @@ function Header() {
       {/* Header Part A */}
       <Toolbar className="part-a">
         <Typography variant="h6" className="logo">
-          BarkBuddy
+          BarkBuddy {user && <p>Welcome, {user.name}!</p>}
         </Typography>
         <Box className="icons-container">
           <Tooltip title="My Profile">
