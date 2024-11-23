@@ -1,46 +1,51 @@
+/* General Styling */
 .my-profile {
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  background-color: #f9f9f9;
 }
 
-.page-title {
+.profile-title {
   text-align: center;
-  margin-bottom: 30px;
   font-weight: bold;
+  color: #444;
+  margin-bottom: 20px;
 }
 
 .profile-container {
   display: flex;
-  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .profile-card {
-  width: 100%;
-  max-width: 400px;
-  padding: 16px;
+  flex: 1;
+  max-width: 48%;
+  background-color: #fff;
+  border: 1px solid #ddd;
   border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .profile-image {
-  width: 100%;
-  height: auto;
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
   border-radius: 8px;
+  margin: 0 auto 16px;
 }
 
-.input-field {
-  width: 100%;
-  margin: 10px 0;
-}
-
-.actions-container {
+.edit-buttons {
   display: flex;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.error-container {
-  text-align: center;
-  padding: 20px;
-  color: red;
+  gap: 10px;
+  justify-content: flex-end;
 }
