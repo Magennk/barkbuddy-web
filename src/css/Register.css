@@ -1,39 +1,19 @@
-/* General Styling for Register Page */
 .register-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f5f5f5; /* Light gray background */
+  max-width: 600px;
+  margin: auto;
   padding: 20px;
+}
+
+.register-title {
   text-align: center;
-}
-
-.register-header {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #4caf50; /* BarkBuddy green */
   margin-bottom: 20px;
-  text-transform: uppercase;
+  font-weight: bold;
 }
 
-.register-container p {
-  font-size: 1rem;
-  color: #666;
+.stepper {
   margin-bottom: 20px;
 }
 
-.register-back {
-  background-color: #4caf50;
-  color: #fff;
-  padding: 10px 20px;
-  text-transform: uppercase;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.register-back:hover {
-  background-color: #43a047;
-  text-decoration: none;
+.step-content {
+  margin-top: 20px;
 }
