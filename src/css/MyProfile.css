@@ -8,7 +8,6 @@
 
 .profile-title {
   text-align: center;
-  font-weight: bold;
   color: #444;
   margin-bottom: 20px;
 }
@@ -48,4 +47,21 @@
   display: flex;
   gap: 10px;
   justify-content: flex-end;
+}
+
+/* Icons */
+.icon {
+  vertical-align: middle;
+}
+.icon.male {
+  color: #2196f3;
+}
+.icon.female {
+  color: #e91e63;
+}
+.icon.positive {
+  color: green;
+}
+.icon.negative {
+  color: lightcoral;
 }

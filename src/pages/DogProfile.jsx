@@ -6,9 +6,9 @@ import {
   CardContent,
   Box,
   Button,
-  Rating,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
+import FlashOnIcon from "@mui/icons-material/FlashOn";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
@@ -47,7 +47,6 @@ function DogProfile() {
       <Typography variant="h3" className="dog-profile-title">
         {dog.name}'s Profile
       </Typography>
-
       <div className="profile-container">
         {/* Left Section: Dog Info */}
         <Card className="profile-card">
@@ -82,14 +81,6 @@ function DogProfile() {
               <span className="label">Breed:</span> {dog.breed}
             </Typography>
             <Typography>
-              <span className="label">Good with kids:</span>{" "}
-              {dog.isgoodwithkids ? (
-                <SentimentSatisfiedAltIcon className="icon positive" />
-              ) : (
-                <SentimentVeryDissatisfiedIcon className="icon negative" />
-              )}
-            </Typography>
-            <Typography>
               <span className="label">Vaccinated:</span>{" "}
               {dog.isvaccinated ? (
                 <SentimentSatisfiedAltIcon className="icon positive" />
@@ -98,15 +89,36 @@ function DogProfile() {
               )}
             </Typography>
             <Typography>
-              <span className="label">Energy Level:</span>
-              <Rating
-                value={dog.energylevel}
-                readOnly
-                max={5}
-                className="energy-rating"
-                icon={<span className="energy-icon">⚡</span>}
-                emptyIcon={<span className="energy-icon-empty">⚡</span>}
-              />
+              <span className="label">Good with kids:</span>{" "}
+              {dog.isgoodwithkids ? (
+                <SentimentSatisfiedAltIcon className="icon positive" />
+              ) : (
+                <SentimentVeryDissatisfiedIcon className="icon negative" />
+              )}
+            </Typography>
+            <Typography>
+              <span className="label">Good with animals:</span>{" "}
+              {dog.isgoodwithanimals ? (
+                <SentimentSatisfiedAltIcon className="icon positive" />
+              ) : (
+                <SentimentVeryDissatisfiedIcon className="icon negative" />
+              )}
+            </Typography>
+            <Typography>
+              <span className="label">Dangerous dog breed:</span>{" "}
+              {dog.isinrestrictedbreedscategory ? (
+                <SentimentSatisfiedAltIcon className="icon positive" />
+              ) : (
+                <SentimentVeryDissatisfiedIcon className="icon negative" />
+              )}
+            </Typography>
+            <Typography>
+              <span className="label">Energy Level:</span>{" "}
+              {Array(dog.energylevel)
+                .fill(null)
+                .map((_, i) => (
+                  <FlashOnIcon key={i} style={{ color: "gold" }} />
+                ))}
             </Typography>
             <Typography className="description">
               <span className="label">A bit more about me:</span>{" "}

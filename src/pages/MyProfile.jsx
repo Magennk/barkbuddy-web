@@ -64,23 +64,13 @@ const MyProfile = () => {
     setEditedOwnerData({ ...editedOwnerData, [name]: value });
   };
 
-  const handleSaveDog = () => {
-    alert("Are you sure you want to save changes?");
-    setIsEditingDog(false);
-    setDogData(editedDogData);
-  };
-
+  // Handle cancel of dog edit
   const handleCancelDog = () => {
     setEditedDogData(dogData);
     setIsEditingDog(false);
   };
 
-  const handleSaveOwner = () => {
-    alert("Are you sure you want to save changes?");
-    setIsEditingOwner(false);
-    setDogData({ ...dogData, owner: editedOwnerData });
-  };
-
+  // Handle cancel of owenr edit
   const handleCancelOwner = () => {
     setEditedOwnerData(dogData.owner);
     setIsEditingOwner(false);
@@ -108,9 +98,9 @@ const MyProfile = () => {
 
   const renderSmileOrSadIcon = (condition) =>
     condition ? (
-      <SentimentSatisfiedAltIcon style={{ color: "green" }} />
+      <SentimentSatisfiedAltIcon className="icon positive" />
     ) : (
-      <SentimentVeryDissatisfiedIcon style={{ color: "red" }} />
+      <SentimentVeryDissatisfiedIcon className="icon negative" />
     );
 
   const renderEditableSmiley = (field) => (
@@ -159,6 +149,12 @@ const MyProfile = () => {
         {/* Dog Information Card */}
         <Card className="profile-card">
           <CardContent>
+            <CardMedia
+              component="img"
+              image={dogData.image}
+              alt={dogData.name}
+              className="profile-image"
+            />
             <Box className="card-header">
               <Typography variant="h5">Dog Information</Typography>
               <Tooltip title="Edit Dog Information">
@@ -167,12 +163,6 @@ const MyProfile = () => {
                 </IconButton>
               </Tooltip>
             </Box>
-            <CardMedia
-              component="img"
-              image={dogData.image}
-              alt={dogData.name}
-              className="profile-image"
-            />
             {isEditingDog ? (
               <>
                 <TextField
@@ -200,8 +190,8 @@ const MyProfile = () => {
                   margin="normal"
                 />
                 <TextField
-                  label="Description"
-                  name="description"
+                  label="A bit more about me"
+                  name="A bit more about me"
                   value={editedDogData.description}
                   onChange={handleDogInputChange}
                   multiline
@@ -250,7 +240,12 @@ const MyProfile = () => {
                   <span className="label">Age:</span> {dogData.age}
                 </Typography>
                 <Typography>
-                  <span className="label">Sex:</span> {dogData.sex}
+                  <span className="label">Sex:</span>{" "}
+                  {dogData.sex === "male" ? (
+                    <MaleIcon className="icon male" />
+                  ) : (
+                    <FemaleIcon className="icon female" />
+                  )}
                 </Typography>
                 <Typography>
                   <span className="label">Region:</span> {dogData.region}
@@ -280,7 +275,7 @@ const MyProfile = () => {
                     ))}
                 </Typography>
                 <Typography>
-                  <span className="label">Description:</span>{" "}
+                  <span className="label">A bit more about me:</span>{" "}
                   {dogData.description}
                 </Typography>
               </>
@@ -291,6 +286,11 @@ const MyProfile = () => {
         {/* Owner Information Card */}
         <Card className="profile-card">
           <CardContent>
+            <CardMedia
+              component="img"
+              image={dogData.owner.image}
+              className="profile-image"
+            />
             <Box className="card-header">
               <Typography variant="h5">Owner Information</Typography>
               <Tooltip title="Edit Owner Information">
@@ -299,11 +299,6 @@ const MyProfile = () => {
                 </IconButton>
               </Tooltip>
             </Box>
-            <CardMedia
-              component="img"
-              image={dogData.owner.image}
-              className="profile-image"
-            />
             {isEditingOwner ? (
               <>
                 <TextField
@@ -356,10 +351,7 @@ const MyProfile = () => {
                   {dogData.owner.firstname} {dogData.owner.lastname}
                 </Typography>
                 <Typography>
-                  <span className="label">Email:</span> {dogData.owner.email}
-                </Typography>
-                <Typography>
-                  <span className="label">City:</span> {dogData.owner.city}
+                  <span className="label"> Age:</span> {dogData.owner.age}
                 </Typography>
                 <Typography>
                   <span className="label">Gender:</span>{" "}
@@ -368,6 +360,12 @@ const MyProfile = () => {
                   ) : (
                     <FemaleIcon className="icon female" />
                   )}
+                </Typography>
+                <Typography>
+                  <span className="label">City:</span> {dogData.owner.city}
+                </Typography>
+                <Typography>
+                  <span className="label">Email:</span> {dogData.owner.email}
                 </Typography>
               </>
             )}
