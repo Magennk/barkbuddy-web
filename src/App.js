@@ -7,6 +7,7 @@ import Login from "./pages/Login"; // Login Page
 import ProtectedRoute from "./components/ProtectedRoute"; // Route Protection
 import { UserProvider } from "./context/UserContext"; // User Context for Global State
 import Register from "./pages/Register"; // Registration Page
+import MyBuddies from "./pages/MyBuddies"; // Registration Page
 import "./css/global.css"; // Global Styles
 import "./css/Spinner.css"; // Modern Spinner Styles
 
@@ -45,6 +46,7 @@ function App() {
                     <Route path="/meet-buddies" element={<MeetNewBuddies />} />
                     <Route path="/dog-profile/:id" element={<DogProfile />} />
                     <Route path="/my-profile" element={<MyProfile />} />
+                    <Route path="/my-buddies" element={<MyBuddies />} />
                   </Routes>
                 </Suspense>
                 <Footer />

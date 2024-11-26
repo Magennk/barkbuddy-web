@@ -1,54 +1,75 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Button, Box } from "@mui/material";
-import "../css/MyBuddies.css"; // External CSS for styling
+import { useNavigate } from "react-router-dom";
+import { Box, Typography, Button, Grid, CardMedia, Paper } from "@mui/material";
+import "../css/MyBuddies.css"; // Import CSS
 
 const MyBuddies = () => {
-  const [buddies, setBuddies] = useState([]); // State to hold the list of buddies
+  const [dogs, setDogs] = useState([]); // State to store the list of dogs
+  const navigate = useNavigate(); // For navigation to profile page
 
+  // Fetch the list of dogs from the JSON file
   useEffect(() => {
-    // Simulate fetching buddy data (replace this with actual backend call)
-    const mockBuddies = [
-      { id: 1, name: "Cooper", city: "Tel Aviv", image: "/images/dog1.jpeg" },
-      { id: 2, name: "Max", city: "Ramat Gan", image: "/images/dog2.jpeg" },
-      { id: 3, name: "Leo", city: "Kfar Saba", image: "/images/dog3.jpeg" },
-    ];
-    setBuddies(mockBuddies);
+    fetch("/data/dogs.json") // Adjusted the path for your JSON
+      .then((res) => res.json())
+      .then((data) => setDogs(data)) // Store the fetched data
+      .catch((err) => console.error("Error fetching dogs:", err));
   }, []);
 
+  // Navigate to Dog Profile page
+  const handleViewProfile = (dogId) => {
+    if (dogId) {
+      navigate(`/dog-profile/${dogId}`); // Navigate to the profile using dog ID
+    } else {
+      console.error("Dog ID is undefined.");
+    }
+  };
+
   return (
-    <div className="my-buddies-container">
-      {/* Page title */}
+    <Box className="my-buddies-container">
+      {/* Page Title */}
       <Typography variant="h4" className="page-title">
         Here are your buddy's buddies
       </Typography>
 
-      {/* Buddy list container */}
-      <div className="buddies-list">
-        {buddies.map((buddy) => (
-          <div className="buddy-card" key={buddy.id}>
-            {/* Buddy's image */}
-            <img src={buddy.image} alt={buddy.name} className="buddy-image" />
-            {/* Buddy's name and city */}
-            <div className="buddy-details">
-              <Typography variant="h6" className="buddy-name">
-                {buddy.name}
-              </Typography>
-              <Typography variant="body2" className="buddy-city">
-                {buddy.city}
-              </Typography>
-            </div>
-            {/* View Profile button */}
-            <Button
-              variant="contained"
-              color="primary"
-              className="view-profile-button"
-            >
-              View Profile
-            </Button>
-          </div>
+      {/* List of Dogs */}
+      <Box className="dog-list">
+        {dogs.map((dog) => (
+          <Paper key={dog.id} className="dog-item" elevation={3}>
+            <Grid container alignItems="center" spacing={2}>
+              {/* Dog Image */}
+              <Grid item xs={3}>
+                <CardMedia
+                  component="img"
+                  image={dog.image || "/data/images/default-dog.jpg"} // Fallback to default image
+                  alt={dog.name}
+                  className="dog-image"
+                />
+              </Grid>
+              {/* Dog Details */}
+              <Grid item xs={6}>
+                <Typography variant="h6" className="dog-name">
+                  {dog.name}
+                </Typography>
+                <Typography variant="body2" className="dog-city">
+                  {dog.region || "Unknown City"}
+                </Typography>
+              </Grid>
+              {/* View Profile Button */}
+              <Grid item xs={3}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className="view-profile-btn"
+                  onClick={() => handleViewProfile(dog.id)} // Pass the correct ID
+                >
+                  View Profile
+                </Button>
+              </Grid>
+            </Grid>
+          </Paper>
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
