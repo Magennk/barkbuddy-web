@@ -24,8 +24,8 @@ function MeetNewBuddies() {
       {/* Container for all dog cards */}
       <div className="dog-list">
         {/* Map through the list of dogs and render a DogCard for each one */}
-        {dogs.map((dog) => (
-          <div className="dog-card-container" key={dog.dogid}>
+        {dogs.map((dog, index) => (
+          <div className="dog-card-container" key={dog.dogid || index}>
             <DogCard dog={dog} />
           </div>
         ))}
