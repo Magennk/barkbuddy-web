@@ -15,6 +15,7 @@ import {
   Checkbox,
   FormControlLabel,
   Alert,
+  FormHelperText,
 } from "@mui/material";
 import "../css/Register.css";
 import TermsConditions from "../components/TermsConditions"; // Import the new TermsConditions component
@@ -72,7 +73,7 @@ const Register = () => {
   // Dog breeds state
   const [breeds, setBreeds] = useState([]);
 
-  // Fetch dog breeds for Step 3
+  // Fetch dog breeds for Step 3 using a rest api
   useEffect(() => {
     fetch("https://dog.ceo/api/breeds/list/all")
       .then((res) => res.json())
@@ -100,25 +101,51 @@ const Register = () => {
         : formData.termsAccepted;
 
     // Step-wise validation
+    // step 0 - user and password
     if (activeStep === 0) {
+      // verify that email will contain a @
       if (!currentStepData.email.includes("@"))
         stepErrors.email = "Please enter a valid email address.";
+      // verify that password is at least 6 letters
       if (currentStepData.password.length < 6)
         stepErrors.password = "Password must be at least 6 characters.";
       if (currentStepData.password !== currentStepData.confirmPassword)
         stepErrors.confirmPassword = "Passwords do not match.";
-    } else if (activeStep === 1) {
-      if (!currentStepData.firstName)
+    }
+    // step 1 - owner information
+    else if (activeStep === 1) {
+      if (!currentStepData.firstName) {
         stepErrors.firstName = "First Name is required.";
-      if (!currentStepData.lastName)
+      }
+      // verify that name is letters only
+      else if (!/^[A-Za-z\s]+$/.test(currentStepData.firstName)) {
+        stepErrors.firstName = "First Name must contain only letters.";
+      }
+      if (!currentStepData.lastName) {
         stepErrors.lastName = "Last Name is required.";
-      if (!currentStepData.city) stepErrors.city = "City is required.";
-    } else if (activeStep === 2) {
+      }
+      // verify that name is letters only
+      else if (!/^[A-Za-z\s]+$/.test(currentStepData.lastName)) {
+        stepErrors.lastName = "Last Name must contain only letters.";
+      }
+      if (!currentStepData.dob) stepErrors.dob = "Date of Birth is required.";
+      if (!currentStepData.gender) stepErrors.gender = "Gender is required.";
+      if (!currentStepData.city) {
+        stepErrors.city = "City is required.";
+      } else if (!/^[A-Za-z\s]+$/.test(currentStepData.city)) {
+        stepErrors.city = "City must contain only letters.";
+      }
+    }
+    // step 2 - dog information
+    else if (activeStep === 2) {
       if (!currentStepData.name) stepErrors.name = "Dog's Name is required.";
+      if (!currentStepData.sex) stepErrors.sex = "Dog's Sex is required.";
       if (!currentStepData.breed) stepErrors.breed = "Breed is required.";
       if (!currentStepData.city) stepErrors.city = "City is required.";
-    } else if (activeStep === 3) {
-      return <TermsConditions />; // Render the TermsConditions component in Step 4
+    }
+    // step 3 - terms
+    else if (activeStep === 3) {
+      return <TermsConditions />;
     }
 
     setErrors(stepErrors);
@@ -248,8 +275,10 @@ const Register = () => {
               fullWidth
               margin="normal"
               InputLabelProps={{ shrink: true }}
+              error={!!errors.dob}
+              helperText={errors.dob}
             />
-            <FormControl fullWidth margin="normal">
+            <FormControl fullWidth margin="normal" error={!!errors.gender}>
               <InputLabel>Gender</InputLabel>
               <Select
                 name="gender"
@@ -259,6 +288,8 @@ const Register = () => {
                 <MenuItem value="male">Male</MenuItem>
                 <MenuItem value="female">Female</MenuItem>
               </Select>
+              <FormHelperText>{errors.gender}</FormHelperText>{" "}
+              {/* Error message */}
             </FormControl>
             <TextField
               label="City"
@@ -294,7 +325,7 @@ const Register = () => {
               error={!!errors.name}
               helperText={errors.name}
             />
-            <FormControl fullWidth margin="normal">
+            <FormControl fullWidth margin="normal" error={!!errors.sex}>
               <InputLabel>Sex</InputLabel>
               <Select
                 name="sex"
@@ -304,6 +335,7 @@ const Register = () => {
                 <MenuItem value="male">Male</MenuItem>
                 <MenuItem value="female">Female</MenuItem>
               </Select>
+              <FormHelperText>{errors.sex}</FormHelperText>{" "}
             </FormControl>
             <TextField
               label="City"
@@ -312,8 +344,10 @@ const Register = () => {
               onChange={(e) => handleChange(e, "dog")}
               fullWidth
               margin="normal"
+              error={!!errors.city}
+              helperText={errors.city}
             />
-            <FormControl fullWidth margin="normal">
+            <FormControl fullWidth margin="normal" error={!!errors.breed}>
               <InputLabel>Breed</InputLabel>
               <Select
                 name="breed"
@@ -326,6 +360,7 @@ const Register = () => {
                   </MenuItem>
                 ))}
               </Select>
+              <FormHelperText>{errors.breed}</FormHelperText>{" "}
             </FormControl>
             <Button variant="contained" component="label" fullWidth>
               Upload Dog Picture
@@ -340,10 +375,7 @@ const Register = () => {
       case 3: // Terms & Conditions
         return (
           <Box className="step-content">
-            <Typography variant="h6">Terms & Conditions</Typography>
-            <Typography variant="body2" className="terms-text">
-              By registering, you agree to the following terms and conditions...
-            </Typography>
+            <TermsConditions />
             <FormControlLabel
               control={
                 <Checkbox

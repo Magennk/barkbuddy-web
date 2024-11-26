@@ -3,7 +3,7 @@
 }
 
 .terms-header {
-  color: #1565c0;
+  color: #000000;
   margin-bottom: 10px;
   text-align: center;
 }
@@ -26,5 +26,6 @@
 .terms-footer {
   font-size: 0.9rem;
   line-height: 1.5;
-  color: #555;
+  color: #063981;
+  text-align: center;
 }
