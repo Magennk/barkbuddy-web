@@ -8,7 +8,8 @@ import ProtectedRoute from "./components/ProtectedRoute"; // Route Protection
 import { UserProvider } from "./context/UserContext"; // User Context for Global State
 import Register from "./pages/Register"; // Registration Page
 import MyBuddies from "./pages/MyBuddies"; // Registration Page
-import MyMeetings from "./pages/MyMeetings"; // My Meetings Page
+import MyMeetings from "./pages/MyMeetings"; // MyMeetings Page
+import MyChat from "./pages/MyChat"; //MyChat Page
 import "./css/global.css"; // Global Styles
 import "./css/Spinner.css"; // Modern Spinner Styles
 
@@ -49,6 +50,7 @@ function App() {
                     <Route path="/my-profile" element={<MyProfile />} />
                     <Route path="/my-buddies" element={<MyBuddies />} />
                     <Route path="/my-meetings" element={<MyMeetings />} />
+                    <Route path="/my-chat" element={<MyChat />} />
                   </Routes>
                 </Suspense>
                 <Footer />
