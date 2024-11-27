@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute"; // Route Protection
 import { UserProvider } from "./context/UserContext"; // User Context for Global State
 import Register from "./pages/Register"; // Registration Page
 import MyBuddies from "./pages/MyBuddies"; // Registration Page
+import MyMeetings from "./pages/MyMeetings"; // My Meetings Page
 import "./css/global.css"; // Global Styles
 import "./css/Spinner.css"; // Modern Spinner Styles
 
@@ -47,13 +48,13 @@ function App() {
                     <Route path="/dog-profile/:id" element={<DogProfile />} />
                     <Route path="/my-profile" element={<MyProfile />} />
                     <Route path="/my-buddies" element={<MyBuddies />} />
+                    <Route path="/my-meetings" element={<MyMeetings />} />
                   </Routes>
                 </Suspense>
                 <Footer />
               </ProtectedRoute>
             }
           />
-
           {/* Fallback Route for Non-Existent Pages */}
           <Route path="*" element={<NotFound />} />
         </Routes>
