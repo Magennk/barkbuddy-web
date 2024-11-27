@@ -8,7 +8,8 @@ function MeetNewBuddies() {
 
   // Fetch data from the mock JSON (or API in the future)
   useEffect(() => {
-    fetch("/data/dogs.json") // Path to mock JSON
+    // fetch("/data/dogs.json") // Path to mock JSON
+    fetch("http://localhost:5000/api/dogs") // Path to mock JSON
       .then((res) => res.json()) // Parse response as JSON
       .then((data) => setDogs(data)) // Store data in state
       .catch((err) => console.error("Error fetching dogs:", err)); // Log any errors
