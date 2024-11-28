@@ -14,11 +14,13 @@ import FemaleIcon from "@mui/icons-material/Female";
 import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 import "../css/DogProfile.css";
+import { useNavigate } from "react-router-dom";
 
 function DogProfile() {
   const { id } = useParams(); // Get dog ID from URL
   const [dog, setDog] = useState(null);
   const [owner, setOwner] = useState(null);
+  const navigate = useNavigate();
 
   // Fetch mock data
   useEffect(() => {
@@ -47,6 +49,7 @@ function DogProfile() {
       <Typography variant="h3" className="dog-profile-title">
         {dog.name}'s Profile
       </Typography>
+      
       <div className="profile-container">
         {/* Left Section: Dog Info */}
         <Card className="profile-card">
@@ -183,13 +186,14 @@ function DogProfile() {
         >
           Add Friend
         </Button>
+       
         <Button
-          variant="contained"
-          color="success"
-          onClick={() => alert("Schedule a meeting function will run")}
-        >
-          Schedule a Meeting
-        </Button>
+        variant="contained"
+        color="success"
+        onClick={() => navigate("/schedule-a-meeting", { state: { buddyName: dog.name } })}
+      >
+        Schedule a Meeting
+      </Button>
       </Box>
     </div>
   );

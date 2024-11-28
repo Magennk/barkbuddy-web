@@ -1,9 +1,10 @@
 import React from "react";
+import { Typography, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 
 function MyChat() {
   return (
     <div>
-      <h1>My Chat</h1>
+      <Typography variant="h4" className="page-title">My Chat</Typography>
     </div>
   );
 }

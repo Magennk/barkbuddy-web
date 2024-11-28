@@ -1,0 +1,37 @@
+/* Main wrapper for the page */
+.Schedule-A-Meeting-title {
+    padding: 20px; /* Add padding around the page */
+    text-align: center; /* Center the title */
+    color: #040407;
+  }
+
+  /* ScheduleAMeeting.css */
+
+/* Style for the meeting form input fields */
+.meeting-field {
+    width: 50%; /* Adjust the width to be 50% */
+    margin: 10px auto; /* Center the fields and add some spacing */
+  }
+  
+  
+  .Schedule-A-Meeting-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .meeting-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+/* Style for the button */
+.meeting-button {
+    width: 50%; /* Adjust the width of the button to match the fields */
+    margin-top: 20px; /* Add spacing above the button */
+    display: block; /* Make the button behave like a block element */
+    margin-left: auto; /* Center the button horizontally */
+    margin-right: auto;
+  }
+  
+ 

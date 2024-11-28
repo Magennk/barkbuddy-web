@@ -10,6 +10,7 @@ import Register from "./pages/Register"; // Registration Page
 import MyBuddies from "./pages/MyBuddies"; // Registration Page
 import MyMeetings from "./pages/MyMeetings"; // MyMeetings Page
 import MyChat from "./pages/MyChat"; //MyChat Page
+import ScheduleAMeeting from "./pages/ScheduleAMeeting"; //Schedule a meeting Page
 import "./css/global.css"; // Global Styles
 import "./css/Spinner.css"; // Modern Spinner Styles
 
@@ -51,6 +52,7 @@ function App() {
                     <Route path="/my-buddies" element={<MyBuddies />} />
                     <Route path="/my-meetings" element={<MyMeetings />} />
                     <Route path="/my-chat" element={<MyChat />} />
+                    <Route path="/schedule-a-meeting" element={<ScheduleAMeeting />} />
                   </Routes>
                 </Suspense>
                 <Footer />
