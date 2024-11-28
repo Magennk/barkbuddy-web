@@ -118,6 +118,7 @@ function Header() {
               "/my-buddies",
               "/my-meetings",
               "/my-chat",
+              "/friend-requests",
             ].map((path, index) => (
               <Button
                 key={index}
@@ -144,6 +145,7 @@ function Header() {
             "/my-buddies",
             "/my-meetings",
             "/my-chat",
+            "/friend-requests",
           ].map((path, index) => (
             <MenuItem
               key={index}
