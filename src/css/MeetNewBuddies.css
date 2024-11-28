@@ -42,3 +42,29 @@
     flex: 1 1 100%; /* One card per row (full width) */
   }
 }
+
+
+/* Spinner container styles */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh; /* Spinner vertically centered */
+}
+
+/* Error message styling */
+.error-message {
+  color: red;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 20px;
+}
+
+/* No dogs available message styling */
+.no-dogs-message {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  color: #555;
+}

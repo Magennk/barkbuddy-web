@@ -1,33 +1,65 @@
-import React, { useEffect, useState } from "react";
-import DogCard from "../components/DogCard"; // Import DogCard component
-import { Typography } from "@mui/material";
-import "../css/MeetNewBuddies.css"; // CSS for the page
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../context/UserContext"; // Importing UserContext for user information
+import "../css/MeetNewBuddies.css"; // Importing existing CSS for styling
+import DogCard from "../components/DogCard"; // Using DogCard component for each dog
+import CircularProgress from "@mui/material/CircularProgress"; // Importing MUI CircularProgress
 
 function MeetNewBuddies() {
-  const [dogs, setDogs] = useState([]); // State to hold list of dogs
+  const { user } = useContext(UserContext); // Getting the logged-in user from context
+  const [dogs, setDogs] = useState([]); // State for dog data
+  const [loading, setLoading] = useState(true); // State to show spinner while loading
+  const [error, setError] = useState(null); // State for handling errors
 
-  // Fetch data from the mock JSON (or API in the future)
   useEffect(() => {
-    // fetch("/data/dogs.json") // Path to mock JSON
-    fetch("http://localhost:5000/api/dogs") // Path to mock JSON
-      .then((res) => res.json()) // Parse response as JSON
-      .then((data) => setDogs(data)) // Store data in state
-      .catch((err) => console.error("Error fetching dogs:", err)); // Log any errors
-  }, []);
+    // Function to fetch data from the backend
+    const fetchNotFriendsDogsAndOwners = async () => {
+      try {
+        setLoading(true); // Show loading spinner
+        const response = await fetch(
+          `http://localhost:5000/api/dogs/not-friends-dogs-and-owners?email=${user.email}`
+        );
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`); // Handle HTTP errors
+        }
+        const data = await response.json();
+        setDogs(data); // Update state with fetched data
+      } catch (err) {
+        setError(err.message); // Set error state if fetch fails
+      } finally {
+        setLoading(false); // Hide spinner
+      }
+    };
+
+    fetchNotFriendsDogsAndOwners(); // Trigger fetch on component mount
+  }, [user.email]); // Re-fetch data if user email changes
+
+  if (loading) {
+    // Render spinner while data is loading
+    return (
+      <div className="spinner-container">
+        <CircularProgress />
+        <p>Loading new buddies...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    // Render error message if an error occurs
+    return <p className="error-message">Error: {error}</p>;
+  }
+
+  if (dogs.length === 0) {
+    // Render a message if no dogs are found
+    return <p className="no-dogs-message">No new buddies available!</p>;
+  }
 
   return (
     <div className="meet-new-buddies">
-      {/* Page title */}
-      <Typography variant="h4" className="page-title">
-        Meet New Buddies
-      </Typography>
-
-      {/* Container for all dog cards */}
+      <h1 className="page-title">Meet New Buddies</h1>
       <div className="dog-list">
-        {/* Map through the list of dogs and render a DogCard for each one */}
         {dogs.map((dog, index) => (
-          <div className="dog-card-container" key={dog.dogid || index}>
-            <DogCard dog={dog} />
+          <div className="dog-card-container" key={dog.id || index}>
+            <DogCard dog={dog} /> {/* Render each dog with DogCard */}
           </div>
         ))}
       </div>
