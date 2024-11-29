@@ -61,3 +61,33 @@ button {
   margin-top: -10px;
   margin-bottom: 10px;
 }
+
+/* General form field consistency */
+.form-field {
+  margin-bottom: 20px;
+}
+
+/* Energy bar customization */
+.energy-bar {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.energy-level-icon {
+  font-size: 30px; /* Adjust to align with design */
+  margin-right: 4px;
+  transition: color 0.3s ease;
+}
+
+.energy-level-icon:hover {
+  color: orange; /* Slight hover effect */
+}
+
+/* Form label consistency */
+.form-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #444; /* Adjust to match the rest of the form */
+  margin-bottom: 4px;
+}

@@ -5,7 +5,6 @@ import {
   Step,
   StepLabel,
   Button,
-  TextField,
   Typography,
   Snackbar,
   Select,
@@ -16,8 +15,11 @@ import {
   FormControlLabel,
   Alert,
   FormHelperText,
+  FormLabel,
 } from "@mui/material";
 import "../css/Register.css";
+import TextField from '@mui/material/TextField';
+import FlashOnIcon from "@mui/icons-material/FlashOn";
 import TermsConditions from "../components/TermsConditions"; // Import the new TermsConditions component
 
 // Steps titles
@@ -53,12 +55,33 @@ const Register = () => {
       goodWithKids: "",
       goodWithAnimals: "",
       restrictedBreed: "",
-      energyLevel: 1,
-      about: "",
+      energyLevel: 3,
+      description: "",
       image: null,
     },
     termsAccepted: false,
   });
+
+  // Energy Level bar
+  const renderEnergyLevel = () => {
+    const levels = Array.from({ length: 5 }, (_, i) => (
+      <FlashOnIcon
+        key={i}
+        style={{
+          color: i < formData.dog.energyLevel ? "gold" : "lightgrey",
+          cursor: "pointer",
+        }}
+        onClick={() =>
+          setFormData((prevData) => ({
+            ...prevData,
+            dog: { ...prevData.dog, energyLevel: i + 1 },
+          }))
+        }
+      />
+    ));
+    return <Box className="energy-bar">{levels}</Box>;
+  };
+
 
   // Validation errors state
   const [errors, setErrors] = useState({});
@@ -362,6 +385,22 @@ const Register = () => {
               </Select>
               <FormHelperText>{errors.breed}</FormHelperText>{" "}
             </FormControl>
+            <FormControl fullWidth margin="normal" error={!!errors.energyLevel}>
+              <FormLabel className="form-label">Energy Level</FormLabel>
+              <Typography>{renderEnergyLevel()}</Typography>
+            </FormControl>
+            <TextField
+              label="Dog Description"
+              name="description"
+              value={formData.dog.description}
+              onChange={(e) => handleChange(e, "dog")}
+              fullWidth
+              multiline
+              rows={4}
+              margin="normal"
+              error={!!errors.description}
+              helperText={errors.description}
+            />
             <Button variant="contained" component="label" fullWidth>
               Upload Dog Picture
               <input
