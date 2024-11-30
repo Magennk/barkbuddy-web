@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,22 +9,21 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "../css/MyMeetings.css"; // CSS for the page
 
-// Mock data for tables with added Location and Subject columns
-const mockData = {
-  upcomingMeetings: [
-    { date: "2024-12-05", time: "10:30", buddyName: "Max", location: "Central Park", subject: "Walk" },
-    { date: "2024-12-10", time: "15:00", buddyName: "Bella", location: "Café A", subject: "Training" },
-    { date: "2024-12-15", time: "09:00", buddyName: "Charlie", location: "Dog Park", subject: "Playdate" },
-  ],
-  pastMeetings: [
-    { date: "2024-11-25", time: "14:00", buddyName: "Luna", location: "Beach", subject: "Walk" },
-    { date: "2024-11-20", time: "11:00", buddyName: "Rocky", location: "Café B", subject: "Training" },
-    { date: "2024-11-15", time: "17:30", buddyName: "Daisy", location: "Park", subject: "Playdate" },
-  ],
-};
-
 function MyMeetings() {
-  const { upcomingMeetings, pastMeetings } = mockData;
+  const [upcomingMeetings, setUpcomingMeetings] = useState([]); // State to store upcoming meetings data
+  const [pastMeetings, setPastMeetings] = useState([]); // State to store past meetings data
+
+  // Fetch data on component load
+  useEffect(() => {
+    fetch("/data/meeting.json") // Path to the mock JSON file (ensure the path is correct)
+      .then((res) => res.json())
+      .then((data) => {
+        // Assuming the JSON contains keys 'upcomingMeetings' and 'pastMeetings'
+        setUpcomingMeetings(data.upcomingMeetings);
+        setPastMeetings(data.pastMeetings);
+      })
+      .catch((err) => console.error("Error fetching meetings:", err)); // Log errors
+  }, []);
 
   return (
     <div className="my-meetings">

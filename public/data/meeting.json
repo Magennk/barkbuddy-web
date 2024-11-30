@@ -1,0 +1,11 @@
+{
+    "upcomingMeetings": [
+      { "date": "2024-12-05", "time": "10:30", "buddyName": "Max", "location": "Central Park", "subject": "Walk" },
+      { "date": "2024-12-10", "time": "15:00", "buddyName": "Bella", "location": "Café A", "subject": "Training" }
+    ],
+    "pastMeetings": [
+      { "date": "2024-11-25", "time": "14:00", "buddyName": "Luna", "location": "Beach", "subject": "Walk" },
+      { "date": "2024-11-20", "time": "11:00", "buddyName": "Rocky", "location": "Café B", "subject": "Training" }
+    ]
+  }
+  
