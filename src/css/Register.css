@@ -91,3 +91,10 @@ button {
   color: #444; /* Adjust to match the rest of the form */
   margin-bottom: 4px;
 }
+
+.required-field {
+  color: rgb(211, 9, 9);
+  font-weight: bold;
+  margin-left: 4px; /* Adds some spacing between the label and asterisk */
+}
+

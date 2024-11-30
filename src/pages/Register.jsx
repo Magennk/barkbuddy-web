@@ -126,9 +126,23 @@ const Register = () => {
     // Step-wise validation
     // step 0 - user and password
     if (activeStep === 0) {
-      // verify that email will contain a @
-      if (!currentStepData.email.includes("@"))
+      // Verify email is required
+      if (!currentStepData.email) {
+        stepErrors.email = "Email is required.";
+      }
+      // Validate email format using regex
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex for a basic email format
+      if (!emailRegex.test(currentStepData.email)) {
         stepErrors.email = "Please enter a valid email address.";
+      }
+      // Verify password is required
+      if (!currentStepData.password) {
+        stepErrors.password = "Password is required.";
+      }
+      // Verify password is required
+      if (!currentStepData.confirmPassword) {
+        stepErrors.confirmPassword = "Confirm Password is required.";
+      }
       // verify that password is at least 6 letters
       if (currentStepData.password.length < 6)
         stepErrors.password = "Password must be at least 6 characters.";
@@ -232,7 +246,11 @@ const Register = () => {
           <Box className="step-content">
             <Typography variant="h6">Account Information</Typography>
             <TextField
-              label="Email"
+             label={
+              <>
+                Email <span className="required-field">*</span>
+              </>
+             }
               name="email"
               value={formData.account.email}
               onChange={(e) => handleChange(e, "account")}
@@ -242,7 +260,11 @@ const Register = () => {
               helperText={errors.email}
             />
             <TextField
-              label="Password"
+              label={
+              <>
+                Password <span className="required-field">*</span>
+              </>
+              }
               name="password"
               type="password"
               value={formData.account.password}
@@ -253,7 +275,11 @@ const Register = () => {
               helperText={errors.password}
             />
             <TextField
-              label="Confirm Password"
+            label={
+              <>
+                Confirm Password <span className="required-field">*</span>
+              </>
+              }
               name="confirmPassword"
               type="password"
               value={formData.account.confirmPassword}
@@ -270,7 +296,11 @@ const Register = () => {
           <Box className="step-content">
             <Typography variant="h6">Owner Information</Typography>
             <TextField
-              label="First Name"
+            label={
+              <>
+                First Name <span className="required-field">*</span>
+              </>
+             }
               name="firstName"
               value={formData.owner.firstName}
               onChange={(e) => handleChange(e, "owner")}
@@ -280,7 +310,11 @@ const Register = () => {
               helperText={errors.firstName}
             />
             <TextField
-              label="Last Name"
+              label={
+                <>
+                  Last Name <span className="required-field">*</span>
+                </>
+                }
               name="lastName"
               value={formData.owner.lastName}
               onChange={(e) => handleChange(e, "owner")}
@@ -290,7 +324,11 @@ const Register = () => {
               helperText={errors.lastName}
             />
             <TextField
-              label="Date of Birth"
+              label={
+                <>
+                  Date Of Birth <span className="required-field">*</span>
+                </>
+                }
               name="dob"
               type="date"
               value={formData.owner.dob}
@@ -302,7 +340,7 @@ const Register = () => {
               helperText={errors.dob}
             />
             <FormControl fullWidth margin="normal" error={!!errors.gender}>
-              <InputLabel>Gender</InputLabel>
+              <InputLabel>Gender <span className="required-field">*</span></InputLabel>
               <Select
                 name="gender"
                 value={formData.owner.gender}
@@ -314,6 +352,23 @@ const Register = () => {
               <FormHelperText>{errors.gender}</FormHelperText>{" "}
               {/* Error message */}
             </FormControl>
+            <FormControl fullWidth margin="normal" error={!!errors.city}>
+              <InputLabel>City <span className="required-field">*</span></InputLabel>
+              <Select
+                name="city"
+                value={formData.owner.city}
+                onChange={(e) => handleChange(e, "owner")}
+              >
+                <MenuItem value="Tel-Aviv">Tel-Aviv</MenuItem>
+                <MenuItem value="Rehovot">Rehovot</MenuItem>
+                <MenuItem value="Herzeliya">Herzeliya</MenuItem>
+                <MenuItem value="Ramat-Gan">Ramat-Gan</MenuItem>
+                <MenuItem value="Jerusalem">Jerusalem</MenuItem>
+                <MenuItem value="Holon">Holon</MenuItem>
+              </Select>
+              <FormHelperText>{errors.city}</FormHelperText>{" "}
+            </FormControl>
+            {/*} Comment by Magen because replace city
             <TextField
               label="City"
               name="city"
@@ -324,6 +379,7 @@ const Register = () => {
               error={!!errors.city}
               helperText={errors.city}
             />
+            */}
             <Button variant="contained" component="label" fullWidth>
               Upload Profile Picture
               <input
@@ -339,7 +395,11 @@ const Register = () => {
           <Box className="step-content">
             <Typography variant="h6">Dog Information</Typography>
             <TextField
-              label="Dog Name"
+              label={
+                <>
+                  Dog Name <span className="required-field">*</span>
+                </>
+                }
               name="name"
               value={formData.dog.name}
               onChange={(e) => handleChange(e, "dog")}
@@ -349,7 +409,7 @@ const Register = () => {
               helperText={errors.name}
             />
             <FormControl fullWidth margin="normal" error={!!errors.sex}>
-              <InputLabel>Sex</InputLabel>
+              <InputLabel>Sex<span className="required-field">*</span></InputLabel>
               <Select
                 name="sex"
                 value={formData.dog.sex}
@@ -360,6 +420,23 @@ const Register = () => {
               </Select>
               <FormHelperText>{errors.sex}</FormHelperText>{" "}
             </FormControl>
+            <FormControl fullWidth margin="normal" error={!!errors.city}>
+              <InputLabel>City<span className="required-field">*</span></InputLabel>
+              <Select
+                name="city"
+                value={formData.dog.city}
+                onChange={(e) => handleChange(e, "dog")}
+              >
+                <MenuItem value="Tel-Aviv">Tel-Aviv</MenuItem>
+                <MenuItem value="Rehovot">Rehovot</MenuItem>
+                <MenuItem value="Herzeliya">Herzeliya</MenuItem>
+                <MenuItem value="Ramat-Gan">Ramat-Gan</MenuItem>
+                <MenuItem value="Jerusalem">Jerusalem</MenuItem>
+                <MenuItem value="Holon">Holon</MenuItem>
+              </Select>
+              <FormHelperText>{errors.city}</FormHelperText>{" "}
+            </FormControl>
+            {/* Comment By Magen because replace city to dropdown
             <TextField
               label="City"
               name="city"
@@ -370,8 +447,9 @@ const Register = () => {
               error={!!errors.city}
               helperText={errors.city}
             />
+            */}
             <FormControl fullWidth margin="normal" error={!!errors.breed}>
-              <InputLabel>Breed</InputLabel>
+              <InputLabel>Breed<span className="required-field">*</span></InputLabel>
               <Select
                 name="breed"
                 value={formData.dog.breed}
@@ -390,7 +468,7 @@ const Register = () => {
               <Typography>{renderEnergyLevel()}</Typography>
             </FormControl>
             <TextField
-              label="Dog Description"
+              label="Dog Description (Fill free to describe your dog)"
               name="description"
               value={formData.dog.description}
               onChange={(e) => handleChange(e, "dog")}
