@@ -16,23 +16,69 @@ import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDiss
 import "../css/DogProfile.css";
 import { useNavigate } from "react-router-dom";
 
+{/*Example for JSON returing from http://localhost:5000/api/dogs/dog/${id}/with-owner
+{
+    "id": 1,
+    "name": "Cooper",
+    "breed": "Golden Retriever",
+    "age": "6",
+    "sex": "Male",
+    "region": "Shfela",
+    "isvaccinated": true,
+    "isgoodwithkids": true,
+    "isgoodwithanimals": true,
+    "isinrestrictedbreedscategory": false,
+    "description": "Friendly and playful dog",
+    "energylevel": "2",
+    "image": "/data/images/1.jpeg",
+    "owner": {
+        "firstname": "Matan",
+        "lastname": "Levi",
+        "email": "matan1@example.com",
+        "gender": "Male",
+        "age": "39",
+        "city": "Tel-Aviv",
+        "image": "http://example.com/profile1"
+    }
+}
+  */}
+
 function DogProfile() {
   const { id } = useParams(); // Get dog ID from URL
   const [dog, setDog] = useState(null);
   const [owner, setOwner] = useState(null);
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
   const navigate = useNavigate();
 
-  // Fetch mock data
   useEffect(() => {
-    fetch(`/data/dogs.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        const selectedDog = data.find((d) => d.id.toString() === id);
-        setDog(selectedDog);
-        setOwner(selectedDog?.owner);
-      })
-      .catch((err) => console.error("Error fetching dog profile:", err));
+    const fetchDogData = async () => {
+      try {
+        setLoading(true); // Start loading
+        const response = await fetch(`http://localhost:5000/api/dogs/dog/${id}/with-owner`); // Fetch dog data with id as variable
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`); // Handle HTTP errors
+        }
+        const data = await response.json(); // Parse response JSON
+        setDog(data); // Set the dog data
+        setOwner(data.owner); // Set the owner data (nested in dog object)
+      } catch (err) {
+        setError(err.message); // Set error state
+      } finally {
+        setLoading(false); // End loading
+      }
+    };
+
+    fetchDogData(); // Fetch data on component mount or when id changes
   }, [id]);
+
+  if (loading) {
+    return <p>Loading dog profile...</p>; // Loading message
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>; // Error message
+  }
 
   if (!dog || !owner) {
     // Show spinner while loading
@@ -42,6 +88,8 @@ function DogProfile() {
       </Box>
     );
   }
+
+
 
   return (
     <div className="dog-profile">

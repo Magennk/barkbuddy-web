@@ -1,0 +1,29 @@
+{
+    "users": [
+      {
+        "id": "owner1",
+        "name": "Alice",
+        "messages": [
+          { "sender": "Alice", "text": "Hi, how's your dog?", "type": "received" },
+          { "sender": "You", "text": "He's doing great, thanks!", "type": "sent" }
+        ]
+      },
+      {
+        "id": "owner2",
+        "name": "Bob",
+        "messages": [
+          { "sender": "Bob", "text": "Are you free for a walk tomorrow?", "type": "received" },
+          { "sender": "You", "text": "Yes, let's go!", "type": "sent" }
+        ]
+      },
+      {
+        "id": "owner3",
+        "name": "Charlie",
+        "messages": [
+          { "sender": "Charlie", "text": "What time is the meetup?", "type": "received" },
+          { "sender": "You", "text": "Let's meet at 3 PM.", "type": "sent" }
+        ]
+      }
+    ]
+  }
+  

@@ -7,6 +7,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button"; // Material-UI Button for actions
 import "../css/MyMeetings.css"; // CSS for the page
 
 function MyMeetings() {
@@ -24,6 +25,28 @@ function MyMeetings() {
       })
       .catch((err) => console.error("Error fetching meetings:", err)); // Log errors
   }, []);
+
+  // Handle cancel meeting action
+  const handleCancelMeeting = (index, meetingId) => {
+    const confirmation = window.confirm("Are you sure you want to cancel this meeting?");
+    if (confirmation) {
+      // Send a request to the backend to cancel the meeting
+      fetch(`/api/meetings/${meetingId}/cancel`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      })
+        .then((response) => {
+          if (response.ok) {
+            const updatedMeetings = [...upcomingMeetings];
+            updatedMeetings.splice(index, 1); // Remove the meeting from the list
+            setUpcomingMeetings(updatedMeetings); // Update state
+          } else {
+            console.error("Failed to cancel the meeting.");
+          }
+        })
+        .catch((err) => console.error("Error during meeting cancellation:", err));
+    }
+  };
 
   return (
     <div className="my-meetings">
@@ -45,6 +68,7 @@ function MyMeetings() {
               <TableCell>Buddy Name</TableCell>
               <TableCell>Location</TableCell>
               <TableCell>Subject</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -55,6 +79,15 @@ function MyMeetings() {
                 <TableCell>{meeting.buddyName}</TableCell>
                 <TableCell>{meeting.location}</TableCell>
                 <TableCell>{meeting.subject}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="error" // Red button
+                    onClick={() => handleCancelMeeting(index, meeting.id)}
+                  >
+                    Cancel Meeting
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -74,6 +107,7 @@ function MyMeetings() {
               <TableCell>Buddy Name</TableCell>
               <TableCell>Location</TableCell>
               <TableCell>Subject</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -84,6 +118,11 @@ function MyMeetings() {
                 <TableCell>{meeting.buddyName}</TableCell>
                 <TableCell>{meeting.location}</TableCell>
                 <TableCell>{meeting.subject}</TableCell>
+                <TableCell>
+                  <Button variant="contained" disabled style={{ backgroundColor: "#9e9e9e", color: "#ffffff" }}>
+                    Meeting Occurred
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -94,3 +133,4 @@ function MyMeetings() {
 }
 
 export default MyMeetings;
+
