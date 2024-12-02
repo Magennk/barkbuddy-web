@@ -45,7 +45,3 @@
   background-color: #b71c1c; /* Darker red for hover effect */
 }
 
-.table-container {
-  max-width: 80%; /* הגבלת רוחב הטבלה ל-80% מרוחב המסך */
-  margin: 0 auto; /* מיקום הטבלה במרכז */
-}
