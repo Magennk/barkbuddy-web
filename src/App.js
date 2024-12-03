@@ -14,6 +14,7 @@ import ScheduleAMeeting from "./pages/ScheduleAMeeting"; //Schedule a meeting Pa
 import FriendRequests from "./pages/FriendRequests"; //My Friend Requests
 import "./css/global.css"; // Global Styles
 import "./css/Spinner.css"; // Modern Spinner Styles
+import About from "./pages/About";
 
 // Lazy load components for performance optimization
 const HomePage = React.lazy(() => import("./pages/HomePage"));
@@ -47,6 +48,7 @@ function App() {
                 >
                   <Routes>
                     <Route path="/" element={<HomePage />} />
+                    <Route path="/about" element={<About />} />
                     <Route path="/meet-buddies" element={<MeetNewBuddies />} />
                     <Route path="/dog-profile/:id" element={<DogProfile />} />
                     <Route path="/my-profile" element={<MyProfile />} />

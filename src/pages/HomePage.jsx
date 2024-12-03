@@ -2,12 +2,12 @@ import React from "react";
 //import Header from "../components/Header";
 import { Container, Typography, Box, Button } from "@mui/material";
 import "../css/HomePage.css";
-
+import backgroundImage from '../assets/background.png'
 function HomePage() {
   return (
     <div>
       <Container className="homepage-container">
-        <Box className="welcome-section">
+        <Box className="welcome-section" >
           <Typography variant="h2" className="welcome-text">
             Welcome to BarkBuddy!
           </Typography>
@@ -17,7 +17,10 @@ function HomePage() {
           <Button variant="contained" color="primary" className="cta-button">
             Get Started
           </Button>
+
         </Box>
+        <img  src={backgroundImage}/>
+
       </Container>
     </div>
   );

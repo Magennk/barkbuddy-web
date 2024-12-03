@@ -45,3 +45,8 @@
   background-color: #b71c1c; /* Darker red for hover effect */
 }
 
+
+.delete {
+  color:#b71c1c;
+  cursor: pointer;
+}

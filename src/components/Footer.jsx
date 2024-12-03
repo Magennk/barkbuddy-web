@@ -4,11 +4,12 @@ import {
   Container,
   Grid,
   Typography,
-  Link,
   IconButton,
   Fab,
   Tooltip,
 } from "@mui/material";
+
+import { Link } from "react-router-dom";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -27,13 +28,13 @@ function Footer() {
           {/* Pages Section */}
           <Grid item xs={12} sm={4}>
             <Typography className="footer-header">Pages</Typography>
-            <Link href="/" className="footer-link">
+            <Link to="/" className="footer-link">
               Home
             </Link>
-            <Link href="mailto:your-email@example.com" className="footer-link">
+            <Link to="mailto:your-email@example.com" className="footer-link">
               Contact
             </Link>
-            <Link href="/about" className="footer-link">
+            <Link to="/about" className="footer-link">
               About
             </Link>
           </Grid>

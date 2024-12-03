@@ -9,6 +9,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+
 
 function MyMeetings() {
   const { user } = useContext(UserContext); // Get logged-in user
@@ -16,6 +18,14 @@ function MyMeetings() {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
+  const deleteMeeting = (meeting) => {
+
+    const conf = window.confirm("Are you sure you want to cancel the meeting?")
+
+    if(conf) {
+      // here you send a server request to delete meeting
+    }
+  }
   // Fetch meetings from the backend
   useEffect(() => {
     const fetchMeetings = async () => {
@@ -31,6 +41,7 @@ function MyMeetings() {
         }
 
         const data = await response.json(); // Parse the response JSON
+        console.log(data)
         setMeetings(data); // Update meetings state
       } catch (err) {
         setError(err.message); // Capture error
@@ -82,6 +93,7 @@ function MyMeetings() {
                   <TableCell>Subject</TableCell>
                   <TableCell>Buddy Participant</TableCell>
                   <TableCell>Owner Participant</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -93,6 +105,7 @@ function MyMeetings() {
                     <TableCell>{meeting.subject}</TableCell>
                     <TableCell>{meeting.buddyNameParticipant}</TableCell>
                     <TableCell>{meeting.ownerNameParticipant}</TableCell>
+                    <TableCell onClick={() => deleteMeeting(meeting)}><DeleteOutlinedIcon className="delete"/></TableCell>
                   </TableRow>
                 ))}
               </TableBody>
