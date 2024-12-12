@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Buddy",
     "breed": "Golden Retriever",
-    "age": "3.2",
+    "age": "3.5",
     "sex": "male",
     "region": "New York",
     "isvaccinated": true,
