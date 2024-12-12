@@ -15,7 +15,8 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
+  DialogActions, 
+  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
@@ -29,8 +30,10 @@ import FemaleIcon from "@mui/icons-material/Female";
 import "../css/MyProfile.css";
 
 const MyProfile = () => {
-  const { user } = useContext(UserContext);
-  const [dogData, setDogData] = useState(null);
+  const { user } = useContext(UserContext); // Get logged-in user's email from context
+  const [dogData, setDogData] = useState(null); // State for dog and owner data
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
   const [isEditingDog, setIsEditingDog] = useState(false);
   const [isEditingOwner, setIsEditingOwner] = useState(false);
   const [editedDogData, setEditedDogData] = useState({});
@@ -38,20 +41,55 @@ const MyProfile = () => {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [saveTarget, setSaveTarget] = useState(null); // Determines target ("dog" or "owner")
 
+  // Fetch data from the backend
   useEffect(() => {
-    fetch("/data/dogs.json")
-      .then((res) => res.json())
-      .then((data) => {
-        const dog = data.find((d) => d.owner.email === user.email);
-        setDogData(dog);
-        setEditedDogData(dog);
-        setEditedOwnerData(dog.owner);
-      })
-      .catch((err) => console.error("Error fetching data:", err));
+    const fetchOwnerAndDog = async () => {
+      try {
+        setLoading(true); // Show loading spinner
+        setError(null); // Reset error state
+
+        const response = await fetch(
+          `http://localhost:5000/api/dogs/owner-and-dog?email=${user.email}`
+        );
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`); // Handle HTTP errors
+        }
+
+        const data = await response.json(); // Parse the response JSON
+        const dog = data[0]; // Assuming only one owner-dog pair for simplicity
+        setDogData(dog); // Set original data
+        setEditedDogData(dog); // Initialize editable dog data
+        setEditedOwnerData(dog.owner); // Initialize editable owner data
+      } catch (err) {
+        setError(err.message); // Capture error
+      } finally {
+        setLoading(false); // Hide spinner
+      }
+    };
+
+    if (user && user.email) {
+      fetchOwnerAndDog(); // Trigger fetch on component mount
+    }
   }, [user]);
 
+  if (loading) {
+    // Render spinner while loading
+    return (
+      <div className="spinner-container">
+        <CircularProgress />
+        <p>Loading your profile...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    // Render error message if fetch fails
+    return <p className="error-message">Error: {error}</p>;
+  }
+
   if (!dogData) {
-    return <div>Loading...</div>;
+    // Render message if no data is found
+    return <p className="no-profile-message">No profile data found.</p>;
   }
 
   const handleDogInputChange = (e) => {
