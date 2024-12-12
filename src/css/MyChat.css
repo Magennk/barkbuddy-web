@@ -1,0 +1,80 @@
+/* Overall container for the My Chat page */
+.my-chat-container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f8e28c;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Page title */
+  .page-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #1a73e8; /* A vibrant blue color */
+  }
+  
+  /* List of chat users */
+  .chat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Individual user item */
+  .user-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .user-item:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* User avatar */
+  .user-avatar {
+    border: 2px solid #1a73e8; /* Match the blue theme */
+  }
+  
+  /* User details (name and city) */
+  .user-details {
+    flex: 1;
+    margin-left: 15px;
+  }
+  
+  .user-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .user-city {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  /* Start Chat button */
+  .start-chat-btn {
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: capitalize;
+    border-radius: 5px;
+    background-color: #4caf50; /* Green color for the chat button */
+    color: #fff;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .start-chat-btn:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
+  

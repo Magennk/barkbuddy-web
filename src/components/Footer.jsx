@@ -31,7 +31,7 @@ function Footer() {
             <Link to="/" className="footer-link">
               Home
             </Link>
-            <Link to="mailto:your-email@example.com" className="footer-link">
+            <Link to="/contact" className="footer-link">
               Contact
             </Link>
             <Link to="/about" className="footer-link">

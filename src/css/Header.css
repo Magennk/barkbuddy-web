@@ -4,7 +4,7 @@
 }
 
 .part-a {
-  background-color: #1976d2; /* Modern blue */
+  background-color: #f5d46bfa; /* Modern blue */
   display: flex;
   justify-content: space-between;
   padding: 0 16px;
@@ -14,7 +14,8 @@
 .logo {
   flex-grow: 1;
   font-weight: bold;
-  color: #fff;
+  color: #0980bb;
+  
 }
 
 .icons-container {
@@ -23,11 +24,20 @@
 }
 
 .logout-icon:hover {
-  color: red;
+  color: red !important;
+}
+
+
+.icons-container .MuiIconButton-root {
+  color: #0980bb; /* Set your desired color */
+}
+
+.icons-container .MuiIconButton-root:hover {
+  color: #007bff; /* Change this to the desired hover color */
 }
 
 .part-b {
-  background-color: #1e88e5; /* Slightly lighter blue */
+  background-color: #f7de8cfa; /* Slightly lighter blue */
   display: flex;
   justify-content: center;
   padding: 8px 0;
@@ -89,4 +99,11 @@
 
 .dialog-yes:hover {
   background-color: #d32f2f; /* Darker red on hover */
+}
+
+.logo-image {
+  width: 50px; /* Adjust to desired width */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 10px; /* Add space between the logo and text if needed */
+  vertical-align: middle; /* Align the logo vertically with the text */
 }

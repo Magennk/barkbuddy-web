@@ -3,6 +3,7 @@ import { UserContext } from "../context/UserContext"; // Importing UserContext f
 import "../css/MeetNewBuddies.css"; // Importing existing CSS for styling
 import DogCard from "../components/DogCard"; // Using DogCard component for each dog
 import CircularProgress from "@mui/material/CircularProgress"; // Importing MUI CircularProgress
+import {Typography } from "@mui/material";
 
 function MeetNewBuddies() {
   const { user } = useContext(UserContext); // Getting the logged-in user from context
@@ -55,7 +56,9 @@ function MeetNewBuddies() {
 
   return (
     <div className="meet-new-buddies">
-      <h1 className="page-title">Meet New Buddies</h1>
+      <Typography variant="h4" className="page-title">
+        Meet New Buddies
+      </Typography>
       <div className="dog-list">
         {dogs.map((dog, index) => (
           <div className="dog-card-container" key={dog.id || index}>

@@ -15,6 +15,8 @@ import FriendRequests from "./pages/FriendRequests"; //My Friend Requests
 import "./css/global.css"; // Global Styles
 import "./css/Spinner.css"; // Modern Spinner Styles
 import About from "./pages/About";
+import Contact from "./pages/Contact";
+import PersonalChat from "./pages/PersonalChat";
 
 // Lazy load components for performance optimization
 const HomePage = React.lazy(() => import("./pages/HomePage"));
@@ -57,6 +59,10 @@ function App() {
                     <Route path="/friend-requests" element={<FriendRequests />} />
                     <Route path="/my-chat" element={<MyChat />} />
                     <Route path="/schedule-a-meeting" element={<ScheduleAMeeting />} />
+                    <Route path="/personal-chat/:userId" element={<PersonalChat />} />
+                    <Route path="/contact" element={<Contact />} />
+
+
                   </Routes>
                 </Suspense>
                 <Footer />

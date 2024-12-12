@@ -24,6 +24,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import "../css/Header.css";
+import logo from "../assets/logo.png"; // Update `logo.png` to the actual file name
+
 
 function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -64,6 +66,7 @@ function Header() {
       {/* Header Part A */}
       <Toolbar className="part-a">
         <Typography variant="h6" className="logo">
+        <img src={logo} alt="Logo" className="logo-image" />
           BarkBuddy {user && <p>Welcome, {user.name}!</p>}
         </Typography>
         <Box className="icons-container">

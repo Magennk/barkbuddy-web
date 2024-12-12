@@ -10,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import {Typography } from "@mui/material";
 
 
 function MyMeetings() {
@@ -77,7 +78,9 @@ function MyMeetings() {
 
   return (
     <div className="my-meetings">
-      <h1>My Meetings</h1>
+      <Typography variant="h4" className="page-title">
+        My Meetings
+      </Typography>
 
       {/* Upcoming Meetings */}
       <div className="table-container">
@@ -91,8 +94,8 @@ function MyMeetings() {
                   <TableCell>Time</TableCell>
                   <TableCell>Location</TableCell>
                   <TableCell>Subject</TableCell>
-                  <TableCell>Buddy Participant</TableCell>
-                  <TableCell>Owner Participant</TableCell>
+                  <TableCell>Buddy</TableCell>
+                  <TableCell>Owner</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -128,8 +131,8 @@ function MyMeetings() {
                   <TableCell>Time</TableCell>
                   <TableCell>Location</TableCell>
                   <TableCell>Subject</TableCell>
-                  <TableCell>Buddy Participant</TableCell>
-                  <TableCell>Owner Participant</TableCell>
+                  <TableCell>Buddy</TableCell>
+                  <TableCell>Owner</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

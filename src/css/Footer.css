@@ -1,6 +1,6 @@
 /* Footer Wrapper */
 .footer {
-  background-color: #f5f5f5 !important;
+  background-color: #f7de8cfa !important;
   padding: 40px 0;
   margin-top: 40px;
   position: relative; /* Needed for floating button */
@@ -18,7 +18,7 @@
 .footer-header {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #333 !important;
+  color: #0980bb !important;
   margin-bottom: 16px;
   text-transform: uppercase;
 }
@@ -28,7 +28,7 @@
   display: block;
   margin: 8px 0;
   font-size: 1rem;
-  color: #555 !important;
+  color: #0980bb !important;
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -45,12 +45,12 @@
 }
 
 .footer-icon {
-  color: #555;
+  color: #0980bb !important;
   transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .footer-icon:hover {
-  color: #007bff; /* Hover blue */
+  color: #007bff !important; /* Hover blue */
   transform: scale(1.1); /* Slight zoom effect */
 }
 
@@ -72,7 +72,7 @@
 /* Footer Copyright */
 .footer-text {
   font-size: 0.9rem;
-  color: #666;
+  color: #0980bb;
 }
 
 /* Responsive Design */

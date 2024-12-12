@@ -50,3 +50,15 @@
   color:#b71c1c;
   cursor: pointer;
 }
+
+/* Add a border only around the outside of the table */
+.MuiTable-root {
+  border: 1px solid rgb(29, 26, 26); /* Thin black border */
+  border-collapse: separate; /* Keep internal cells separate */
+}
+
+/* Remove internal cell borders */
+.MuiTableCell-root {
+  border: none; /* No border for individual cells */
+}
+

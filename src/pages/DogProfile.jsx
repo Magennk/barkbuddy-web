@@ -15,6 +15,9 @@ import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt
 import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
 import "../css/DogProfile.css";
 import { useNavigate } from "react-router-dom";
+import ChatIcon from "@mui/icons-material/Chat";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 {/*Example for JSON returing from http://localhost:5000/api/dogs/dog/${id}/with-owner
 {
@@ -223,13 +226,17 @@ function DogProfile() {
         <Button
           variant="contained"
           color="primary"
+          className="equal-button"
+          startIcon={<ChatIcon />}
           onClick={() => alert("Chat started")}
         >
           Chat
         </Button>
         <Button
           variant="contained"
-          color="secondary"
+          color="primary"
+          className="equal-button"
+          startIcon={<PersonAddIcon />}
           onClick={() => alert("Add friend function will run")}
         >
           Add Friend
@@ -237,7 +244,9 @@ function DogProfile() {
        
         <Button
         variant="contained"
-        color="success"
+        color="primary"
+        className="equal-button"
+        startIcon={<CalendarTodayIcon />}
         onClick={() => navigate("/schedule-a-meeting", { state: { buddyName: dog.name } })}
       >
         Schedule a Meeting
