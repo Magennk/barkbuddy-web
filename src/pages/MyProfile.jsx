@@ -30,7 +30,7 @@ import FemaleIcon from "@mui/icons-material/Female";
 import "../css/MyProfile.css";
 
 const MyProfile = () => {
-  const { user } = useContext(UserContext); // Get logged-in user's email from context
+  const { user, setUser } = useContext(UserContext); // Get logged-in user's email from context
   const [dogData, setDogData] = useState(null); // State for dog and owner data
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
@@ -121,12 +121,38 @@ const MyProfile = () => {
   };
 
   // Handle confirmation result
-  const handleSaveConfirm = (confirm) => {
+  const handleSaveConfirm = async (confirm) => {
     if (confirm) {
       if (saveTarget === "dog") {
         setDogData(editedDogData); // Save changes to the dog
       } else if (saveTarget === "owner") {
-        setDogData({ ...dogData, owner: editedOwnerData }); // Save changes to the owner
+        //setDogData({ ...dogData, owner: editedOwnerData }); // Save changes to the owner
+        try {
+          const response = await fetch("http://localhost:5000/api/users/update-owner", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: user.email, ...editedOwnerData }),
+          });
+  
+          if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+          }
+  
+          const data = await response.json();
+          setDogData({ ...dogData, owner: data.owner }); // Update state with new owner data
+                  // Update the UserContext with the new owner information
+        setUser((prevUser) => ({
+          ...prevUser,
+          firstname: data.owner.firstname,
+          lastname: data.owner.lastname,
+        }));
+          alert("Owner information updated successfully!");
+        } catch (err) {
+          console.error(err);
+          alert("Failed to update owner information. Please try again.");
+        }
       }
     }
     setConfirmDialogOpen(false); // Close dialog

@@ -67,7 +67,7 @@ function Header() {
       <Toolbar className="part-a">
         <Typography variant="h6" className="logo">
         <img src={logo} alt="Logo" className="logo-image" />
-          BarkBuddy {user && <p>Welcome, {user.firstname}!</p>}
+          BarkBuddy {user && <p>Welcome, {user?.firstname} {user?.lastname}!</p>}
         </Typography>
         <Box className="icons-container">
           <Tooltip title="My Profile">
