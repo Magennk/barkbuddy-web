@@ -23,37 +23,24 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Replace this block with a Node.js backend API call in the future
-      // Example API structure:
-      // const response = await fetch("https://api.example.com/login", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ email, password }),
-      // });
-      // const data = await response.json();
-      // if (data.success) {
-      //   setUser(data.user); // Set logged-in user data
-      //   navigate("/"); // Redirect to home
-      // } else {
-      //   setError(data.message); // Display error from backend
-      // }
+      // Call backend API for login
+      const response = await fetch("http://localhost:5000/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // Temporary for testing: Only set dummy user
-      if (email === "john.doe@example.com" && password === "123") {
-        setUser({ email, name: "John Doe" });
-        navigate("/");
+      const data = await response.json(); // Parse response JSON
+      if (response.ok) {
+        setUser(data); // Set logged-in user data in context
+        navigate("/"); // Redirect to home
       } else {
-        setError("Invalid email or password"); // Show error for invalid login
+        setError(data.message); // Display error from backend
       }
     } catch (err) {
       console.error(err);
       setError("Something went wrong. Please try again later."); // Handle network or server errors
     }
-  };
-
-  // Handles "Forgot Password" click
-  const handleForgotPassword = () => {
-    alert("Not available in the current version."); // Placeholder for future feature
   };
 
   return (
@@ -106,7 +93,7 @@ const Login = () => {
         <Link
           component="button"
           variant="body2"
-          onClick={handleForgotPassword}
+          onClick={() => alert("Feature not available yet")}
           className="forgot-password"
         >
           Forgot password?
