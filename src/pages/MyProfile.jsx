@@ -94,8 +94,14 @@ const MyProfile = () => {
 
   const handleDogInputChange = (e) => {
     const { name, value } = e.target;
-    setEditedDogData({ ...editedDogData, [name]: value });
+  
+    // Update the corresponding field in the state
+    setEditedDogData((prevData) => ({
+      ...prevData,
+      [name]: value, // Dynamically update the correct field
+    }));
   };
+  
 
   const handleOwnerInputChange = (e) => {
     const { name, value } = e.target;
@@ -124,7 +130,33 @@ const MyProfile = () => {
   const handleSaveConfirm = async (confirm) => {
     if (confirm) {
       if (saveTarget === "dog") {
-        setDogData(editedDogData); // Save changes to the dog
+        //setDogData(editedDogData); // Save changes to the dog
+        try {
+          const response = await fetch("http://localhost:5000/api/dogs/update-dog", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ dogId: dogData.id, ...editedDogData }),
+          });
+  
+          if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+          }
+  
+          const data = await response.json();
+  
+          // Update the dogData state
+          setDogData((prevDogData) => ({
+            ...prevDogData,
+            ...data.dog, // Merge updated dog data
+          }));
+  
+          alert("Dog information updated successfully!");
+        } catch (err) {
+          console.error(err);
+          alert("Failed to update dog information. Please try again.");
+        }
       } else if (saveTarget === "owner") {
         //setDogData({ ...dogData, owner: editedOwnerData }); // Save changes to the owner
         try {
@@ -255,7 +287,7 @@ const MyProfile = () => {
                 />
                 <TextField
                   label="A bit more about me"
-                  name="A bit more about me"
+                  name="description"
                   value={editedDogData.description}
                   onChange={handleDogInputChange}
                   multiline
