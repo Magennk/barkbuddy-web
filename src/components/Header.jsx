@@ -25,6 +25,7 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import "../css/Header.css";
 import logo from "../assets/logo.png"; // Update `logo.png` to the actual file name
+import BackButton from "./BackButton";
 
 
 function Header() {
@@ -57,6 +58,9 @@ function Header() {
     }
     setLogoutDialogOpen(false);
   };
+
+  const hideBackButtonRoutes = ["/"]; // Add any routes where the BackButton should not appear
+  const showBackButton = !hideBackButtonRoutes.includes(location.pathname);
 
   // Check if the button matches the current active page
   const isActive = (path) => location.pathname === path;
@@ -113,6 +117,7 @@ function Header() {
           </IconButton>
         ) : (
           <Box className="buttons-container">
+             {showBackButton && <BackButton />} {/* Conditionally render BackButton */}
             {[
               // List of navigation paths
               "/",

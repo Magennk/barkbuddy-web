@@ -61,6 +61,14 @@ const MyBuddies = () => {
             >
               View Profile
             </Button>
+            <Button
+      variant="contained"
+      color="error" // Red color for the delete button
+      className="delete-buddy-btn"
+      
+    >
+      Delete Buddy
+    </Button>
           </Box>
         ))}
       </Box>

@@ -62,10 +62,39 @@
   color: #666;
 }
 
-/* View Profile button */
+/* View Profile button styling */
 .view-profile-btn {
   font-size: 0.9em;
   font-weight: bold;
   text-transform: capitalize;
   border-radius: 5px;
+  padding: 6px 10px;  /* Adjust padding to make it narrower */
+  min-width: 120px; /* Ensure minimum width to avoid buttons collapsing */
+  max-width: 150px; /* Limit maximum width */
+}
+
+/* Buttons container */
+.buttons-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between the buttons */
+}
+
+/* Delete Buddy button styling */
+.delete-buddy-btn {
+  font-size: 0.9em;
+  font-weight: bold;
+  text-transform: capitalize;
+  border-radius: 5px;
+  padding: 6px 10px;  /* Adjust padding to make it narrower */
+  min-width: 120px; /* Ensure minimum width to avoid buttons collapsing */
+  max-width: 150px; /* Limit maximum width */
+  background-color: #e57373; /* Red color for Delete button */
+  color: white; /* Ensures text is readable */
+}
+
+.view-profile-btn:hover,
+.delete-buddy-btn:hover {
+  opacity: 0.8;
+  cursor: pointer;
 }

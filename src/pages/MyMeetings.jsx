@@ -19,14 +19,39 @@ function MyMeetings() {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
-  const deleteMeeting = (meeting) => {
-
-    const conf = window.confirm("Are you sure you want to cancel the meeting?")
-
-    if(conf) {
-      // here you send a server request to delete meeting
+  const deleteMeeting = async (meeting) => {
+    const conf = window.confirm("Are you sure you want to cancel the meeting?");
+  
+    if (conf) {
+      try {
+        // Send DELETE request to server to remove the meeting by meeting_id
+        const response = await fetch(
+          `http://localhost:5000/api/meetings/delete-meeting/${meeting.meeting_id}`,
+          { method: 'DELETE' }
+        );
+  
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+  
+        // If successful, remove the deleted meeting from the state
+        setMeetings((prevState) => ({
+          upcomingMeetings: prevState.upcomingMeetings.filter(
+            (m) => m.meeting_id !== meeting.meeting_id
+          ),
+          pastMeetings: prevState.pastMeetings.filter(
+            (m) => m.meeting_id !== meeting.meeting_id
+          ),
+        }));
+  
+        alert("Meeting cancelled successfully");
+      } catch (err) {
+        setError(err.message); // Capture any errors
+        alert("Failed to cancel meeting");
+      }
     }
-  }
+  };
+  
   // Fetch meetings from the backend
   useEffect(() => {
     const fetchMeetings = async () => {
