@@ -1,29 +1,65 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Box, Typography, Button, Avatar } from "@mui/material";
-import "../css/MyBuddies.css"; // Dedicated CSS file for styling
+import React, { useState, useEffect, useContext } from "react";
+import { UserContext } from "../context/UserContext"; // For user context
+import { useNavigate } from "react-router-dom"; // For navigation
+import { Box, Typography, Button, Avatar, CircularProgress } from "@mui/material";
+import "../css/MyBuddies.css"; // For custom styling
 
 const MyBuddies = () => {
-  const [dogs, setDogs] = useState([]); // State to store dog data
-  const navigate = useNavigate(); // Navigation to the dog profile page
+  const { user } = useContext(UserContext); // Get logged-in user's details
+  const [friends, setFriends] = useState([]); // State to store friends
+  const [loading, setLoading] = useState(true); // Spinner state
+  const [error, setError] = useState(null); // Error state
+  const navigate = useNavigate(); // Navigation hook for profile redirection
 
-  // Fetch dog data on component load
+  // Fetch friends from the backend
   useEffect(() => {
-    fetch("/data/dogs.json") // Path to mock JSON
-      .then((res) => res.json())
-      .then((data) => setDogs(data)) // Update state with fetched data
-      .catch((err) => console.error("Error fetching dogs:", err)); // Log errors
-  }, []);
+    const fetchMyFriends = async () => {
+      try {
+        setLoading(true); // Show spinner while loading
+        const response = await fetch(`http://localhost:5000/api/friends/my-friends?email=${user.email}`);
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`); // Handle HTTP errors
+        }
+        const data = await response.json();
+        setFriends(data); // Update friends state
+      } catch (err) {
+        setError(err.message); // Set error state
+      } finally {
+        setLoading(false); // Hide spinner
+      }
+    };
+
+    fetchMyFriends(); // Call the fetch function on component mount
+  }, [user.email]); // Re-fetch if user's email changes
 
   // Navigate to the dog profile page
   const handleViewProfile = (dogId) => {
     if (dogId) {
-      navigate(`/dog-profile/${dogId}`); // Use dynamic routing with the dog ID
+      navigate(`/dog-profile/${dogId}`); // Navigate to the dog's profile page
     } else {
       console.error("Dog ID is undefined");
     }
   };
 
+  if (loading) {
+    // Render spinner while data is loading
+    return (
+      <div className="spinner-container">
+        <CircularProgress />
+        <p>Loading your buddies...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    // Render error message if an error occurs
+    return <p className="error-message">Error: {error}</p>;
+  }
+
+  if (friends.length === 0) {
+    // Render a message if no friends are found
+    return <p className="no-friends-message">You don't have any buddies yet!</p>;
+  }
   return (
     <Box className="my-buddies-container">
       {/* Page Title */}
@@ -33,7 +69,7 @@ const MyBuddies = () => {
 
       {/* Dog List */}
       <Box className="buddies-list">
-        {dogs.map((dog) => (
+        {friends.map((dog) => (
           <Box key={dog.id} className="dog-item">
             {/* Dog Image */}
             <Avatar
