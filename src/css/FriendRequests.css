@@ -91,4 +91,23 @@
       background-color: #b71c1c;
     }
   }
+
+  .spinner-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+  }
+  
+  .error-message {
+    color: red;
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .no-requests-message {
+    text-align: center;
+    color: gray;
+    margin-top: 50px;
+  }
   

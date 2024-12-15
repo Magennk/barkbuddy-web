@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext} from "react";
 import {
   Typography,
   Card,
@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import ChatIcon from "@mui/icons-material/Chat";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import { UserContext } from "../context/UserContext"; // Access logged-in user's details
 
 {/*Example for JSON returing from http://localhost:5000/api/dogs/dog/${id}/with-owner
 {
@@ -47,12 +48,14 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
   */}
 
 function DogProfile() {
+  const { user } = useContext(UserContext); // Access user context to get logged-in user's email
   const { id } = useParams(); // Get dog ID from URL
   const [dog, setDog] = useState(null);
   const [owner, setOwner] = useState(null);
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const fetchDogData = async () => {
@@ -237,7 +240,29 @@ function DogProfile() {
           color="primary"
           className="equal-button"
           startIcon={<PersonAddIcon />}
-          onClick={() => alert("Add friend function will run")}
+          onClick={async () => {
+            try {
+              const response = await fetch("http://localhost:5000/api/friends/send-request", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  senderEmail: user.email, // The logged-in user's email
+                  recipientEmail: owner.email, // The owner's email from the profile
+                }),
+              });
+        
+              if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+              }
+        
+              alert("Friend request sent successfully!");
+            } catch (err) {
+              console.error("Error sending friend request:", err.message);
+              alert("Could not send friend request. Please try again.");
+            }
+          }}
         >
           Add Friend
         </Button>

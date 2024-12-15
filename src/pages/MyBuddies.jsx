@@ -41,6 +41,31 @@ const MyBuddies = () => {
     }
   };
 
+  // Handle Remove Buddy action
+const handleRemoveBuddy = async (buddyEmail) => {
+  try {
+    const response = await fetch("http://localhost:5000/api/friends/remove", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email1: user.email, // Logged-in user's email
+        email2: buddyEmail,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.statusText}`);
+    }
+
+    setFriends((prev) => prev.filter((friend) => friend.owner.email !== buddyEmail)); // Remove buddy from state
+  } catch (err) {
+    console.error("Error removing buddy:", err.message);
+    alert("Could not remove the buddy. Please try again.");
+  }
+};
+
   if (loading) {
     // Render spinner while data is loading
     return (
@@ -98,13 +123,13 @@ const MyBuddies = () => {
               View Profile
             </Button>
             <Button
-      variant="contained"
-      color="error" // Red color for the delete button
-      className="delete-buddy-btn"
-      
-    >
-      Delete Buddy
-    </Button>
+              variant="contained"
+              color="error" // Red color for the delete button
+              className="delete-buddy-btn"  
+              onClick={() => handleRemoveBuddy(dog.owner.email)} // Pass buddy's email
+            >
+              Delete Buddy
+            </Button>
           </Box>
         ))}
       </Box>
