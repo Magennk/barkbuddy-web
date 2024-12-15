@@ -20,6 +20,7 @@ function MyMeetings() {
   const [error, setError] = useState(null); // Error state
 
   const deleteMeeting = async (meeting) => {
+    console.log("Meeting to delete:", meeting); // Log the entire meeting object
     const conf = window.confirm("Are you sure you want to cancel the meeting?");
   
     if (conf) {
@@ -125,17 +126,21 @@ function MyMeetings() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {meetings.upcomingMeetings.map((meeting, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{meeting.date}</TableCell>
-                    <TableCell>{meeting.time.slice(0, 5)}</TableCell> {/* Display hh:mm */}
-                    <TableCell>{meeting.location}</TableCell>
-                    <TableCell>{meeting.subject}</TableCell>
-                    <TableCell>{meeting.buddyNameParticipant}</TableCell>
-                    <TableCell>{meeting.ownerNameParticipant}</TableCell>
-                    <TableCell onClick={() => deleteMeeting(meeting)}><DeleteOutlinedIcon className="delete"/></TableCell>
-                  </TableRow>
-                ))}
+              {meetings.upcomingMeetings.map((meeting, index) => {
+  console.log("Meeting object:", meeting); // This will log each meeting object
+  return (
+    <TableRow key={index}>
+      <TableCell>{meeting.date}</TableCell>
+      <TableCell>{meeting.time.slice(0, 5)}</TableCell> {/* Display hh:mm */}
+      <TableCell>{meeting.location}</TableCell>
+      <TableCell>{meeting.subject}</TableCell>
+      <TableCell>{meeting.buddyNameParticipant}</TableCell>
+      <TableCell>{meeting.ownerNameParticipant}</TableCell>
+      <TableCell onClick={() => deleteMeeting(meeting)}><DeleteOutlinedIcon className="delete" /></TableCell>
+    </TableRow>
+  );
+})}
+
               </TableBody>
             </Table>
           </TableContainer>
