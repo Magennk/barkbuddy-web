@@ -10,6 +10,7 @@ function MeetNewBuddies() {
   const [dogs, setDogs] = useState([]); // State for dog data
   const [loading, setLoading] = useState(true); // State to show spinner while loading
   const [error, setError] = useState(null); // State for handling errors
+  const [refresh, setRefresh] = useState(false); // Trigger re-fetching data
 
   useEffect(() => {
     // Function to fetch data from the backend
@@ -32,7 +33,12 @@ function MeetNewBuddies() {
     };
 
     fetchNotFriendsDogsAndOwners(); // Trigger fetch on component mount
-  }, [user.email]); // Re-fetch data if user email changes
+  }, [user.email, refresh]); // Re-fetch data if user email changes
+
+   // Function to trigger data refresh
+   const refreshDogs = () => {
+    setRefresh((prev) => !prev); // Toggle refresh state
+  };
 
   if (loading) {
     // Render spinner while data is loading
@@ -62,7 +68,7 @@ function MeetNewBuddies() {
       <div className="dog-list">
         {dogs.map((dog, index) => (
           <div className="dog-card-container" key={dog.id || index}>
-            <DogCard dog={dog} /> {/* Render each dog with DogCard */}
+            <DogCard dog={dog} refreshDogs={refreshDogs} /> {/* Render each dog with DogCard */}
           </div>
         ))}
       </div>

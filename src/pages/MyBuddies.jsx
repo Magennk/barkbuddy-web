@@ -114,6 +114,7 @@ const handleRemoveBuddy = async (buddyEmail) => {
               </Typography>
             </Box>
             {/* View Profile Button */}
+            <Box className="action-buttons">
             <Button
               variant="contained"
               color="primary"
@@ -130,6 +131,7 @@ const handleRemoveBuddy = async (buddyEmail) => {
             >
               Delete Buddy
             </Button>
+            </Box>
           </Box>
         ))}
       </Box>

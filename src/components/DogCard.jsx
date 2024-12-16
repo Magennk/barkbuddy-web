@@ -21,7 +21,11 @@ import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt"; // Icon for add
 import "../css/DogCard.css"; // Import CSS for card styling
 import { UserContext } from "../context/UserContext"; // Importing UserContext for user information
 
-function DogCard({ dog }) {
+function DogCard({ dog, refreshDogs  }) {
+    // Ensure refreshDogs is a valid function
+    if (!refreshDogs) {
+      console.warn("refreshDogs function is not passed as a prop to DogCard.");
+    }
   const { user } = useContext(UserContext); // Getting the logged-in user from context
   const [openDialog, setOpenDialog] = useState(false); // State for confirmation dialog
   const [loading, setLoading] = useState(false); // Spinner state while sending request
@@ -52,6 +56,7 @@ function DogCard({ dog }) {
       }
 
       alert(`Friend request sent successfully to ${dog.name}!`);
+      refreshDogs(); // Trigger refresh of dog list
     } catch (err) {
       console.error("Error sending friend request:", err.message);
       alert("Could not send the friend request. Please try again.");
