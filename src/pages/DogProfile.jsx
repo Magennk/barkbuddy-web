@@ -260,7 +260,7 @@ function DogProfile() {
               alert("Friend request sent successfully!");
             } catch (err) {
               console.error("Error sending friend request:", err.message);
-              alert("Could not send friend request. Please try again.");
+              alert("Could not send friend request.");
             }
           }}
         >

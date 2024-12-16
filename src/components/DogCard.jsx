@@ -59,7 +59,7 @@ function DogCard({ dog, refreshDogs  }) {
       refreshDogs(); // Trigger refresh of dog list
     } catch (err) {
       console.error("Error sending friend request:", err.message);
-      alert("Could not send the friend request. Please try again.");
+      alert("Could not send the friend request.");
     } finally {
       setLoading(false); // Hide spinner
       setOpenDialog(false); // Close dialog

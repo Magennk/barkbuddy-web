@@ -5,6 +5,7 @@ import {
   CardContent,
   Typography,
   TextField,
+  InputLabel,
   Box,
   IconButton,
   Button,
@@ -40,7 +41,22 @@ const MyProfile = () => {
   const [editedOwnerData, setEditedOwnerData] = useState({});
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [saveTarget, setSaveTarget] = useState(null); // Determines target ("dog" or "owner")
+  const [breeds, setBreeds] = useState([]); // Dog breeds state
 
+ // Fetch dog breeds for Step 3 using a rest api
+ useEffect(() => {
+   fetch("https://dog.ceo/api/breeds/list/all")
+     .then((res) => res.json())
+     .then((data) => {
+       if (data.message) {
+         setBreeds(Object.keys(data.message)); // Extract breed names
+       }
+     })
+     .catch((error) => {
+       console.error("Error fetching dog breeds:", error);
+       setBreeds([]);
+     });
+ }, []);
   // Fetch data from the backend
   useEffect(() => {
     const fetchOwnerAndDog = async () => {
@@ -269,14 +285,27 @@ const MyProfile = () => {
                   fullWidth
                   margin="normal"
                 />
-                <TextField
+               {/* <TextField
                   label="Breed"
                   name="breed"
                   value={editedDogData.breed}
                   onChange={handleDogInputChange}
                   fullWidth
                   margin="normal"
-                />
+                /> */}
+                <Typography>Breed:</Typography>
+                <Select
+                label="Breed"
+                name="breed"
+                value={editedDogData.breed}
+                onChange={(e) => handleDogInputChange(e, "dog")}
+              >
+                {breeds.map((breed) => (
+                  <MenuItem key={breed} value={breed}>
+                    {breed}
+                  </MenuItem>
+                ))}
+              </Select>
                 <TextField
                   label="Region"
                   name="region"
