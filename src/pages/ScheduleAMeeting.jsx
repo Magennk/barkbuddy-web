@@ -1,17 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useLocation } from "react-router-dom"; // useLocation to access the state
+import { useContext } from "react"; // useContext to access the UserContext
+import { UserContext } from "../context/UserContext"; // Import UserContext
 import "../css/ScheduleAMeeting.css"; // CSS for the page
 
 const ScheduleAMeeting = () => {
-  // Receive the buddy name passed from DogProfile via useLocation
+  // Receive the buddy name and owner email passed from DogProfile
   const location = useLocation();
+  const { buddyName, ownerEmail } = location.state || {}; // Get buddyName and ownerEmail from location state
+  const { user } = useContext(UserContext); // Access user context to get logged-in user's email
+
   const [formData, setFormData] = useState({
-    buddyName: location.state?.buddyName || "",  // Using the state we passed
+    buddyName: buddyName || "",  // Using the state we passed
     date: "",       // Date of the meeting
     time: "",       // Time of the meeting
     location: "",   // Location of the meeting
     subject: "",    // Subject of the meeting
+    ownerEmail1: user?.email || "", // Logged-in user's email
+    ownerEmail2: ownerEmail || "", // Dog owner's email
   });
 
   const [openDialog, setOpenDialog] = useState(false); // To control the dialog's visibility
@@ -29,11 +36,41 @@ const ScheduleAMeeting = () => {
     setOpenDialog(true); // Show the confirmation dialog
   };
 
-  const handleConfirm = () => {
-    console.log("Form submitted with data:", formData);
-    // You can add logic here to submit the form data to the DB
-    setOpenDialog(false); // Close the dialog after confirming
+  const handleConfirm = async () => {
+    console.log("Payload being sent to the backend:", formData);
+    if (
+      !formData.date ||
+      !formData.time ||
+      !formData.location ||
+      !formData.subject ||
+      !formData.ownerEmail1 ||
+      !formData.ownerEmail2
+    ) {
+      alert("All fields are required. Please fill in all the details.");
+      console.error("Missing fields:", formData);
+      return; // Stop function execution if fields are missing
+    }
+    try {
+      const response = await fetch("http://localhost:5000/api/meetings/schedule-meeting", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+  
+      const result = await response.json();
+      console.log("Meeting scheduled successfully:", result);
+      alert("Meeting scheduled successfully!");
+      setOpenDialog(false); // Close the dialog after successful submission
+    } catch (error) {
+      console.error("Error scheduling meeting:", error.message);
+      alert("Failed to schedule the meeting. Please try again.");
+    }
   };
+  
 
   const handleCancel = () => {
     setOpenDialog(false); // Close the dialog without submitting
@@ -130,3 +167,4 @@ const ScheduleAMeeting = () => {
 };
 
 export default ScheduleAMeeting;
+

@@ -272,7 +272,7 @@ function DogProfile() {
         color="primary"
         className="equal-button"
         startIcon={<CalendarTodayIcon />}
-        onClick={() => navigate("/schedule-a-meeting", { state: { buddyName: dog.name } })}
+        onClick={() => navigate("/schedule-a-meeting", { state: { buddyName: dog.name , ownerEmail: owner.email} })}
       >
         Schedule a Meeting
       </Button>
