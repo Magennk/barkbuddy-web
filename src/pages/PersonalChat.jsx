@@ -1,88 +1,109 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Typography, TextField, Button, Box } from "@mui/material";
+import { useParams, useLocation } from "react-router-dom";
 import "../css/PersonalChat.css"; 
 
-function PersonalChat() {
-  const { userId } = useParams(); // Get userId from the route
-  const [userData, setUserData] = useState(null); // Store user data
-  const [newMessage, setNewMessage] = useState("");
-  const [messages, setMessages] = useState([]);
+const PersonalChat = () => {
+  const { userId } = useParams(); // The dog's owner email passed as a route parameter
+  const location = useLocation();
+  const { ownerEmail, ownerName } = location.state || {};
+  const loggedInUserEmail = "loggedInUser@example.com"; // Replace with logged-in user's email
 
-  // Fetch user data from chat-data.json (this will simulate backend data)
+  const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+
+  // Fetch chat history
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("/data/chat-data.json"); // Update the path as necessary
-      const data = await response.json();
-      
-      const user = data.users.find((user) => user.id === userId); // Find user by ID
-      if (user) {
-        setUserData(user);
-        setMessages(user.messages); // Set initial messages from mock data
+    const fetchChatHistory = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/chat/init", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ownerEmail1: loggedInUserEmail,
+            ownerEmail2: userId,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch chat history");
+        }
+
+        const data = await response.json();
+        setMessages(data.chatHistory);
+      } catch (error) {
+        console.error("Error fetching chat history:", error.message);
       }
     };
 
-    fetchData();
-  }, [userId]);
+    fetchChatHistory();
+  }, [userId, loggedInUserEmail]);
 
-  // Handle sending new messages (will later connect to backend)
-  const sendMessage = () => {
-    if (newMessage.trim()) {
-      const newMessageData = {
-        sender: "You", // The logged-in user
-        text: newMessage,
-        type: "sent",
-      };
+  // Send a new message
+  const handleSendMessage = async () => {
+    if (!newMessage.trim()) return;
 
-      // Add the new message to the chat (no auto-response logic)
-      setMessages((prevMessages) => [...prevMessages, newMessageData]);
+    try {
+      const response = await fetch("http://localhost:5000/api/chat/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          senderEmail: loggedInUserEmail,
+          receiverEmail: userId,
+          messageText: newMessage,
+        }),
+      });
 
-      // Clear the input field
-      setNewMessage("");
+      if (!response.ok) {
+        throw new Error("Failed to send message");
+      }
 
-      // Here, you'd send the new message to the backend or update the JSON file.
-      // For now, just log it for debugging
-      console.log("Message sent:", newMessageData);
+      const savedMessage = await response.json();
+      setMessages((prevMessages) => [...prevMessages, savedMessage]); // Append new message
+      setNewMessage(""); // Clear input field
+    } catch (error) {
+      console.error("Error sending message:", error.message);
     }
   };
 
-  if (!userData) return <div>Loading...</div>; // Loading state
-
   return (
     <div className="chat-container">
-      <Typography variant="h4" className="page-title">
-        Chat with {userData.name}
-      </Typography>
+      <h2 className="page-title">Chat with {ownerName || "Unknown User"}</h2>
 
-      <Box className="chat-box">
+      <div className="chat-box">
         {messages.map((msg, index) => (
-          <Box
+          <div
             key={index}
-            className={msg.type === "sent" ? "my-message" : "partner-message"}
+            className={
+              msg.senderemail === loggedInUserEmail ? "my-message" : "partner-message"
+            }
           >
-            <Typography variant="body1">
-              <strong>{msg.sender}:</strong> {msg.text}
-            </Typography>
-          </Box>
+            <strong>
+              {msg.senderemail === loggedInUserEmail ? "You" : ownerName}:
+            </strong>{" "}
+            {msg.messagetext}
+          </div>
         ))}
-      </Box>
+      </div>
 
-      <TextField
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        fullWidth
-        placeholder="Type your message..."
-        variant="outlined"
-        className="message-input"
-      />
-      <Button onClick={sendMessage} variant="contained" className="send-button">
-        Send
-      </Button>
+      <div>
+        <input
+          type="text"
+          className="message-input"
+          placeholder="Type your message..."
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+        />
+        <button onClick={handleSendMessage} className="send-button">
+          Send
+        </button>
+      </div>
     </div>
   );
-}
+};
 
 export default PersonalChat;
+
+
 
 
 

@@ -42,8 +42,25 @@ const MyProfile = () => {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [saveTarget, setSaveTarget] = useState(null); // Determines target ("dog" or "owner")
   const [breeds, setBreeds] = useState([]); // Dog breeds state
+  const [cities, setCities] = useState([]); // City list state
 
- // Fetch dog breeds for Step 3 using a rest api
+  // Fetch list of cities from backend 
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/get-cities");
+        if (!response.ok) throw new Error("Failed to fetch cities");
+        const data = await response.json();
+        setCities(data.cities); // Set cities list from response
+      } catch (error) {
+        console.error("Error fetching cities:", error.message);
+        setCities([]); // Default to empty list if fetch fails
+      }
+    };
+    fetchCities();
+  }, []);
+
+ // Fetch dog breeds using a rest api
  useEffect(() => {
    fetch("https://dog.ceo/api/breeds/list/all")
      .then((res) => res.json())
@@ -442,14 +459,31 @@ const MyProfile = () => {
                   fullWidth
                   margin="normal"
                 />
-                <TextField
+                <Typography>City:</Typography>
+                <Select
+                label="City"
+                name="city"
+                value={editedOwnerData.city}
+                onChange={handleOwnerInputChange}
+              >
+                 {cities.length > 0 ? (
+                    cities.map((city, index) => (
+                    <MenuItem key={index} value={city}>
+                      {city}
+                    </MenuItem>
+            ))
+          ) : (
+                    <MenuItem disabled>No cities available</MenuItem>
+          )}
+              </Select>
+                {/*<TextField
                   label="City"
                   name="city"
                   value={editedOwnerData.city}
                   onChange={handleOwnerInputChange}
                   fullWidth
                   margin="normal"
-                />
+                />*/}
                 <Box className="edit-buttons">
                   <Button
                     variant="contained"

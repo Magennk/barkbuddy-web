@@ -33,7 +33,8 @@ const steps = [
 const Register = () => {
   // Track active step
   const [activeStep, setActiveStep] = useState(0);
-
+  // City list state
+  const [cities, setCities] = useState([]);
   // Form data state
   const [formData, setFormData] = useState({
     account: { email: "", password: "", confirmPassword: "" },
@@ -111,6 +112,22 @@ const Register = () => {
       });
   }, []);
 
+  // Fetch list of cities from backend
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/get-cities");
+        if (!response.ok) throw new Error("Failed to fetch cities");
+        const data = await response.json();
+        setCities(data.cities); // Set cities list from response
+      } catch (error) {
+        console.error("Error fetching cities:", error.message);
+        setCities([]); // Default to empty list if fetch fails
+      }
+    };
+    fetchCities();
+  }, []);
+
   // Validate current step
   const validateStep = () => {
     const stepErrors = {};
@@ -169,9 +186,9 @@ const Register = () => {
       if (!currentStepData.gender) stepErrors.gender = "Gender is required.";
       if (!currentStepData.city) {
         stepErrors.city = "City is required.";
-      } else if (!/^[A-Za-z\s]+$/.test(currentStepData.city)) {
-        stepErrors.city = "City must contain only letters.";
-      }
+      }// else if (!/^[A-Za-z\s]+$/.test(currentStepData.city)) {
+        //stepErrors.city = "City must contain only letters.";
+      //}
     }
     // step 2 - dog information
     else if (activeStep === 2) {
@@ -359,12 +376,21 @@ const Register = () => {
                 value={formData.owner.city}
                 onChange={(e) => handleChange(e, "owner")}
               >
-                <MenuItem value="Tel-Aviv">Tel-Aviv</MenuItem>
+                {cities.length > 0 ? (
+            cities.map((city, index) => (
+              <MenuItem key={index} value={city}>
+                {city}
+              </MenuItem>
+            ))
+          ) : (
+            <MenuItem disabled>No cities available</MenuItem>
+          )}
+                {/*<MenuItem value="Tel-Aviv">Tel-Aviv</MenuItem>
                 <MenuItem value="Rehovot">Rehovot</MenuItem>
                 <MenuItem value="Herzeliya">Herzeliya</MenuItem>
                 <MenuItem value="Ramat-Gan">Ramat-Gan</MenuItem>
                 <MenuItem value="Jerusalem">Jerusalem</MenuItem>
-                <MenuItem value="Holon">Holon</MenuItem>
+                <MenuItem value="Holon">Holon</MenuItem>*/}
               </Select>
               <FormHelperText>{errors.city}</FormHelperText>{" "}
             </FormControl>
@@ -427,12 +453,21 @@ const Register = () => {
                 value={formData.dog.city}
                 onChange={(e) => handleChange(e, "dog")}
               >
-                <MenuItem value="Tel-Aviv">Tel-Aviv</MenuItem>
+                {cities.length > 0 ? (
+            cities.map((city, index) => (
+              <MenuItem key={index} value={city}>
+                {city}
+              </MenuItem>
+            ))
+          ) : (
+            <MenuItem disabled>No cities available</MenuItem>
+          )}
+                {/*<MenuItem value="Tel-Aviv">Tel-Aviv</MenuItem>
                 <MenuItem value="Rehovot">Rehovot</MenuItem>
                 <MenuItem value="Herzeliya">Herzeliya</MenuItem>
                 <MenuItem value="Ramat-Gan">Ramat-Gan</MenuItem>
                 <MenuItem value="Jerusalem">Jerusalem</MenuItem>
-                <MenuItem value="Holon">Holon</MenuItem>
+                <MenuItem value="Holon">Holon</MenuItem>*/}
               </Select>
               <FormHelperText>{errors.city}</FormHelperText>{" "}
             </FormControl>

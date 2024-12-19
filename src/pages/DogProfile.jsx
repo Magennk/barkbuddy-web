@@ -226,15 +226,44 @@ function DogProfile() {
 
       {/* Footer Buttons */}
       <Box className="profile-actions">
-        <Button
-          variant="contained"
-          color="primary"
-          className="equal-button"
-          startIcon={<ChatIcon />}
-          onClick={() => alert("Chat started")}
-        >
-          Chat
-        </Button>
+      <Button
+  variant="contained"
+  color="primary"
+  startIcon={<ChatIcon />}
+  onClick={async () => {
+    const loggedInUserEmail = user?.email; // Logged-in user's email from context
+    const dogOwnerEmail = owner.email; // Owner's email from the profile
+
+    try {
+      // Initialize the chat by calling the backend
+      const response = await fetch("http://localhost:5000/api/chat/init", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ownerEmail1: loggedInUserEmail,
+          ownerEmail2: dogOwnerEmail,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to initialize chat");
+      }
+
+      // Navigate to the PersonalChat page after successfully initializing the chat
+      navigate(`/personal-chat/${dogOwnerEmail}`, {
+        state: { ownerEmail: dogOwnerEmail, ownerName: owner.firstname },
+      });
+    } catch (error) {
+      console.error("Error initializing chat:", error.message);
+      alert("Failed to start chat. Please try again.");
+    }
+  }}
+>
+  Chat
+</Button>
+
+
+
         <Button
           variant="contained"
           color="primary"
