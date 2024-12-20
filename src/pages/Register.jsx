@@ -35,6 +35,8 @@ const Register = () => {
   const [activeStep, setActiveStep] = useState(0);
   // City list state
   const [cities, setCities] = useState([]);
+  // State for email validation
+  const [emailValidation, setEmailValidation] = useState({ isValid: true, message: "" });
   // Form data state
   const [formData, setFormData] = useState({
     account: { email: "", password: "", confirmPassword: "" },
@@ -128,6 +130,23 @@ const Register = () => {
     fetchCities();
   }, []);
 
+  // Validate if email of user already exist
+  const validateEmail = async (email) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/users/check-email?email=${email}`);
+      const data = await response.json();
+      if (data.exists) {
+        setEmailValidation({ isValid: false, message: "Email is already registered to BarkBuddy, try using another Email." });
+      } else {
+        setEmailValidation({ isValid: true, message: "" });
+      }
+    } catch (error) {
+      console.error("Error validating email:", error.message);
+      setEmailValidation({ isValid: false, message: "Server error. Please try again later." });
+    }
+  };
+  
+
   // Validate current step
   const validateStep = () => {
     const stepErrors = {};
@@ -146,6 +165,10 @@ const Register = () => {
       // Verify email is required
       if (!currentStepData.email) {
         stepErrors.email = "Email is required.";
+      }
+      // Validate if email is already exist
+      if (!emailValidation.isValid) {
+        stepErrors.email = emailValidation.message;
       }
       // Validate email format using regex
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex for a basic email format
@@ -270,7 +293,10 @@ const Register = () => {
              }
               name="email"
               value={formData.account.email}
-              onChange={(e) => handleChange(e, "account")}
+              onChange={(e) => {
+                  handleChange(e, "account"); 
+                  validateEmail(e.target.value); // Validate email
+                }}
               fullWidth
               margin="normal"
               error={!!errors.email}
