@@ -21,6 +21,7 @@ import "../css/Register.css";
 import TextField from '@mui/material/TextField';
 import FlashOnIcon from "@mui/icons-material/FlashOn";
 import TermsConditions from "../components/TermsConditions"; // Import the new TermsConditions component
+import { useNavigate } from "react-router-dom"; // React Router's navigate function
 
 // Steps titles
 const steps = [
@@ -41,26 +42,29 @@ const Register = () => {
   const [formData, setFormData] = useState({
     account: { email: "", password: "", confirmPassword: "" },
     owner: {
+      email: "",
+      password: "",
+      confirmPassword:"",
       firstName: "",
       lastName: "",
       dob: "",
       gender: "",
       city: "",
-      image: null,
+      image: "",
     },
     dog: {
       name: "",
+      yearofbirth: 2023, // Default
       sex: "",
       city: "",
-      dob: "",
       breed: "",
-      vaccinated: "",
-      goodWithKids: "",
-      goodWithAnimals: "",
-      restrictedBreed: "",
-      energyLevel: 3,
+      isvaccinated: false, // Default
+      isgoodWithKids: false, // Default
+      isgoodWithAnimals: false, // Default
+      isinrestrictedbreedscategory: false, // Default
+      energyLevel: 3, // Default
       description: "",
-      image: null,
+      image: "",
     },
     termsAccepted: false,
   });
@@ -146,13 +150,49 @@ const Register = () => {
     }
   };
   
+  // usestate hook for registration state
+  const [registrationStatus, setRegistrationStatus] = useState({
+    success: false,
+    message: "",
+  });
+
+  const navigate = useNavigate(); // React Router's navigation function
+  // Function to send all the formdata and register new user and new dog.
+  const handleRegistration = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/users/register-owner-dog", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Registration failed");
+      }
+  
+      const data = await response.json();
+      console.log("Registered data:", data); // Log success
+  
+      setRegistrationStatus({ success: true, message: "" });
+  
+      // Navigate to Thank You page
+      navigate("/thank-you");
+    } catch (error) {
+      console.error("Error during registration:", error.message);
+      setRegistrationStatus({ success: false, message: error.message });
+    }
+  };
+  
+  
+  
 
   // Validate current step
   const validateStep = () => {
     const stepErrors = {};
     const currentStepData =
       activeStep === 0
-        ? formData.account
+        ? formData.owner
         : activeStep === 1
         ? formData.owner
         : activeStep === 2
@@ -224,7 +264,7 @@ const Register = () => {
     else if (activeStep === 3) {
       return <TermsConditions />;
     }
-
+    
     setErrors(stepErrors);
     return Object.keys(stepErrors).length === 0;
   };
@@ -261,22 +301,70 @@ const Register = () => {
     }));
   };
 
-  // Handle file upload
-  const handleFileUpload = (e, stepKey) => {
+  // Upload Image to the backend
+  const handleImageUpload = async (e, type) => {
     const file = e.target.files[0];
-    if (file && file.type === "image/jpeg") {
-      setFormData((prevData) => ({
-        ...prevData,
-        [stepKey]: { ...prevData[stepKey], image: file },
-      }));
-    } else {
+    if (!file) {
       setAlert({
         open: true,
         severity: "error",
-        message: "Only JPEG files are allowed.",
+        message: "No file selected!",
+      });
+      return;
+    }
+  
+    const uploadData = new FormData();
+    if (type === "owner") {
+      uploadData.append("ownerImage", file);
+      uploadData.append("email", formData.owner.email); // Use the email as the unique identifier
+    } else if (type === "dog") {
+      uploadData.append("dogImage", file);
+      uploadData.append("ownerEmail", formData.owner.email); // Use the owner email
+    }
+  
+    const endpoint =
+      type === "owner"
+        ? "http://localhost:5000/api/images/upload-owner"
+        : "http://localhost:5000/api/images/upload-dog";
+  
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        body: uploadData,
+      });
+  
+      if (!response.ok) {
+        throw new Error("Image upload failed");
+      }
+  
+      const data = await response.json();
+      if (type === "owner") {
+        setFormData((prev) => ({
+          ...prev,
+          owner: { ...prev.owner, image: data.imagePath }, // Update formData for owner
+        }));
+      } else if (type === "dog") {
+        setFormData((prev) => ({
+          ...prev,
+          dog: { ...prev.dog, image: data.imagePath }, // Update formData for dog
+        }));
+      }
+  
+      setAlert({
+        open: true,
+        severity: "success",
+        message: "Image uploaded successfully!",
+      });
+    } catch (error) {
+      console.error("Image upload error:", error.message);
+      setAlert({
+        open: true,
+        severity: "error",
+        message: "Image upload failed. Please try again.",
       });
     }
   };
+  
 
   // Render step content dynamically
   const renderStepContent = () => {
@@ -292,9 +380,9 @@ const Register = () => {
               </>
              }
               name="email"
-              value={formData.account.email}
+              value={formData.owner.email}
               onChange={(e) => {
-                  handleChange(e, "account"); 
+                  handleChange(e, "owner"); 
                   validateEmail(e.target.value); // Validate email
                 }}
               fullWidth
@@ -310,8 +398,8 @@ const Register = () => {
               }
               name="password"
               type="password"
-              value={formData.account.password}
-              onChange={(e) => handleChange(e, "account")}
+              value={formData.owner.password}
+              onChange={(e) => handleChange(e, "owner")}
               fullWidth
               margin="normal"
               error={!!errors.password}
@@ -325,8 +413,8 @@ const Register = () => {
               }
               name="confirmPassword"
               type="password"
-              value={formData.account.confirmPassword}
-              onChange={(e) => handleChange(e, "account")}
+              value={formData.owner.confirmPassword}
+              onChange={(e) => handleChange(e, "owner")}
               fullWidth
               margin="normal"
               error={!!errors.confirmPassword}
@@ -437,9 +525,12 @@ const Register = () => {
               <input
                 type="file"
                 hidden
-                onChange={(e) => handleFileUpload(e, "owner")}
+                onChange={(e) => handleImageUpload(e, "owner")}
               />
             </Button>
+            <Typography variant="caption">
+  {formData.owner.image || "No image uploaded"}
+</Typography>
           </Box>
         );
       case 2: // Dog Information
@@ -545,7 +636,7 @@ const Register = () => {
               <input
                 type="file"
                 hidden
-                onChange={(e) => handleFileUpload(e, "dog")}
+                onChange={(e) => handleImageUpload(e, "dog")}
               />
             </Button>
           </Box>
@@ -604,20 +695,21 @@ const Register = () => {
             Next
           </Button>
         ) : (
+          <>
           <Button
             variant="contained"
             color="success"
-            onClick={() =>
-              setAlert({
-                open: true,
-                severity: "success",
-                message: "Registration Complete!",
-              })
-            }
+            onClick={handleRegistration}
             disabled={!formData.termsAccepted} // Disable if terms are not accepted
           >
             Finish
           </Button>
+          {registrationStatus.message && (
+        <FormHelperText>
+          {registrationStatus.message}
+        </FormHelperText>
+      )}
+          </>
         )}
       </Box>
       <Snackbar

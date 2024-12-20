@@ -117,28 +117,37 @@ function Header() {
           </IconButton>
         ) : (
           <Box className="buttons-container">
-             {showBackButton && <BackButton />} {/* Conditionally render BackButton */}
-            {[
-              // List of navigation paths
-              "/",
-              "/meet-buddies",
-              "/my-profile",
-              "/my-buddies",
-              "/my-meetings",
-              "/my-chat",
-              "/friend-requests",
-            ].map((path, index) => (
-              <Button
-                key={index}
-                component={Link}
-                to={path}
-                className={`nav-button ${isActive(path) ? "active" : ""}`}
-              >
-                {path.replace("/", "").replace("-", " ").toUpperCase() ||
-                  "HOMEPAGE"}
-              </Button>
-            ))}
-          </Box>
+  {showBackButton && (
+    <Tooltip title="Go Back">
+      <span> {/* Ensure valid DOM element wrapping BackButton */}
+        <BackButton />
+      </span>
+    </Tooltip>
+  )}
+  {[
+    "/", // Navigation paths
+    "/meet-buddies",
+    "/my-profile",
+    "/my-buddies",
+    "/my-meetings",
+    "/my-chat",
+    "/friend-requests",
+  ].map((path, index) => (
+    <Tooltip title={` ${path.replace("/", "").replace("-", " ").toUpperCase() || "Homepage"}`} key={index}>
+      <span>
+        <Button
+          component={Link}
+          to={path}
+          className={`nav-button ${isActive(path) ? "active" : ""}`}
+        >
+          {path.replace("/", "").replace("-", " ").toUpperCase() || "HOMEPAGE"}
+        </Button>
+      </span>
+    </Tooltip>
+  ))}
+</Box>
+
+        
         )}
         <Menu
           anchorEl={anchorEl}

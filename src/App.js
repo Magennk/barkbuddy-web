@@ -17,6 +17,8 @@ import "./css/Spinner.css"; // Modern Spinner Styles
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import PersonalChat from "./pages/PersonalChat";
+import ThankYou from "./pages/ThankYou";
+
 
 // Lazy load components for performance optimization
 const HomePage = React.lazy(() => import("./pages/HomePage"));
@@ -33,6 +35,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/not-found" element={<NotFound />} />
+          <Route path="/thank-you" element={<ThankYou />} />
 
           {/* Protected Routes */}
           <Route
