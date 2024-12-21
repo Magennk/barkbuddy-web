@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Card,
   CardMedia,
@@ -15,19 +15,19 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions, 
+  DialogActions,
   CircularProgress,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Cancel";
-import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
-import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-import FlashOnIcon from "@mui/icons-material/FlashOn";
-import { UserContext } from "../context/UserContext";
-import MaleIcon from "@mui/icons-material/Male";
-import FemaleIcon from "@mui/icons-material/Female";
-import "../css/MyProfile.css";
+} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import FlashOnIcon from '@mui/icons-material/FlashOn';
+import { UserContext } from '../context/UserContext';
+import MaleIcon from '@mui/icons-material/Male';
+import FemaleIcon from '@mui/icons-material/Female';
+import '../css/MyProfile.css';
 
 const MyProfile = () => {
   const { user, setUser } = useContext(UserContext); // Get logged-in user's email from context
@@ -43,36 +43,36 @@ const MyProfile = () => {
   const [breeds, setBreeds] = useState([]); // Dog breeds state
   const [cities, setCities] = useState([]); // City list state
 
-  // Fetch list of cities from backend 
+  // Fetch list of cities from backend
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/get-cities");
-        if (!response.ok) throw new Error("Failed to fetch cities");
+        const response = await fetch('http://localhost:5000/api/get-cities');
+        if (!response.ok) throw new Error('Failed to fetch cities');
         const data = await response.json();
         setCities(data.cities); // Set cities list from response
       } catch (error) {
-        console.error("Error fetching cities:", error.message);
+        console.error('Error fetching cities:', error.message);
         setCities([]); // Default to empty list if fetch fails
       }
     };
     fetchCities();
   }, []);
 
- // Fetch dog breeds using a rest api
- useEffect(() => {
-   fetch("https://dog.ceo/api/breeds/list/all")
-     .then((res) => res.json())
-     .then((data) => {
-       if (data.message) {
-         setBreeds(Object.keys(data.message)); // Extract breed names
-       }
-     })
-     .catch((error) => {
-       console.error("Error fetching dog breeds:", error);
-       setBreeds([]);
-     });
- }, []);
+  // Fetch dog breeds using a rest api
+  useEffect(() => {
+    fetch('https://dog.ceo/api/breeds/list/all')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message) {
+          setBreeds(Object.keys(data.message)); // Extract breed names
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching dog breeds:', error);
+        setBreeds([]);
+      });
+  }, []);
   // Fetch data from the backend
   useEffect(() => {
     const fetchOwnerAndDog = async () => {
@@ -126,14 +126,13 @@ const MyProfile = () => {
 
   const handleDogInputChange = (e) => {
     const { name, value } = e.target;
-  
+
     // Update the corresponding field in the state
     setEditedDogData((prevData) => ({
       ...prevData,
       [name]: value, // Dynamically update the correct field
     }));
   };
-  
 
   const handleOwnerInputChange = (e) => {
     const { name, value } = e.target;
@@ -161,61 +160,67 @@ const MyProfile = () => {
   // Handle confirmation result
   const handleSaveConfirm = async (confirm) => {
     if (confirm) {
-      if (saveTarget === "dog") {
+      if (saveTarget === 'dog') {
         //setDogData(editedDogData); // Save changes to the dog
         try {
-          const response = await fetch("http://localhost:5000/api/dogs/update-dog", {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ dogId: dogData.id, ...editedDogData }),
-          });
-  
+          const response = await fetch(
+            'http://localhost:5000/api/dogs/update-dog',
+            {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ dogId: dogData.id, ...editedDogData }),
+            }
+          );
+
           if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
           }
-  
+
           const data = await response.json();
-  
+
           // Update the dogData state
           setDogData((prevDogData) => ({
             ...prevDogData,
             ...data.dog, // Merge updated dog data
           }));
-  
-          alert("Dog information updated successfully!");
+
+          alert('Dog information updated successfully!');
         } catch (err) {
           console.error(err);
-          alert("Failed to update dog information. Please try again.");
+          alert('Failed to update dog information. Please try again.');
         }
-      } else if (saveTarget === "owner") {
+      } else if (saveTarget === 'owner') {
         //setDogData({ ...dogData, owner: editedOwnerData }); // Save changes to the owner
         try {
-          const response = await fetch("http://localhost:5000/api/users/update-owner", {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email: user.email, ...editedOwnerData }),
-          });
-  
+          const response = await fetch(
+            'http://localhost:5000/api/users/update-owner',
+            {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ email: user.email, ...editedOwnerData }),
+            }
+          );
+
           if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
           }
-  
+
           const data = await response.json();
           setDogData({ ...dogData, owner: data.owner }); // Update state with new owner data
-                  // Update the UserContext with the new owner information
-        setUser((prevUser) => ({
-          ...prevUser,
-          firstname: data.owner.firstname,
-          lastname: data.owner.lastname,
-        }));
-          alert("Owner information updated successfully!");
+          // Update the UserContext with the new owner information
+          setUser((prevUser) => ({
+            ...prevUser,
+            firstname: data.owner.firstname,
+            lastname: data.owner.lastname,
+          }));
+          alert('Owner information updated successfully!');
         } catch (err) {
           console.error(err);
-          alert("Failed to update owner information. Please try again.");
+          alert('Failed to update owner information. Please try again.');
         }
       }
     }
@@ -241,10 +246,10 @@ const MyProfile = () => {
         }
       >
         <MenuItem value={true}>
-          <SentimentSatisfiedAltIcon style={{ color: "green" }} />
+          <SentimentSatisfiedAltIcon style={{ color: 'green' }} />
         </MenuItem>
         <MenuItem value={false}>
-          <SentimentVeryDissatisfiedIcon style={{ color: "red" }} />
+          <SentimentVeryDissatisfiedIcon style={{ color: 'red' }} />
         </MenuItem>
       </Select>
     </FormControl>
@@ -255,8 +260,8 @@ const MyProfile = () => {
       <FlashOnIcon
         key={i}
         style={{
-          color: i < editedDogData.energylevel ? "gold" : "lightgrey",
-          cursor: "pointer",
+          color: i < editedDogData.energylevel ? 'gold' : 'lightgrey',
+          cursor: 'pointer',
         }}
         onClick={() =>
           setEditedDogData({ ...editedDogData, energylevel: i + 1 })
@@ -301,7 +306,7 @@ const MyProfile = () => {
                   fullWidth
                   margin="normal"
                 />
-               {/* <TextField
+                {/* <TextField
                   label="Breed"
                   name="breed"
                   value={editedDogData.breed}
@@ -311,17 +316,17 @@ const MyProfile = () => {
                 /> */}
                 <Typography>Breed:</Typography>
                 <Select
-                label="Breed"
-                name="breed"
-                value={editedDogData.breed}
-                onChange={(e) => handleDogInputChange(e, "dog")}
-              >
-                {breeds.map((breed) => (
-                  <MenuItem key={breed} value={breed}>
-                    {breed}
-                  </MenuItem>
-                ))}
-              </Select>
+                  label="Breed"
+                  name="breed"
+                  value={editedDogData.breed}
+                  onChange={(e) => handleDogInputChange(e, 'dog')}
+                >
+                  {breeds.map((breed) => (
+                    <MenuItem key={breed} value={breed}>
+                      {breed}
+                    </MenuItem>
+                  ))}
+                </Select>
                 <TextField
                   label="Region"
                   name="region"
@@ -343,18 +348,18 @@ const MyProfile = () => {
                 <Typography>Energy Level:</Typography>
                 {renderEnergyLevel()}
                 <Typography>Vaccinated:</Typography>
-                {renderEditableSmiley("isvaccinated")}
+                {renderEditableSmiley('isvaccinated')}
                 <Typography>Good with Kids:</Typography>
-                {renderEditableSmiley("isgoodwithkids")}
+                {renderEditableSmiley('isgoodwithkids')}
                 <Typography>Good with Animals:</Typography>
-                {renderEditableSmiley("isgoodwithanimals")}
+                {renderEditableSmiley('isgoodwithanimals')}
                 <Typography>Restricted Breed:</Typography>
-                {renderEditableSmiley("isinrestrictedbreedscategory")}
+                {renderEditableSmiley('isinrestrictedbreedscategory')}
                 <Box className="edit-buttons">
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => openConfirmDialog("dog")}
+                    onClick={() => openConfirmDialog('dog')}
                   >
                     <SaveIcon />
                     Save
@@ -381,8 +386,8 @@ const MyProfile = () => {
                   <span className="label">Age:</span> {dogData.age}
                 </Typography>
                 <Typography>
-                  <span className="label">Sex:</span>{" "}
-                  {dogData.sex === "male" ? (
+                  <span className="label">Sex:</span>{' '}
+                  {dogData.sex === 'male' ? (
                     <MaleIcon className="icon male" />
                   ) : (
                     <FemaleIcon className="icon female" />
@@ -392,31 +397,31 @@ const MyProfile = () => {
                   <span className="label">Region:</span> {dogData.region}
                 </Typography>
                 <Typography>
-                  <span className="label">Vaccinated:</span>{" "}
+                  <span className="label">Vaccinated:</span>{' '}
                   {renderSmileOrSadIcon(dogData.isvaccinated)}
                 </Typography>
                 <Typography>
-                  <span className="label">Good with Kids:</span>{" "}
+                  <span className="label">Good with Kids:</span>{' '}
                   {renderSmileOrSadIcon(dogData.isgoodwithkids)}
                 </Typography>
                 <Typography>
-                  <span className="label">Good with animals:</span>{" "}
+                  <span className="label">Good with animals:</span>{' '}
                   {renderSmileOrSadIcon(dogData.isgoodwithanimals)}
                 </Typography>
                 <Typography>
-                  <span className="label">Dangerous dog breed:</span>{" "}
+                  <span className="label">Dangerous dog breed:</span>{' '}
                   {renderSmileOrSadIcon(dogData.isinrestrictedbreedscategory)}
                 </Typography>
                 <Typography>
-                  <span className="label">Energy Level:</span>{" "}
+                  <span className="label">Energy Level:</span>{' '}
                   {Array(dogData.energylevel)
                     .fill(null)
                     .map((_, i) => (
-                      <FlashOnIcon key={i} style={{ color: "gold" }} />
+                      <FlashOnIcon key={i} style={{ color: 'gold' }} />
                     ))}
                 </Typography>
                 <Typography>
-                  <span className="label">A bit more about me:</span>{" "}
+                  <span className="label">A bit more about me:</span>{' '}
                   {dogData.description}
                 </Typography>
               </>
@@ -460,21 +465,21 @@ const MyProfile = () => {
                 />
                 <Typography>City:</Typography>
                 <Select
-                label="City"
-                name="city"
-                value={editedOwnerData.city}
-                onChange={handleOwnerInputChange}
-              >
-                 {cities.length > 0 ? (
+                  label="City"
+                  name="city"
+                  value={editedOwnerData.city}
+                  onChange={handleOwnerInputChange}
+                >
+                  {cities.length > 0 ? (
                     cities.map((city, index) => (
-                    <MenuItem key={index} value={city}>
-                      {city}
-                    </MenuItem>
-            ))
-          ) : (
+                      <MenuItem key={index} value={city}>
+                        {city}
+                      </MenuItem>
+                    ))
+                  ) : (
                     <MenuItem disabled>No cities available</MenuItem>
-          )}
-              </Select>
+                  )}
+                </Select>
                 {/*<TextField
                   label="City"
                   name="city"
@@ -487,7 +492,7 @@ const MyProfile = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => openConfirmDialog("owner")}
+                    onClick={() => openConfirmDialog('owner')}
                   >
                     <SaveIcon />
                     Save
@@ -505,15 +510,15 @@ const MyProfile = () => {
             ) : (
               <>
                 <Typography>
-                  <span className="label"> Full Name:</span>{" "}
+                  <span className="label"> Full Name:</span>{' '}
                   {dogData.owner.firstname} {dogData.owner.lastname}
                 </Typography>
                 <Typography>
                   <span className="label"> Age:</span> {dogData.owner.age}
                 </Typography>
                 <Typography>
-                  <span className="label">Gender:</span>{" "}
-                  {dogData.owner.gender === "male" ? (
+                  <span className="label">Gender:</span>{' '}
+                  {dogData.owner.gender === 'male' ? (
                     <MaleIcon className="icon male" />
                   ) : (
                     <FemaleIcon className="icon female" />
@@ -536,8 +541,8 @@ const MyProfile = () => {
         >
           <DialogTitle>Confirm Changes</DialogTitle>
           <DialogContent>
-            Are you sure you want to save the changes to your{" "}
-            {saveTarget === "dog" ? "Dog" : "Owner"}?
+            Are you sure you want to save the changes to your{' '}
+            {saveTarget === 'dog' ? 'Dog' : 'Owner'}?
           </DialogContent>
           <DialogActions>
             <Button variant="outlined" onClick={() => handleSaveConfirm(false)}>
