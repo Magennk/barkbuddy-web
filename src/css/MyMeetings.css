@@ -66,3 +66,17 @@
   color: #000; /* Black text color */
   padding: 10px; /* Add padding for spacing */
 }
+
+.dialog-yes-button{
+  background-color: #4caf50 !important; /* Green background */
+  color: black !important; /* Black text */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.dialog-no-button{
+  background-color: #d3d3d3 !important; /* Light grey background */
+  color: black !important; /* Black text */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}

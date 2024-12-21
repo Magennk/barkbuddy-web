@@ -50,6 +50,26 @@ const ScheduleAMeeting = () => {
     });
   };
 
+  // Check if the user's email is Gmail
+  const isGmailUser = () => {
+    return formData.ownerEmail1.endsWith('@gmail.com');
+  };
+
+  // Function to generate Google Calendar URL
+  const generateGoogleCalendarLink = () => {
+    const startDateTime = `${formData.date.replace(
+      /-/g,
+      ''
+    )}T${formData.time.replace(/:/g, '')}00`;
+    const endDateTime = `${formData.date.replace(/-/g, '')}T${(
+      parseInt(formData.time.split(':')[0]) + 1
+    )
+      .toString()
+      .padStart(2, '0')}${formData.time.split(':')[1]}00`;
+    const baseUrl = 'https://calendar.google.com/calendar/render';
+    return `${baseUrl}?action=TEMPLATE&text=BarkBuddy Meeting - ${formData.subject}&details=Meeting with ${formData.buddyName} at ${formData.location}&location=${formData.location}&dates=${startDateTime}/${endDateTime}`;
+  };
+
   const validateForm = () => {
     const newErrors = {};
     if (!formData.date) newErrors.date = 'Date is required.';
@@ -207,6 +227,29 @@ const ScheduleAMeeting = () => {
           className={`meeting-field ${errors.subject ? 'error-field' : ''}`}
           helperText={errors.subject}
         />
+        {formData.date &&
+          formData.time &&
+          formData.subject &&
+          formData.location && (
+            <a
+              href={isGmailUser() ? generateGoogleCalendarLink() : undefined}
+              target={isGmailUser() ? '_blank' : undefined}
+              rel="noopener noreferrer"
+              style={{
+                textDecoration: 'none',
+                marginTop: '20px',
+                display: 'inline-block',
+              }}
+            >
+              <Button
+                variant="contained"
+                color="secondary"
+                disabled={!isGmailUser()} // Disable if the user is not Gmail
+              >
+                Add to Google Calendar
+              </Button>
+            </a>
+          )}
         <Button
           type="submit"
           variant="contained"
