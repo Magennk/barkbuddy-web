@@ -13,6 +13,7 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import {Typography } from "@mui/material";
 
 
+
 function MyMeetings() {
   const { user } = useContext(UserContext); // Get logged-in user
   const [meetings, setMeetings] = useState({ upcomingMeetings: [], pastMeetings: [] }); // Store meetings data

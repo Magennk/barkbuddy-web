@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from 'react';
 import {
   Typography,
   TextField,
@@ -7,12 +7,12 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-} from "@mui/material";
-import { useLocation } from "react-router-dom";
-import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
-import "../css/ScheduleAMeeting.css";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+} from '@mui/material';
+import { useLocation } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
+import '../css/ScheduleAMeeting.css';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const ScheduleAMeeting = () => {
   const location = useLocation();
@@ -21,22 +21,22 @@ const ScheduleAMeeting = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
   const handleGoToMyMeetings = () => {
-    navigate("/my-meetings"); // Navigate to the "My Meetings" page
+    navigate('/my-meetings'); // Navigate to the "My Meetings" page
   };
 
   const [formData, setFormData] = useState({
-    buddyName: buddyName || "",
-    date: "",
-    time: "",
-    location: "",
-    subject: "",
-    ownerEmail1: user?.email || "",
-    ownerEmail2: ownerEmail || "",
+    buddyName: buddyName || '',
+    date: '',
+    time: '',
+    location: '',
+    subject: '',
+    ownerEmail1: user?.email || '',
+    ownerEmail2: ownerEmail || '',
   });
 
   const [errors, setErrors] = useState({});
   const [openDialog, setOpenDialog] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(""); // New state for success message
+  const [successMessage, setSuccessMessage] = useState(''); // New state for success message
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -46,16 +46,16 @@ const ScheduleAMeeting = () => {
     });
     setErrors({
       ...errors,
-      [name]: "", // Clear error when field is edited
+      [name]: '', // Clear error when field is edited
     });
   };
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.date) newErrors.date = "Date is required.";
-    if (!formData.time) newErrors.time = "Time is required.";
-    if (!formData.location) newErrors.location = "Location is required.";
-    if (!formData.subject) newErrors.subject = "Subject is required.";
+    if (!formData.date) newErrors.date = 'Date is required.';
+    if (!formData.time) newErrors.time = 'Time is required.';
+    if (!formData.location) newErrors.location = 'Location is required.';
+    if (!formData.subject) newErrors.subject = 'Subject is required.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -64,18 +64,18 @@ const ScheduleAMeeting = () => {
     e.preventDefault();
     if (!validateForm()) return;
     setOpenDialog(true);
-    setSuccessMessage(""); // Reset success message when dialog is reopened
+    setSuccessMessage(''); // Reset success message when dialog is reopened
   };
 
   const handleConfirm = async () => {
-    console.log("Payload being sent to the backend:", formData);
+    console.log('Payload being sent to the backend:', formData);
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/meetings/schedule-meeting",
+        'http://localhost:5000/api/meetings/schedule-meeting',
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),
         }
       );
@@ -85,17 +85,17 @@ const ScheduleAMeeting = () => {
       }
 
       const result = await response.json();
-      console.log("Meeting scheduled successfully:", result);
-      setSuccessMessage("Meeting scheduled successfully!"); // Update success message
+      console.log('Meeting scheduled successfully:', result);
+      setSuccessMessage('Meeting scheduled successfully!'); // Update success message
     } catch (error) {
-      console.error("Error scheduling meeting:", error.message);
-      setSuccessMessage("Failed to schedule the meeting. Please try again."); // Handle error
+      console.error('Error scheduling meeting:', error.message);
+      setSuccessMessage('Failed to schedule the meeting. Please try again.'); // Handle error
     }
   };
 
   const handleCancel = () => {
     setOpenDialog(false);
-    setSuccessMessage(""); // Clear success message when dialog is closed
+    setSuccessMessage(''); // Clear success message when dialog is closed
   };
 
   return (
@@ -118,7 +118,11 @@ const ScheduleAMeeting = () => {
           className="meeting-field"
         />
         <TextField
-          label="Date *"
+          label={
+            <>
+              Date <span className="required-field">*</span>
+            </>
+          }
           type="date"
           variant="outlined"
           name="date"
@@ -128,41 +132,79 @@ const ScheduleAMeeting = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          className={`meeting-field ${errors.date ? "error-field" : ""}`}
+          inputProps={{
+            min: new Date().toISOString().split('T')[0], // Set the minimum date to today
+          }}
+          className={`meeting-field ${errors.date ? 'error-field' : ''}`}
           helperText={errors.date}
         />
+
         <TextField
-          label="Time *"
+          label={
+            <>
+              Time <span className="required-field">*</span>
+            </>
+          }
           type="time"
           variant="outlined"
           name="time"
           value={formData.time}
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e);
+
+            // Add validation for same-day times
+            if (formData.date === new Date().toISOString().split('T')[0]) {
+              const currentTime = new Date()
+                .toISOString()
+                .split('T')[1]
+                .slice(0, 5);
+              if (e.target.value < currentTime) {
+                setErrors({
+                  ...errors,
+                  time: 'Time cannot be in the past for today.',
+                });
+              } else {
+                setErrors({
+                  ...errors,
+                  time: '',
+                });
+              }
+            }
+          }}
           margin="normal"
           InputLabelProps={{
             shrink: true,
           }}
-          className={`meeting-field ${errors.time ? "error-field" : ""}`}
+          className={`meeting-field ${errors.time ? 'error-field' : ''}`}
           helperText={errors.time}
         />
+
         <TextField
-          label="Location *"
+          label={
+            <>
+              Location <span className="required-field">*</span>
+            </>
+          }
           variant="outlined"
           name="location"
           value={formData.location}
           onChange={handleChange}
           margin="normal"
-          className={`meeting-field ${errors.location ? "error-field" : ""}`}
+          className={`meeting-field ${errors.location ? 'error-field' : ''}`}
           helperText={errors.location}
         />
         <TextField
-          label="Subject *"
+          label={
+            <>
+              Subject <span className="required-field">*</span>
+            </>
+          }
           variant="outlined"
           name="subject"
           value={formData.subject}
           onChange={handleChange}
           margin="normal"
-          className={`meeting-field ${errors.subject ? "error-field" : ""}`}
+          className={`meeting-field ${errors.subject ? 'error-field' : ''}`}
           helperText={errors.subject}
         />
         <Button
@@ -173,26 +215,28 @@ const ScheduleAMeeting = () => {
         >
           Schedule Meeting
         </Button>
+
         <Button
-    variant="contained"
-    style={{ backgroundColor: "red", color: "white" }}
-    className="meeting-button"
-    onClick={() => navigate("/meet-buddies")}
-  >
-    Go Back to "Meet Buddies"
-  </Button>
+          variant="contained"
+          style={{ backgroundColor: 'red', color: 'white', marginTop: '15px' }}
+          className="meeting-button"
+          onClick={() => navigate('/meet-buddies')}
+        >
+          BACK TO "MEET BUDDIES"
+        </Button>
       </form>
 
       <Dialog open={openDialog} onClose={handleCancel}>
         <DialogTitle>
-          {successMessage || "Are you sure you want to schedule a meeting?"}
+          {successMessage || 'Are you sure you want to schedule a meeting?'}
         </DialogTitle>
         <DialogContent>
           {successMessage ? (
             <Typography variant="body1">{successMessage}</Typography>
           ) : (
             <Typography variant="body1">
-              Please confirm if you'd like to proceed with scheduling the meeting.
+              Please confirm if you'd like to proceed with scheduling the
+              meeting.
             </Typography>
           )}
         </DialogContent>
@@ -208,9 +252,9 @@ const ScheduleAMeeting = () => {
             </>
           )}
           {successMessage && (
-           <Button onClick={handleGoToMyMeetings} color="primary">
-           Go to "My Meetings"
-         </Button>
+            <Button onClick={handleGoToMyMeetings} color="primary">
+              Go to "My Meetings"
+            </Button>
           )}
         </DialogActions>
       </Dialog>
@@ -219,5 +263,3 @@ const ScheduleAMeeting = () => {
 };
 
 export default ScheduleAMeeting;
-
-

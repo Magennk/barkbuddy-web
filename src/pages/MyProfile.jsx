@@ -42,7 +42,11 @@ const MyProfile = () => {
   const [saveTarget, setSaveTarget] = useState(null); // Determines target ("dog" or "owner")
   const [breeds, setBreeds] = useState([]); // Dog breeds state
   const [cities, setCities] = useState([]); // City list state
-
+  const [errors, setErrors] = useState({
+    firstname: '',
+    lastname: '',
+    name: '',
+  }); // for errors of validation of the data
   // Fetch list of cities from backend
   useEffect(() => {
     const fetchCities = async () => {
@@ -127,15 +131,51 @@ const MyProfile = () => {
   const handleDogInputChange = (e) => {
     const { name, value } = e.target;
 
-    // Update the corresponding field in the state
+    // Validate dog name
+    if (name === 'name') {
+      if (!isValidString(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          name: 'Only letters and spaces are allowed.',
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          name: '',
+        }));
+      }
+    }
+
+    // Update state
     setEditedDogData((prevData) => ({
       ...prevData,
-      [name]: value, // Dynamically update the correct field
+      [name]: value,
     }));
   };
 
+  // String validation
+  const isValidString = (value) => /^[A-Za-z\s]+$/.test(value);
+
+  // handle owner data
   const handleOwnerInputChange = (e) => {
     const { name, value } = e.target;
+
+    // Validate firstname and lastname
+    if (name === 'firstname' || name === 'lastname') {
+      if (!isValidString(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          [name]: 'Only letters and spaces are allowed.',
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          [name]: '',
+        }));
+      }
+    }
+
+    // Update state
     setEditedOwnerData({ ...editedOwnerData, [name]: value });
   };
 
@@ -305,6 +345,8 @@ const MyProfile = () => {
                   onChange={handleDogInputChange}
                   fullWidth
                   margin="normal"
+                  error={!!errors.name}
+                  helperText={errors.name}
                 />
                 {/* <TextField
                   label="Breed"
@@ -327,14 +369,23 @@ const MyProfile = () => {
                     </MenuItem>
                   ))}
                 </Select>
-                <TextField
+                <Typography>Region:</Typography>
+                <Select
                   label="Region"
                   name="region"
                   value={editedDogData.region}
                   onChange={handleDogInputChange}
-                  fullWidth
-                  margin="normal"
-                />
+                >
+                  {cities.length > 0 ? (
+                    cities.map((city, index) => (
+                      <MenuItem key={index} value={city}>
+                        {city}
+                      </MenuItem>
+                    ))
+                  ) : (
+                    <MenuItem disabled>No cities available</MenuItem>
+                  )}
+                </Select>
                 <TextField
                   label="A bit more about me"
                   name="description"
@@ -360,6 +411,7 @@ const MyProfile = () => {
                     variant="contained"
                     color="primary"
                     onClick={() => openConfirmDialog('dog')}
+                    disabled={!!errors.name}
                   >
                     <SaveIcon />
                     Save
@@ -454,6 +506,8 @@ const MyProfile = () => {
                   onChange={handleOwnerInputChange}
                   fullWidth
                   margin="normal"
+                  error={!!errors.firstname}
+                  helperText={errors.firstname}
                 />
                 <TextField
                   label="Last Name"
@@ -462,6 +516,8 @@ const MyProfile = () => {
                   onChange={handleOwnerInputChange}
                   fullWidth
                   margin="normal"
+                  error={!!errors.lastname}
+                  helperText={errors.lastname}
                 />
                 <Typography>City:</Typography>
                 <Select
@@ -493,6 +549,7 @@ const MyProfile = () => {
                     variant="contained"
                     color="primary"
                     onClick={() => openConfirmDialog('owner')}
+                    disabled={!!errors.firstname || !!errors.lastname}
                   >
                     <SaveIcon />
                     Save
