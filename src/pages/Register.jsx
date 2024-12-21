@@ -57,14 +57,14 @@ const Register = () => {
     },
     dog: {
       name: '',
-      yearofbirth: 2023, // Default
+      yearofbirth: new Date().getFullYear(), // Default
       sex: '',
       city: '',
       breed: '',
-      isvaccinated: false, // Default
-      isgoodWithKids: false, // Default
-      isgoodWithAnimals: false, // Default
-      isinrestrictedbreedscategory: false, // Default
+      isvaccinated: '', // Default
+      isgoodWithKids: '', // Default
+      isgoodWithAnimals: '', // Default
+      isinrestrictedbreedscategory: '', // Default
       energyLevel: 3, // Default
       description: '',
       image: '',
@@ -256,7 +256,15 @@ const Register = () => {
       else if (!/^[A-Za-z\s]+$/.test(currentStepData.lastName)) {
         stepErrors.lastName = 'Last Name must contain only letters.';
       }
-      if (!currentStepData.dob) stepErrors.dob = 'Date of Birth is required.';
+      if (!currentStepData.dob) {
+        stepErrors.dob = 'Date of Birth is required.';
+      } else {
+        const today = new Date(); // Get the current date
+        const dobDate = new Date(currentStepData.dob); // Parse the input date
+        if (dobDate > today) {
+          stepErrors.dob = 'Please enter a valid birth date';
+        }
+      }
       if (!currentStepData.gender) stepErrors.gender = 'Gender is required.';
       if (!currentStepData.city) {
         stepErrors.city = 'City is required.';
@@ -270,6 +278,34 @@ const Register = () => {
       if (!currentStepData.sex) stepErrors.sex = "Dog's Sex is required.";
       if (!currentStepData.breed) stepErrors.breed = 'Breed is required.';
       if (!currentStepData.city) stepErrors.city = 'City is required.';
+      if (!currentStepData.yearofbirth) {
+        stepErrors.yearofbirth = 'Year of birth is required.';
+      } else if (
+        !/^\d{4}$/.test(currentStepData.yearofbirth) || // Ensure 4 digits
+        currentStepData.yearofbirth < 1900 || // Ensure realistic range
+        currentStepData.yearofbirth > new Date().getFullYear()
+      ) {
+        stepErrors.yearofbirth = 'Enter a valid year.';
+      }
+
+      if (currentStepData.isvaccinated === undefined) {
+        stepErrors.isvaccinated = 'Is vaccinated status is required.';
+      }
+
+      if (currentStepData.isgoodWithKids === undefined) {
+        stepErrors.isgoodWithKids =
+          'Please indicate if the dog is good with kids.';
+      }
+
+      if (currentStepData.isgoodWithAnimals === undefined) {
+        stepErrors.isgoodWithAnimals =
+          'Please indicate if the dog is good with animals.';
+      }
+
+      if (currentStepData.isinrestrictedbreedscategory === undefined) {
+        stepErrors.isinrestrictedbreedscategory =
+          'Please indicate if the dog is in the restricted breed category.';
+      }
     }
     // step 3 - terms
     else if (activeStep === 3) {
@@ -327,6 +363,18 @@ const Register = () => {
         severity: 'error',
         message: 'No file selected!',
       });
+      e.target.value = ''; // Reset the file input
+      return;
+    }
+
+    // Validate file type
+    else if (file.type !== 'image/jpeg') {
+      setAlert({
+        open: true,
+        severity: 'error',
+        message: 'Only JPEG images are allowed.',
+      });
+      e.target.value = ''; // Reset the file input
       return;
     }
 
@@ -381,6 +429,8 @@ const Register = () => {
         severity: 'error',
         message: 'Image upload failed. Please try again.',
       });
+    } finally {
+      e.target.value = ''; // Reset the file input after upload attempt
     }
   };
 
@@ -583,6 +633,93 @@ const Register = () => {
               error={!!errors.name}
               helperText={errors.name}
             />
+            <TextField
+              label="Year of Birth (4 digits) *"
+              name="yearofbirth"
+              value={formData.dog.yearofbirth}
+              onChange={(e) => handleChange(e, 'dog')}
+              type="number"
+              fullWidth
+              margin="normal"
+              error={!!errors.yearofbirth}
+              helperText={errors.yearofbirth}
+            />
+            <FormControl
+              fullWidth
+              margin="normal"
+              error={!!errors.isvaccinated}
+            >
+              <InputLabel>
+                Is Vaccinated <span className="required-field">*</span>
+              </InputLabel>
+              <Select
+                name="isvaccinated"
+                value={formData.dog.isvaccinated}
+                onChange={(e) => handleChange(e, 'dog')}
+              >
+                <MenuItem value={true}>Yes</MenuItem>
+                <MenuItem value={false}>No</MenuItem>
+              </Select>
+              <FormHelperText>{errors.isvaccinated}</FormHelperText>{' '}
+            </FormControl>
+            <FormControl
+              fullWidth
+              margin="normal"
+              error={!!errors.isgoodWithKids}
+            >
+              <InputLabel>
+                Good with Kids <span className="required-field">*</span>
+              </InputLabel>
+              <Select
+                name="isgoodWithKids"
+                value={formData.dog.isgoodWithKids}
+                onChange={(e) => handleChange(e, 'dog')}
+              >
+                <MenuItem value={true}>Yes</MenuItem>
+                <MenuItem value={false}>No</MenuItem>
+              </Select>
+              <FormHelperText>{errors.isgoodWithKids}</FormHelperText>{' '}
+            </FormControl>
+
+            <FormControl
+              fullWidth
+              margin="normal"
+              error={!!errors.isgoodWithAnimals}
+            >
+              <InputLabel>
+                Good with Animals <span className="required-field">*</span>
+              </InputLabel>
+              <Select
+                name="isgoodWithAnimals"
+                value={formData.dog.isgoodWithAnimals}
+                onChange={(e) => handleChange(e, 'dog')}
+              >
+                <MenuItem value={true}>Yes</MenuItem>
+                <MenuItem value={false}>No</MenuItem>
+              </Select>
+              <FormHelperText>{errors.isgoodWithAnimals}</FormHelperText>{' '}
+            </FormControl>
+
+            <FormControl
+              fullWidth
+              margin="normal"
+              error={!!errors.isinrestrictedbreedscategory}
+            >
+              <InputLabel>
+                Restricted Breed <span className="required-field">*</span>
+              </InputLabel>
+              <Select
+                name="isinrestrictedbreedscategory"
+                value={formData.dog.isinrestrictedbreedscategory}
+                onChange={(e) => handleChange(e, 'dog')}
+              >
+                <MenuItem value={true}>Yes</MenuItem>
+                <MenuItem value={false}>No</MenuItem>
+              </Select>
+              <FormHelperText>
+                {errors.isinrestrictedbreedscategory}
+              </FormHelperText>{' '}
+            </FormControl>
             <FormControl fullWidth margin="normal" error={!!errors.sex}>
               <InputLabel>
                 Sex<span className="required-field">*</span>

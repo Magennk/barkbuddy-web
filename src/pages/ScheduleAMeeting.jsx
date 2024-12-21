@@ -8,15 +8,21 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { useLocation } from "react-router-dom"; 
-import { useContext } from "react"; 
-import { UserContext } from "../context/UserContext"; 
+import { useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 import "../css/ScheduleAMeeting.css";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const ScheduleAMeeting = () => {
   const location = useLocation();
   const { buddyName, ownerEmail } = location.state || {};
-  const { user } = useContext(UserContext); 
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const handleGoToMyMeetings = () => {
+    navigate("/my-meetings"); // Navigate to the "My Meetings" page
+  };
 
   const [formData, setFormData] = useState({
     buddyName: buddyName || "",
@@ -28,7 +34,9 @@ const ScheduleAMeeting = () => {
     ownerEmail2: ownerEmail || "",
   });
 
+  const [errors, setErrors] = useState({});
   const [openDialog, setOpenDialog] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(""); // New state for success message
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,28 +44,31 @@ const ScheduleAMeeting = () => {
       ...formData,
       [name]: value,
     });
+    setErrors({
+      ...errors,
+      [name]: "", // Clear error when field is edited
+    });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.date) newErrors.date = "Date is required.";
+    if (!formData.time) newErrors.time = "Time is required.";
+    if (!formData.location) newErrors.location = "Location is required.";
+    if (!formData.subject) newErrors.subject = "Subject is required.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
     setOpenDialog(true);
+    setSuccessMessage(""); // Reset success message when dialog is reopened
   };
 
   const handleConfirm = async () => {
     console.log("Payload being sent to the backend:", formData);
-
-    if (
-      !formData.date ||
-      !formData.time ||
-      !formData.location ||
-      !formData.subject ||
-      !formData.ownerEmail1 ||
-      !formData.ownerEmail2
-    ) {
-      alert("All fields are required. Please fill in all the details.");
-      console.error("Missing fields:", formData);
-      return;
-    }
 
     try {
       const response = await fetch(
@@ -75,16 +86,16 @@ const ScheduleAMeeting = () => {
 
       const result = await response.json();
       console.log("Meeting scheduled successfully:", result);
-      alert("Meeting scheduled successfully!");
-      setOpenDialog(false);
+      setSuccessMessage("Meeting scheduled successfully!"); // Update success message
     } catch (error) {
       console.error("Error scheduling meeting:", error.message);
-      alert("Failed to schedule the meeting. Please try again.");
+      setSuccessMessage("Failed to schedule the meeting. Please try again."); // Handle error
     }
   };
 
   const handleCancel = () => {
     setOpenDialog(false);
+    setSuccessMessage(""); // Clear success message when dialog is closed
   };
 
   return (
@@ -106,13 +117,8 @@ const ScheduleAMeeting = () => {
           disabled
           className="meeting-field"
         />
-
         <TextField
-          label={
-            <>
-              Date <span className="required-field">*</span>
-            </>
-          }
+          label="Date *"
           type="date"
           variant="outlined"
           name="date"
@@ -122,16 +128,11 @@ const ScheduleAMeeting = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          className="meeting-field"
-          required
+          className={`meeting-field ${errors.date ? "error-field" : ""}`}
+          helperText={errors.date}
         />
-
         <TextField
-          label={
-            <>
-              Time <span className="required-field">*</span>
-            </>
-          }
+          label="Time *"
           type="time"
           variant="outlined"
           name="time"
@@ -141,40 +142,29 @@ const ScheduleAMeeting = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          className="meeting-field"
-          required
+          className={`meeting-field ${errors.time ? "error-field" : ""}`}
+          helperText={errors.time}
         />
-
         <TextField
-          label={
-            <>
-              Location <span className="required-field">*</span>
-            </>
-          }
+          label="Location *"
           variant="outlined"
           name="location"
           value={formData.location}
           onChange={handleChange}
           margin="normal"
-          className="meeting-field"
-          required
+          className={`meeting-field ${errors.location ? "error-field" : ""}`}
+          helperText={errors.location}
         />
-
         <TextField
-          label={
-            <>
-              Subject <span className="required-field">*</span>
-            </>
-          }
+          label="Subject *"
           variant="outlined"
           name="subject"
           value={formData.subject}
           onChange={handleChange}
           margin="normal"
-          className="meeting-field"
-          required
+          className={`meeting-field ${errors.subject ? "error-field" : ""}`}
+          helperText={errors.subject}
         />
-
         <Button
           type="submit"
           variant="contained"
@@ -183,24 +173,45 @@ const ScheduleAMeeting = () => {
         >
           Schedule Meeting
         </Button>
+        <Button
+    variant="contained"
+    style={{ backgroundColor: "red", color: "white" }}
+    className="meeting-button"
+    onClick={() => navigate("/meet-buddies")}
+  >
+    Go Back to "Meet Buddies"
+  </Button>
       </form>
 
       <Dialog open={openDialog} onClose={handleCancel}>
         <DialogTitle>
-          Are you sure you want to schedule a meeting?
+          {successMessage || "Are you sure you want to schedule a meeting?"}
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body1">
-            Please confirm if you'd like to proceed with scheduling the meeting.
-          </Typography>
+          {successMessage ? (
+            <Typography variant="body1">{successMessage}</Typography>
+          ) : (
+            <Typography variant="body1">
+              Please confirm if you'd like to proceed with scheduling the meeting.
+            </Typography>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancel} color="primary">
-            No
-          </Button>
-          <Button onClick={handleConfirm} color="primary" autoFocus>
-            Yes
-          </Button>
+          {!successMessage && (
+            <>
+              <Button onClick={handleCancel} color="primary">
+                No
+              </Button>
+              <Button onClick={handleConfirm} color="primary" autoFocus>
+                Yes
+              </Button>
+            </>
+          )}
+          {successMessage && (
+           <Button onClick={handleGoToMyMeetings} color="primary">
+           Go to "My Meetings"
+         </Button>
+          )}
         </DialogActions>
       </Dialog>
     </div>
@@ -208,3 +219,5 @@ const ScheduleAMeeting = () => {
 };
 
 export default ScheduleAMeeting;
+
+
