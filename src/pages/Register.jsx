@@ -20,6 +20,7 @@ import {
 import "../css/Register.css";
 import TextField from '@mui/material/TextField';
 import FlashOnIcon from "@mui/icons-material/FlashOn";
+import Badge from "@mui/material/Badge";
 import TermsConditions from "../components/TermsConditions"; // Import the new TermsConditions component
 import { useNavigate } from "react-router-dom"; // React Router's navigate function
 
@@ -301,6 +302,14 @@ const Register = () => {
     }));
   };
 
+
+  // State for upload status of image of owner or dog for responsive notification
+  const [uploadStatus, setUploadStatus] = useState({
+    owner: false,
+    dog: false,
+  });
+  
+
   // Upload Image to the backend
   const handleImageUpload = async (e, type) => {
     const file = e.target.files[0];
@@ -319,7 +328,7 @@ const Register = () => {
       uploadData.append("email", formData.owner.email); // Use the email as the unique identifier
     } else if (type === "dog") {
       uploadData.append("dogImage", file);
-      uploadData.append("ownerEmail", formData.owner.email); // Use the owner email
+      uploadData.append("ownerEmail", formData.owner.email); // Use the owner email for dog's image name
     }
   
     const endpoint =
@@ -343,11 +352,13 @@ const Register = () => {
           ...prev,
           owner: { ...prev.owner, image: data.imagePath }, // Update formData for owner
         }));
+      setUploadStatus((prev) => ({ ...prev, owner: true }));
       } else if (type === "dog") {
         setFormData((prev) => ({
           ...prev,
           dog: { ...prev.dog, image: data.imagePath }, // Update formData for dog
         }));
+        setUploadStatus((prev) => ({ ...prev, dog: true }));
       }
   
       setAlert({
@@ -520,17 +531,23 @@ const Register = () => {
               helperText={errors.city}
             />
             */}
-            <Button variant="contained" component="label" fullWidth>
-              Upload Profile Picture
-              <input
-                type="file"
-                hidden
-                onChange={(e) => handleImageUpload(e, "owner")}
-              />
-            </Button>
-            <Typography variant="caption">
-  {formData.owner.image || "No image uploaded"}
-</Typography>
+<div className="upload-container">
+  <Button variant="contained" component="label" fullWidth disabled={uploadStatus.owner}>
+    UPLOAD PROFILE PICTURE
+    <input
+      type="file"
+      hidden
+      onChange={(e) => handleImageUpload(e, "owner")}
+    />
+  </Button>
+  <Badge
+    color="success"
+    badgeContent="✔"
+    invisible={!uploadStatus.owner} // Show only if upload is successful
+    className="upload-badge"
+  />
+</div>
+
           </Box>
         );
       case 2: // Dog Information
@@ -631,14 +648,22 @@ const Register = () => {
               error={!!errors.description}
               helperText={errors.description}
             />
-            <Button variant="contained" component="label" fullWidth>
-              Upload Dog Picture
-              <input
-                type="file"
-                hidden
-                onChange={(e) => handleImageUpload(e, "dog")}
-              />
-            </Button>
+<div className="upload-container">
+  <Button variant="contained" component="label" fullWidth disabled={uploadStatus.dog} >
+    UPLOAD DOG PROFILE PICTURE
+    <input
+      type="file"
+      hidden
+      onChange={(e) => handleImageUpload(e, "dog")} // Use "dog" for dog image upload
+    />
+  </Button>
+  <Badge
+    color="success"
+    badgeContent="✔"
+    invisible={!uploadStatus.dog} // Show only if the dog's image upload is successful
+    className="upload-badge"
+  />
+</div>
           </Box>
         );
       case 3: // Terms & Conditions
@@ -714,7 +739,8 @@ const Register = () => {
       </Box>
       <Snackbar
         open={alert.open}
-        autoHideDuration={3000}
+        autoHideDuration={6500}
+        anchorOrigin={{vertical: 'top', horizontal: 'left' }}
         onClose={() => setAlert({ ...alert, open: false })}
       >
         <Alert

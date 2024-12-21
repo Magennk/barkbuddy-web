@@ -98,3 +98,17 @@ button {
   margin-left: 4px; /* Adds some spacing between the label and asterisk */
 }
 
+.upload-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between button and badge */
+  margin-top: 10px; /* Add some spacing if needed */
+}
+
+.upload-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+}
+
