@@ -314,7 +314,7 @@ const MyProfile = () => {
   return (
     <div className="my-profile">
       {/* Dog's Name as Page Title */}
-      <Typography variant="h3" className="profile-title">
+      <Typography variant="h4" className="profile-title">
         {dogData.name} & {dogData.owner.firstname} {dogData.owner.lastname}'s
         Profile
       </Typography>
@@ -602,12 +602,13 @@ const MyProfile = () => {
             {saveTarget === 'dog' ? 'Dog' : 'Owner'}?
           </DialogContent>
           <DialogActions>
-            <Button variant="outlined" onClick={() => handleSaveConfirm(false)}>
+            <Button  onClick={() => handleSaveConfirm(false)} className="dialog-no-button">
               No
             </Button>
             <Button
+            className="dialog-yes-button"
               variant="contained"
-              color="primary"
+              
               onClick={() => handleSaveConfirm(true)}
             >
               Yes

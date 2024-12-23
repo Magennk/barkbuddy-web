@@ -286,16 +286,16 @@ const ScheduleAMeeting = () => {
         <DialogActions>
           {!successMessage && (
             <>
-              <Button onClick={handleCancel} color="primary">
+              <Button onClick={handleCancel} className="dialog-no-button" color="primary">
                 No
               </Button>
-              <Button onClick={handleConfirm} color="primary" autoFocus>
+              <Button onClick={handleConfirm} className="dialog-yes-button" color="primary" autoFocus >
                 Yes
               </Button>
             </>
           )}
           {successMessage && (
-            <Button onClick={handleGoToMyMeetings} color="primary">
+            <Button onClick={handleGoToMyMeetings} className="custom-primary-button" >
               Go to "My Meetings"
             </Button>
           )}

@@ -11,6 +11,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { Typography, Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
+import EmptyState from "../components/EmptyState";
 
 function MyMeetings() {
   const { user } = useContext(UserContext);
@@ -94,7 +95,7 @@ function MyMeetings() {
   }
 
   if (meetings.upcomingMeetings.length === 0 && meetings.pastMeetings.length === 0) {
-    return <p className="no-meetings-message">You have no meetings scheduled.</p>;
+    return <EmptyState message="You have no meetings scheduled." />;
   }
 
   return (

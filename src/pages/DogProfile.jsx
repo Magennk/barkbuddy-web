@@ -19,6 +19,13 @@ import ChatIcon from "@mui/icons-material/Chat";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { UserContext } from "../context/UserContext"; // Access logged-in user's details
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+
 
 {/*Example for JSON returing from http://localhost:5000/api/dogs/dog/${id}/with-owner
 {
@@ -55,6 +62,9 @@ function DogProfile() {
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
   const navigate = useNavigate();
+  const [dialogOpen, setDialogOpen] = useState(false);
+const [dialogMessage, setDialogMessage] = useState("");
+
   
 
   useEffect(() => {
@@ -100,7 +110,7 @@ function DogProfile() {
   return (
     <div className="dog-profile">
       {/* Dog's Name as Page Title */}
-      <Typography variant="h3" className="dog-profile-title">
+      <Typography variant="h4" className="dog-profile-title">
         {dog.name}'s Profile
       </Typography>
       
@@ -227,6 +237,7 @@ function DogProfile() {
       {/* Footer Buttons */}
       <Box className="profile-actions">
       <Button
+      className="equal-button"
   variant="contained"
   color="primary"
   startIcon={<ChatIcon />}
@@ -286,10 +297,12 @@ function DogProfile() {
                 throw new Error(`Error: ${response.statusText}`);
               }
         
-              alert("Friend request sent successfully!");
+              setDialogMessage("Friend request sent successfully!");
+              setDialogOpen(true); // Open the dialog
             } catch (err) {
               console.error("Error sending friend request:", err.message);
-              alert("Could not send friend request.");
+              setDialogMessage("Could not send friend request.");
+              setDialogOpen(true); // Open the dialog with an error message
             }
           }}
         >
@@ -306,6 +319,18 @@ function DogProfile() {
         Schedule a Meeting
       </Button>
       </Box>
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+  <DialogTitle>Notification</DialogTitle>
+  <DialogContent>
+    <Typography>{dialogMessage}</Typography>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={() => setDialogOpen(false)} className="custom-primary-button" >
+      OK
+    </Button>
+  </DialogActions>
+</Dialog>
+
     </div>
   );
 }

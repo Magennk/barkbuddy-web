@@ -20,6 +20,8 @@
 
 .icons-container {
   display: flex;
+  align-items: center; /* Center-align icons */
+  justify-content: space-between; /* Space evenly */
   gap: 8px;
 }
 
@@ -27,10 +29,38 @@
   color: red !important;
 }
 
+/* Fix any extra styles specific to the logout icon */
+.logout-icon {
+  padding: 0; /* Reset any extra padding */
+  margin: 0; /* Reset any extra margin */
+  width: 48px; /* Ensure consistent button size */
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure all icons are the same size */
+.icons-container .MuiSvgIcon-root {
+  font-size: 24px; /* Ensure icons are uniformly sized */
+  width: 24px; /* Consistent icon width */
+  height: 24px; /* Consistent icon height */
+}
+
 
 .icons-container .MuiIconButton-root {
-  color: #0980bb; /* Set your desired color */
+  color: #0980bb;
+  padding: 8px; /* Adjust to match other buttons */
+  margin: 0; /* Ensure no extra margin is added */
+  width: 48px; /* Set uniform size if needed */
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box; /* Ensure padding doesn’t affect size */
+
 }
+
 
 .icons-container .MuiIconButton-root:hover {
   color: #007bff; /* Change this to the desired hover color */
@@ -106,4 +136,18 @@
   height: auto; /* Maintain aspect ratio */
   margin-right: 10px; /* Add space between the logo and text if needed */
   vertical-align: middle; /* Align the logo vertically with the text */
+}
+
+.dialog-no{
+  background-color: #d3d3d3 !important; /* Light grey background */
+  color: black !important; /* Black text */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.dialog-yes{
+  background-color: #4caf50 !important; /* Green background */
+  color: black !important; /* Black text */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
 }

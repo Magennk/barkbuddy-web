@@ -10,7 +10,7 @@
 .dog-profile-title {
   text-align: center;
   margin-bottom: 20px;
-  font-weight: bold;
+  
   color: #0980bb;
 }
 
@@ -129,4 +129,17 @@
 .equal-button {
   min-width: 200px;
   height: 40px;
+}
+
+
+.custom-primary-button {
+  background-color: #1976d2 !important; /* Primary blue color */
+  color: white !important; /* White font color */
+  border: none; /* Remove any border */
+  padding: 10px 20px; /* Adjust padding */
+  font-size: 16px; /* Adjust font size */
+  border-radius: 5px; /* Optional: Add rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  text-transform: none; /* Prevent all-uppercase text */
+  transition: background-color 0.3s ease; /* Smooth background transition */
 }

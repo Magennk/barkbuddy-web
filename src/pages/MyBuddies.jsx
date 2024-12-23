@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../context/UserContext"; // For user context
 import { useNavigate } from "react-router-dom"; // For navigation
-import { Box, Typography, Button, Avatar, CircularProgress } from "@mui/material";
+import { Box, Typography, Button, Avatar, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import "../css/MyBuddies.css"; // For custom styling
+import EmptyState from "../components/EmptyState";
 
 const MyBuddies = () => {
   const { user } = useContext(UserContext); // Get logged-in user's details
@@ -10,6 +11,10 @@ const MyBuddies = () => {
   const [loading, setLoading] = useState(true); // Spinner state
   const [error, setError] = useState(null); // Error state
   const navigate = useNavigate(); // Navigation hook for profile redirection
+
+  // Added for dialog functionality
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [buddyToDelete, setBuddyToDelete] = useState(null);
 
   // Fetch friends from the backend
   useEffect(() => {
@@ -41,30 +46,39 @@ const MyBuddies = () => {
     }
   };
 
-  // Handle Remove Buddy action
-const handleRemoveBuddy = async (buddyEmail) => {
-  try {
-    const response = await fetch("http://localhost:5000/api/friends/remove", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email1: user.email, // Logged-in user's email
-        email2: buddyEmail,
-      }),
-    });
+  // Show confirmation dialog for removing a buddy
+  const confirmRemoveBuddy = (buddyEmail) => {
+    setBuddyToDelete(buddyEmail);
+    setDialogOpen(true);
+  };
 
-    if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
+  // Proceed with removing the buddy
+  const handleRemoveBuddy = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/friends/remove", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email1: user.email, // Logged-in user's email
+          email2: buddyToDelete,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      setFriends((prev) => prev.filter((friend) => friend.owner.email !== buddyToDelete)); // Remove buddy from state
+    } catch (err) {
+      console.error("Error removing buddy:", err.message);
+      alert("Could not remove the buddy. Please try again.");
+    } finally {
+      setDialogOpen(false); // Close the dialog
+      setBuddyToDelete(null); // Clear the buddyToDelete state
     }
-
-    setFriends((prev) => prev.filter((friend) => friend.owner.email !== buddyEmail)); // Remove buddy from state
-  } catch (err) {
-    console.error("Error removing buddy:", err.message);
-    alert("Could not remove the buddy. Please try again.");
-  }
-};
+  };
 
   if (loading) {
     // Render spinner while data is loading
@@ -83,7 +97,7 @@ const handleRemoveBuddy = async (buddyEmail) => {
 
   if (friends.length === 0) {
     // Render a message if no friends are found
-    return <p className="no-friends-message">You don't have any buddies yet!</p>;
+    return <EmptyState message="You don't have any buddies yet!" />;
   }
   return (
     <Box className="my-buddies-container">
@@ -115,28 +129,51 @@ const handleRemoveBuddy = async (buddyEmail) => {
             </Box>
             {/* View Profile Button */}
             <Box className="action-buttons">
-            <Button
-              variant="contained"
-              color="primary"
-              className="view-profile-btn"
-              onClick={() => handleViewProfile(dog.id)}
-            >
-              View Profile
-            </Button>
-            <Button
-              variant="contained"
-              color="error" // Red color for the delete button
-              className="delete-buddy-btn"  
-              onClick={() => handleRemoveBuddy(dog.owner.email)} // Pass buddy's email
-            >
-              Delete Buddy
-            </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className="view-profile-btn"
+                onClick={() => handleViewProfile(dog.id)}
+              >
+                View Profile
+              </Button>
+              <Button
+                variant="contained"
+                color="error" // Red color for the delete button
+                className="delete-buddy-btn"
+                onClick={() => confirmRemoveBuddy(dog.owner.email)} // Open confirmation dialog
+              >
+                Delete Buddy
+              </Button>
             </Box>
           </Box>
         ))}
       </Box>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to remove this buddy?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setDialogOpen(false)}
+            className="dialog-no-button"
+          >
+            No
+          </Button>
+          <Button
+            onClick={handleRemoveBuddy}
+            className="dialog-yes-button"
+          >
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
 
 export default MyBuddies;
+

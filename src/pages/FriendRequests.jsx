@@ -1,8 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext"; // Access logged-in user's details
-import { Box, Typography, Button, Avatar, CircularProgress } from "@mui/material";
-import "../css/FriendRequests.css"; // Dedicated CSS file for styling
+import { UserContext } from "../context/UserContext";
+import {
+  Box,
+  Typography,
+  Button,
+  Avatar,
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+import "../css/FriendRequests.css";
+import EmptyState from "../components/EmptyState";
+
 
 const FriendRequests = () => {
   const { user } = useContext(UserContext); // Access user context to get logged-in user's email
@@ -10,6 +22,8 @@ const FriendRequests = () => {
   const [loading, setLoading] = useState(true); // Loading spinner state
   const [error, setError] = useState(null); // Error state
   const navigate = useNavigate(); // Navigation to dog profile page
+  const [dialogOpen, setDialogOpen] = useState(false); // Dialog open state
+  const [requestToDelete, setRequestToDelete] = useState(null); // Track which request to delete
 
   // Fetch friend requests from the backend
   useEffect(() => {
@@ -91,6 +105,11 @@ const handleDelete = async (requestEmail) => {
   }
 };  
 
+const confirmDeleteRequest = (requestEmail) => {
+  setRequestToDelete(requestEmail);
+  setDialogOpen(true);
+};
+
   if (loading) {
     // Render spinner while loading data
     return (
@@ -108,7 +127,7 @@ const handleDelete = async (requestEmail) => {
 
   if (requests.length === 0) {
     // Render message if no friend requests are found
-    return <p className="no-requests-message">You have no pending friend requests.</p>;
+    return <EmptyState message="You have no pending friend requests." />;
   }
 
   return (
@@ -151,9 +170,9 @@ const handleDelete = async (requestEmail) => {
               </Button>
               <Button
                 variant="contained"
-                color="error" // Red for Delete
+                color="error"
                 className="delete-btn"
-                onClick={() => handleDelete(request.owner.email)}
+                onClick={() => confirmDeleteRequest(request.owner.email)}
               >
                 Delete
               </Button>
@@ -161,6 +180,31 @@ const handleDelete = async (requestEmail) => {
           </Box>
         ))}
       </Box>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to delete this friend request?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setDialogOpen(false)}
+            className="dialog-no-button"
+          >
+            No
+          </Button>
+          <Button
+            onClick={() => {
+              handleDelete(requestToDelete);
+              setDialogOpen(false);
+            }}
+            className="dialog-yes-button"
+          >
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
