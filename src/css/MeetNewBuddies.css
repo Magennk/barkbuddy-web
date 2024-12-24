@@ -8,7 +8,6 @@
 .page-title {
   margin-bottom: 20px; /* Space below the title */
   font-size: 2rem; /* Larger font for the title */
-  
 }
 
 /* Container for the list of dog cards */
@@ -43,7 +42,6 @@
   }
 }
 
-
 /* Spinner container styles */
 .spinner-container {
   display: flex;
@@ -67,4 +65,63 @@
   font-size: 1.2rem;
   margin-top: 20px;
   color: #555;
+}
+
+/* General container for filters */
+.filters-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f9f9f9; /* Light gray background for better distinction */
+  border: 1px solid #ddd; /* Subtle border */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+}
+
+/* Header for filters section */
+.filters-header {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333; /* Dark gray text */
+}
+
+.filters-header svg {
+  margin-right: 8px; /* Space between the icon and text */
+  font-size: 24px; /* Slightly larger icon size */
+  color: #1976d2; /* Blue color for the filter icon */
+}
+
+/* Individual filter items */
+.filter-item {
+  margin-bottom: 15px; /* Space between filter dropdowns */
+}
+
+.filter-label {
+  font-size: 16px;
+  margin-bottom: 5px;
+  display: block;
+  color: #555; /* Medium gray text */
+}
+
+/* Custom style for filter select menus */
+.filter-select {
+  width: 100%;
+  background-color: white; /* Ensure consistent dropdown background */
+  border-radius: 4px;
+}
+
+.filter-select .MuiSelect-select {
+  padding: 8px 12px; /* Adjust padding for compact design */
+}
+
+/* Clear Filters Button */
+.clear-filters-button {
+  background-color: #f50057 !important; /* Pink-red color */
+  color: white !important; /* White text */
+  text-transform: none; /* Prevent uppercase text */
+  font-size: 14px; /* Slightly smaller font size */
+  margin-top: 10px;
 }

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
 import {
   Box,
   Typography,
@@ -11,10 +11,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-} from "@mui/material";
-import "../css/FriendRequests.css";
-import EmptyState from "../components/EmptyState";
-
+} from '@mui/material';
+import '../css/FriendRequests.css';
+import EmptyState from '../components/EmptyState';
 
 const FriendRequests = () => {
   const { user } = useContext(UserContext); // Access user context to get logged-in user's email
@@ -30,7 +29,9 @@ const FriendRequests = () => {
     const fetchFriendRequests = async () => {
       try {
         setLoading(true); // Show spinner while loading
-        const response = await fetch(`http://localhost:5000/api/friends/my-friend-requests?email=${user.email}`);
+        const response = await fetch(
+          `http://localhost:5000/api/friends/my-friend-requests?email=${user.email}`
+        );
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`); // Handle HTTP errors
         }
@@ -51,64 +52,71 @@ const FriendRequests = () => {
     if (dogId) {
       navigate(`/dog-profile/${dogId}`); // Navigate to the dog's profile
     } else {
-      console.error("Dog ID is undefined");
+      console.error('Dog ID is undefined');
     }
   };
 
- // Handle Confirm action
-const handleConfirm = async (requestEmail) => {
-  try {
-    const response = await fetch("http://localhost:5000/api/friends/accept-request", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        senderEmail: requestEmail,
-        recipientEmail: user.email, // Logged-in user's email
-      }),
-    });
+  // Handle Confirm action
+  const handleConfirm = async (requestEmail) => {
+    try {
+      const response = await fetch(
+        'http://localhost:5000/api/friends/accept-request',
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            senderEmail: requestEmail,
+            recipientEmail: user.email, // Logged-in user's email
+          }),
+        }
+      );
 
-    if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      setRequests((prev) =>
+        prev.filter((req) => req.owner.email !== requestEmail)
+      ); // Remove request from state
+    } catch (err) {
+      console.error('Error confirming friend request:', err.message);
+      alert('Could not confirm the friend request. Please try again.');
     }
+  };
 
-    setRequests((prev) => prev.filter((req) => req.owner.email !== requestEmail)); // Remove request from state
-  } catch (err) {
-    console.error("Error confirming friend request:", err.message);
-    alert("Could not confirm the friend request. Please try again.");
-  }
-};
+  // Handle Delete action
+  const handleDelete = async (requestEmail) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/friends/remove', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email1: user.email, // Logged-in user's email
+          email2: requestEmail,
+        }),
+      });
 
- // Handle Delete action
-const handleDelete = async (requestEmail) => {
-  try {
-    const response = await fetch("http://localhost:5000/api/friends/remove", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email1: user.email, // Logged-in user's email
-        email2: requestEmail,
-      }),
-    });
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
 
-    if (!response.ok) {
-      throw new Error(`Error: ${response.statusText}`);
+      setRequests((prev) =>
+        prev.filter((req) => req.owner.email !== requestEmail)
+      ); // Remove request from state
+    } catch (err) {
+      console.error('Error deleting friend request:', err.message);
+      alert('Could not delete the friend request. Please try again.');
     }
+  };
 
-    setRequests((prev) => prev.filter((req) => req.owner.email !== requestEmail)); // Remove request from state
-  } catch (err) {
-    console.error("Error deleting friend request:", err.message);
-    alert("Could not delete the friend request. Please try again.");
-  }
-};  
-
-const confirmDeleteRequest = (requestEmail) => {
-  setRequestToDelete(requestEmail);
-  setDialogOpen(true);
-};
+  const confirmDeleteRequest = (requestEmail) => {
+    setRequestToDelete(requestEmail);
+    setDialogOpen(true);
+  };
 
   if (loading) {
     // Render spinner while loading data
@@ -143,7 +151,7 @@ const confirmDeleteRequest = (requestEmail) => {
           <Box key={request.id} className="request-item">
             {/* Dog Image */}
             <Avatar
-              src={request.image || "/data/images/default-dog.jpg"}
+              src={request.image || '/data/images/default-dog.jpg'}
               alt={request.name}
               className="dog-avatar"
               sx={{ width: 130, height: 130 }}
@@ -185,7 +193,9 @@ const confirmDeleteRequest = (requestEmail) => {
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
-          <Typography>Are you sure you want to delete this friend request?</Typography>
+          <Typography>
+            Are you sure you want to delete this friend request?
+          </Typography>
         </DialogContent>
         <DialogActions>
           <Button
@@ -210,4 +220,3 @@ const confirmDeleteRequest = (requestEmail) => {
 };
 
 export default FriendRequests;
-
