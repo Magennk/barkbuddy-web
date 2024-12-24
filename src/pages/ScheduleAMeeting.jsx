@@ -7,6 +7,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Tooltip,
 } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { useContext } from 'react';
@@ -66,8 +67,16 @@ const ScheduleAMeeting = () => {
     )
       .toString()
       .padStart(2, '0')}${formData.time.split(':')[1]}00`;
-    const baseUrl = 'https://calendar.google.com/calendar/render';
-    return `${baseUrl}?action=TEMPLATE&text=BarkBuddy Meeting - ${formData.subject}&details=Meeting with ${formData.buddyName} at ${formData.location}&location=${formData.location}&dates=${startDateTime}/${endDateTime}`;
+
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=BarkBuddy+Meeting+-+${encodeURIComponent(
+      formData.subject
+    )}&details=Meeting+with+${encodeURIComponent(
+      formData.buddyName
+    )}+at+${encodeURIComponent(
+      formData.location
+    )}&location=${encodeURIComponent(
+      formData.location
+    )}&dates=${startDateTime}/${endDateTime}`;
   };
 
   const validateForm = () => {
@@ -227,29 +236,7 @@ const ScheduleAMeeting = () => {
           className={`meeting-field ${errors.subject ? 'error-field' : ''}`}
           helperText={errors.subject}
         />
-        {formData.date &&
-          formData.time &&
-          formData.subject &&
-          formData.location && (
-            <a
-              href={isGmailUser() ? generateGoogleCalendarLink() : undefined}
-              target={isGmailUser() ? '_blank' : undefined}
-              rel="noopener noreferrer"
-              style={{
-                textDecoration: 'none',
-                marginTop: '20px',
-                display: 'inline-block',
-              }}
-            >
-              <Button
-                variant="contained"
-                color="secondary"
-                disabled={!isGmailUser()} // Disable if the user is not Gmail
-              >
-                Add to Google Calendar
-              </Button>
-            </a>
-          )}
+
         <Button
           type="submit"
           variant="contained"
@@ -286,18 +273,58 @@ const ScheduleAMeeting = () => {
         <DialogActions>
           {!successMessage && (
             <>
-              <Button onClick={handleCancel} className="dialog-no-button" color="primary">
+              <Button
+                onClick={handleCancel}
+                className="dialog-no-button"
+                color="primary"
+              >
                 No
               </Button>
-              <Button onClick={handleConfirm} className="dialog-yes-button" color="primary" autoFocus >
+              <Button
+                onClick={handleConfirm}
+                className="dialog-yes-button"
+                color="primary"
+                autoFocus
+              >
                 Yes
               </Button>
             </>
           )}
+
           {successMessage && (
-            <Button onClick={handleGoToMyMeetings} className="custom-primary-button" >
-              Go to "My Meetings"
-            </Button>
+            <>
+              <Button
+                onClick={handleGoToMyMeetings}
+                className="custom-primary-button"
+              >
+                Go to "My Meetings"
+              </Button>
+              <a
+                href={isGmailUser() ? generateGoogleCalendarLink() : undefined}
+                target={isGmailUser() ? '_blank' : undefined}
+                rel="noopener noreferrer"
+              >
+                <Tooltip
+                  title={
+                    !isGmailUser()
+                      ? 'This feature is available only for Gmail accounts'
+                      : ''
+                  }
+                >
+                  <span>
+                    <Button
+                      variant="contained"
+                      className={`custom-primary-button-google ${
+                        !isGmailUser() ? 'disabled-button' : ''
+                      }`}
+                      disabled={!isGmailUser()} // Disable if the user is not Gmail
+                    >
+                      Add to Google Calendar
+                    </Button>
+                  </span>
+                </Tooltip>
+              </a>
+            </>
           )}
         </DialogActions>
       </Dialog>

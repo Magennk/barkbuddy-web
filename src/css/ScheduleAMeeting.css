@@ -1,73 +1,87 @@
 /* Main wrapper for the page */
 .Schedule-A-Meeting-title {
-    padding: 20px; /* Add padding around the page */
-    text-align: center; /* Center the title */
-    color: #040407;
-  }
+  padding: 20px; /* Add padding around the page */
+  text-align: center; /* Center the title */
+  color: #040407;
+}
 
-  /* ScheduleAMeeting.css */
+/* ScheduleAMeeting.css */
 
 /* Style for the meeting form input fields */
 .meeting-field {
-    width: 50%; /* Adjust the width to be 50% */
-    margin: 10px auto; /* Center the fields and add some spacing */
-  }
-  
-  
-  .Schedule-A-Meeting-title {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .meeting-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
+  width: 50%; /* Adjust the width to be 50% */
+  margin: 10px auto; /* Center the fields and add some spacing */
+}
+
+.Schedule-A-Meeting-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.meeting-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /* Style for the button */
 .meeting-button {
-    width: 50%; /* Adjust the width of the button to match the fields */
-    margin-top: 20px; /* Add spacing above the button */
-    display: block; /* Make the button behave like a block element */
-    margin-left: auto; /* Center the button horizontally */
-    margin-right: auto;
-  }
-  
-  .required-field {
-    color: red !important;;
-    font-weight: bold;
-  }
-  
-  .error-field {
-    border: 1px solid red !important;
-  }
-  
-  .dialog-yes-button{
-    background-color: #4caf50 !important; /* Green background */
-    color: black !important; /* Black text */
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .dialog-no-button{
-    background-color: #d3d3d3 !important; /* Light grey background */
-    color: black !important; /* Black text */
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-  }
+  width: 50%; /* Adjust the width of the button to match the fields */
+  margin-top: 20px; /* Add spacing above the button */
+  display: block; /* Make the button behave like a block element */
+  margin-left: auto; /* Center the button horizontally */
+  margin-right: auto;
+}
 
-  .custom-primary-button {
-    background-color: #1976d2 !important; /* Primary blue color */
-    color: white !important; /* White font color */
-    border: none; /* Remove any border */
-    padding: 10px 20px; /* Adjust padding */
-    font-size: 16px; /* Adjust font size */
-    border-radius: 5px; /* Optional: Add rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    text-transform: none; /* Prevent all-uppercase text */
-    transition: background-color 0.3s ease; /* Smooth background transition */
-  }
-  
+.required-field {
+  color: red !important;
+  font-weight: bold;
+}
 
-  
+.error-field {
+  border: 1px solid red !important;
+}
+
+.dialog-yes-button {
+  background-color: #4caf50 !important; /* Green background */
+  color: black !important; /* Black text */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.dialog-no-button {
+  background-color: #d3d3d3 !important; /* Light grey background */
+  color: black !important; /* Black text */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-primary-button {
+  background-color: #1976d2 !important; /* Primary blue color */
+  color: white !important; /* White font color */
+  border: none; /* Remove any border */
+  padding: 10px 20px; /* Adjust padding */
+  font-size: 16px; /* Adjust font size */
+  border-radius: 5px; /* Optional: Add rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  text-transform: none; /* Prevent all-uppercase text */
+  transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+.custom-primary-button-google {
+  background-color: #a200ff !important; /* Primary purple color */
+  color: white !important; /* White font color */
+  border: none; /* Remove any border */
+  padding: 10px 20px; /* Adjust padding */
+  font-size: 16px; /* Adjust font size */
+  border-radius: 5px; /* Optional: Add rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  text-transform: none; /* Prevent all-uppercase text */
+  transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+.custom-primary-button-google.disabled-button {
+  background-color: grey !important; /* Grey out the button */
+  color: lightgrey !important; /* Light grey text */
+  cursor: not-allowed !important; /* Show not-allowed cursor */
+}
