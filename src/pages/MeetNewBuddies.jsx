@@ -138,8 +138,9 @@ function MeetNewBuddies() {
             ))}
           </Select>
         </Tooltip>
-        <Typography className="filter-label">Sex</Typography>
+        
         <Tooltip title="Filter by sex">
+        <Typography className="filter-label">Sex</Typography>
           <Select
             name="sex"
             value={filters.sex}
@@ -151,8 +152,9 @@ function MeetNewBuddies() {
             <MenuItem value="female">Female</MenuItem>
           </Select>
         </Tooltip>
-        <Typography className="filter-label">Breeds</Typography>
+        
         <Tooltip title="Filter by breed">
+        <Typography className="filter-label">Breeds</Typography>
           <Select
             name="breed"
             value={filters.breed}

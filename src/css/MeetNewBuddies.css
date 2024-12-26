@@ -97,13 +97,20 @@
 /* Individual filter items */
 .filter-item {
   margin-bottom: 15px; /* Space between filter dropdowns */
+  min-width: 200px  !important; /* Minimum width for each filter */
+  background-color: #b9dbfd;
 }
 
 .filter-label {
-  font-size: 16px;
+  font-size: 18px;
+  font: bold !important;
   margin-bottom: 5px;
   display: block;
   color: #555; /* Medium gray text */
+  background-color: #f6eebb;
+  outline-style: solid;
+  outline-width: thin;
+  outline-color: darkgray;
 }
 
 /* Custom style for filter select menus */
@@ -119,9 +126,53 @@
 
 /* Clear Filters Button */
 .clear-filters-button {
-  background-color: #f50057 !important; /* Pink-red color */
+  background-color: #f71010 !important; /* Pink-red color */
   color: white !important; /* White text */
   text-transform: none; /* Prevent uppercase text */
   font-size: 14px; /* Slightly smaller font size */
   margin-top: 10px;
+  grid-column: span 1; /* Ensure it spans one grid cell */
+  align-items: center;
+  width: 95%;
+}
+
+.filters {
+  display: grid; /* Use grid layout */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Create columns for filters */
+  gap: 10px; /* Add space between items */
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Horizontally center filters */
+  margin-bottom: 20px; /* Space below filters */
+  width: 80%;
+  margin-left: auto; /* Center horizontally */
+  margin-right: auto; /* Center horizontally */
+  background-color: #e8f2ff;
+ padding: 15px;
+ outline-style: solid;
+ outline-width: thin;
+ outline-color: darkgray;
+}
+
+.filter-item .MuiOutlinedInput-root {
+  background-color: #b9dbfd; /* Set the background color */
+  border-radius: 4px; /* Optional: Add rounded corners */
+  padding: 5px; /* Add some padding inside the dropdown */
+}
+
+.filter-item .MuiSelect-root {
+  background-color: #b9dbfd  !important; /* Ensure the dropdown background matches */
+}
+
+.filter-item .MuiSelect-select {
+  background-color: #b9dbfd; /* Set background color for the selected area */
+  color: #000; /* Set text color */
+  font-size: 16px; /* Adjust font size */
+}
+.filter-item .MuiOutlinedInput-root:hover {
+  background-color: #a8c8ef; /* Slightly darker hover color */
+}
+
+.filter-item .MuiOutlinedInput-root.Mui-focused {
+  background-color: #a8c8ef; /* Slightly darker focus color */
+  border: 1px solid #1976d2; /* Optional: Add a focus border */
 }
