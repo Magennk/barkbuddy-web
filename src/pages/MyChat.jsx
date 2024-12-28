@@ -65,14 +65,14 @@ const MyChat = () => {
               {/* User Avatar */}
               <Avatar
                 src={chatUser.image || '/data/images/default-dog.jpg'}
-                alt={`${chatUser.firstName} ${chatUser.lastName}`}
+                alt={`${chatUser.firstname} ${chatUser.lastname}`}
                 className="user-avatar"
                 sx={{ width: 130, height: 130 }} // Adjust avatar size
               />
               {/* User Details */}
               <Box className="user-details">
                 <Typography variant="h6" className="user-name">
-                  {chatUser.firstName} {chatUser.lastName}
+                  {chatUser.firstname} {chatUser.lastname}
                 </Typography>
                 <Typography variant="body2" className="user-city">
                   {chatUser.city}
