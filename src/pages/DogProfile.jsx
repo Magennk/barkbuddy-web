@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext} from "react";
+import React, { useEffect, useState, useContext } from 'react';
 import {
   Typography,
   Card,
@@ -6,28 +6,27 @@ import {
   CardContent,
   Box,
   Button,
-} from "@mui/material";
-import { useParams } from "react-router-dom";
-import FlashOnIcon from "@mui/icons-material/FlashOn";
-import MaleIcon from "@mui/icons-material/Male";
-import FemaleIcon from "@mui/icons-material/Female";
-import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
-import SentimentVeryDissatisfiedIcon from "@mui/icons-material/SentimentVeryDissatisfied";
-import "../css/DogProfile.css";
-import { useNavigate } from "react-router-dom";
-import ChatIcon from "@mui/icons-material/Chat";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import { UserContext } from "../context/UserContext"; // Access logged-in user's details
+} from '@mui/material';
+import { useParams } from 'react-router-dom';
+import FlashOnIcon from '@mui/icons-material/FlashOn';
+import MaleIcon from '@mui/icons-material/Male';
+import FemaleIcon from '@mui/icons-material/Female';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import '../css/DogProfile.css';
+import { useNavigate } from 'react-router-dom';
+import ChatIcon from '@mui/icons-material/Chat';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { UserContext } from '../context/UserContext'; // Access logged-in user's details
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-} from "@mui/material";
+} from '@mui/material';
 
-
-{/*Example for JSON returing from http://localhost:5000/api/dogs/dog/${id}/with-owner
+/*Example for JSON returing from http://localhost:5000/api/dogs/dog/${id}/with-owner
 {
     "id": 1,
     "name": "Cooper",
@@ -52,7 +51,7 @@ import {
         "image": "http://example.com/profile1"
     }
 }
-  */}
+  */
 
 function DogProfile() {
   const { user } = useContext(UserContext); // Access user context to get logged-in user's email
@@ -63,15 +62,15 @@ function DogProfile() {
   const [error, setError] = useState(null); // Error state
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
-const [dialogMessage, setDialogMessage] = useState("");
-
-  
+  const [dialogMessage, setDialogMessage] = useState('');
 
   useEffect(() => {
     const fetchDogData = async () => {
       try {
         setLoading(true); // Start loading
-        const response = await fetch(`http://localhost:5000/api/dogs/dog/${id}/with-owner`); // Fetch dog data with id as variable
+        const response = await fetch(
+          `http://localhost:5000/api/dogs/dog/${id}/with-owner`
+        ); // Fetch dog data with id as variable
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`); // Handle HTTP errors
         }
@@ -105,7 +104,37 @@ const [dialogMessage, setDialogMessage] = useState("");
     );
   }
 
+  const startChatWithOwner = async () => {
+    try {
+      //const { email: senderEmail } = user; // Get the logged-in user's email
+      const ownerEmail1 = user.email; // Get the logged-in user's email
+      const ownerEmail2 = owner.email; // Owner's email
 
+      // API call to create or fetch the chat
+      const response = await fetch('http://localhost:5000/api/chat/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ownerEmail1, ownerEmail2 }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create or get chat.');
+      }
+
+      const responseData = await response.json(); // Parse the response JSON
+      const { chatid } = responseData.chat; // Access chatid from the nested chat object
+
+      if (!chatid) {
+        throw new Error('Chat ID is missing in the response.');
+      }
+      navigate(`/personal-chat/${chatid}`, {
+        state: { receiverEmail: ownerEmail2 },
+      }); // Navigate to PersonalChat
+    } catch (error) {
+      console.error('Error starting chat:', error);
+      alert('Failed to start chat. Please try again.');
+    }
+  };
 
   return (
     <div className="dog-profile">
@@ -113,7 +142,7 @@ const [dialogMessage, setDialogMessage] = useState("");
       <Typography variant="h4" className="dog-profile-title">
         {dog.name}'s Profile
       </Typography>
-      
+
       <div className="profile-container">
         {/* Left Section: Dog Info */}
         <Card className="profile-card">
@@ -134,8 +163,8 @@ const [dialogMessage, setDialogMessage] = useState("");
               <span className="label">Age:</span> {dog.age} years
             </Typography>
             <Typography>
-              <span className="label">Sex:</span>{" "}
-              {dog.sex === "male" ? (
+              <span className="label">Sex:</span>{' '}
+              {dog.sex === 'male' ? (
                 <MaleIcon className="icon male" />
               ) : (
                 <FemaleIcon className="icon female" />
@@ -148,7 +177,7 @@ const [dialogMessage, setDialogMessage] = useState("");
               <span className="label">Breed:</span> {dog.breed}
             </Typography>
             <Typography>
-              <span className="label">Vaccinated:</span>{" "}
+              <span className="label">Vaccinated:</span>{' '}
               {dog.isvaccinated ? (
                 <SentimentSatisfiedAltIcon className="icon positive" />
               ) : (
@@ -156,7 +185,7 @@ const [dialogMessage, setDialogMessage] = useState("");
               )}
             </Typography>
             <Typography>
-              <span className="label">Good with kids:</span>{" "}
+              <span className="label">Good with kids:</span>{' '}
               {dog.isgoodwithkids ? (
                 <SentimentSatisfiedAltIcon className="icon positive" />
               ) : (
@@ -164,7 +193,7 @@ const [dialogMessage, setDialogMessage] = useState("");
               )}
             </Typography>
             <Typography>
-              <span className="label">Good with animals:</span>{" "}
+              <span className="label">Good with animals:</span>{' '}
               {dog.isgoodwithanimals ? (
                 <SentimentSatisfiedAltIcon className="icon positive" />
               ) : (
@@ -172,7 +201,7 @@ const [dialogMessage, setDialogMessage] = useState("");
               )}
             </Typography>
             <Typography>
-              <span className="label">Dangerous dog breed:</span>{" "}
+              <span className="label">Dangerous dog breed:</span>{' '}
               {dog.isinrestrictedbreedscategory ? (
                 <SentimentSatisfiedAltIcon className="icon positive" />
               ) : (
@@ -180,15 +209,15 @@ const [dialogMessage, setDialogMessage] = useState("");
               )}
             </Typography>
             <Typography>
-              <span className="label">Energy Level:</span>{" "}
+              <span className="label">Energy Level:</span>{' '}
               {Array(dog.energylevel)
                 .fill(null)
                 .map((_, i) => (
-                  <FlashOnIcon key={i} style={{ color: "gold" }} />
+                  <FlashOnIcon key={i} style={{ color: 'gold' }} />
                 ))}
             </Typography>
             <Typography className="description">
-              <span className="label">A bit more about me:</span>{" "}
+              <span className="label">A bit more about me:</span>{' '}
               {dog.description}
             </Typography>
           </CardContent>
@@ -207,15 +236,15 @@ const [dialogMessage, setDialogMessage] = useState("");
               Owner Information
             </Typography>
             <Typography>
-              <span className="label">Full Name:</span> {owner.firstname}{" "}
+              <span className="label">Full Name:</span> {owner.firstname}{' '}
               {owner.lastname}
             </Typography>
             <Typography>
               <span className="label">Age:</span> {owner.age}
             </Typography>
             <Typography>
-              <span className="label">Gender:</span>{" "}
-              {owner.gender === "male" ? (
+              <span className="label">Gender:</span>{' '}
+              {owner.gender === 'male' ? (
                 <MaleIcon className="icon male" />
               ) : (
                 <FemaleIcon className="icon female" />
@@ -225,7 +254,7 @@ const [dialogMessage, setDialogMessage] = useState("");
               <span className="label">City:</span> {owner.city}
             </Typography>
             <Typography>
-              <span className="label">Email:</span>{" "}
+              <span className="label">Email:</span>{' '}
               <a href={`mailto:${owner.email}`} className="email-link">
                 {owner.email}
               </a>
@@ -236,44 +265,15 @@ const [dialogMessage, setDialogMessage] = useState("");
 
       {/* Footer Buttons */}
       <Box className="profile-actions">
-      <Button
-      className="equal-button"
-  variant="contained"
-  color="primary"
-  startIcon={<ChatIcon />}
-  onClick={async () => {
-    const loggedInUserEmail = user?.email; // Logged-in user's email from context
-    const dogOwnerEmail = owner.email; // Owner's email from the profile
-
-    try {
-      // Initialize the chat by calling the backend
-      const response = await fetch("http://localhost:5000/api/chat/init", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ownerEmail1: loggedInUserEmail,
-          ownerEmail2: dogOwnerEmail,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to initialize chat");
-      }
-
-      // Navigate to the PersonalChat page after successfully initializing the chat
-      navigate(`/personal-chat/${dogOwnerEmail}`, {
-        state: { ownerEmail: dogOwnerEmail, ownerName: owner.firstname },
-      });
-    } catch (error) {
-      console.error("Error initializing chat:", error.message);
-      alert("Failed to start chat. Please try again.");
-    }
-  }}
->
-  Chat
-</Button>
-
-
+        <Button
+          className="equal-button"
+          variant="contained"
+          color="primary"
+          startIcon={<ChatIcon />}
+          onClick={startChatWithOwner}
+        >
+          Chat
+        </Button>
 
         <Button
           variant="contained"
@@ -282,55 +282,64 @@ const [dialogMessage, setDialogMessage] = useState("");
           startIcon={<PersonAddIcon />}
           onClick={async () => {
             try {
-              const response = await fetch("http://localhost:5000/api/friends/send-request", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  senderEmail: user.email, // The logged-in user's email
-                  recipientEmail: owner.email, // The owner's email from the profile
-                }),
-              });
-        
+              const response = await fetch(
+                'http://localhost:5000/api/friends/send-request',
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    senderEmail: user.email, // The logged-in user's email
+                    recipientEmail: owner.email, // The owner's email from the profile
+                  }),
+                }
+              );
+
               if (!response.ok) {
                 throw new Error(`Error: ${response.statusText}`);
               }
-        
-              setDialogMessage("Friend request sent successfully!");
+
+              setDialogMessage('Friend request sent successfully!');
               setDialogOpen(true); // Open the dialog
             } catch (err) {
-              console.error("Error sending friend request:", err.message);
-              setDialogMessage("Could not send friend request.");
+              console.error('Error sending friend request:', err.message);
+              setDialogMessage('Could not send friend request.');
               setDialogOpen(true); // Open the dialog with an error message
             }
           }}
         >
           Add Friend
         </Button>
-       
+
         <Button
-        variant="contained"
-        color="primary"
-        className="equal-button"
-        startIcon={<CalendarTodayIcon />}
-        onClick={() => navigate("/schedule-a-meeting", { state: { buddyName: dog.name , ownerEmail: owner.email} })}
-      >
-        Schedule a Meeting
-      </Button>
+          variant="contained"
+          color="primary"
+          className="equal-button"
+          startIcon={<CalendarTodayIcon />}
+          onClick={() =>
+            navigate('/schedule-a-meeting', {
+              state: { buddyName: dog.name, ownerEmail: owner.email },
+            })
+          }
+        >
+          Schedule a Meeting
+        </Button>
       </Box>
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-  <DialogTitle>Notification</DialogTitle>
-  <DialogContent>
-    <Typography>{dialogMessage}</Typography>
-  </DialogContent>
-  <DialogActions>
-    <Button onClick={() => setDialogOpen(false)} className="custom-primary-button" >
-      OK
-    </Button>
-  </DialogActions>
-</Dialog>
-
+        <DialogTitle>Notification</DialogTitle>
+        <DialogContent>
+          <Typography>{dialogMessage}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setDialogOpen(false)}
+            className="custom-primary-button"
+          >
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

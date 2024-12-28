@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import {
   Box,
@@ -20,7 +19,6 @@ const FriendRequests = () => {
   const [requests, setRequests] = useState([]); // State to store friend requests
   const [loading, setLoading] = useState(true); // Loading spinner state
   const [error, setError] = useState(null); // Error state
-  const navigate = useNavigate(); // Navigation to dog profile page
   const [dialogOpen, setDialogOpen] = useState(false); // Dialog open state
   const [requestToDelete, setRequestToDelete] = useState(null); // Track which request to delete
 
@@ -46,15 +44,6 @@ const FriendRequests = () => {
 
     fetchFriendRequests(); // Fetch data on component load
   }, [user.email]); // Re-fetch if user's email changes
-
-  // Navigate to the dog profile page
-  const handleViewProfile = (dogId) => {
-    if (dogId) {
-      navigate(`/dog-profile/${dogId}`); // Navigate to the dog's profile
-    } else {
-      console.error('Dog ID is undefined');
-    }
-  };
 
   // Handle Confirm action
   const handleConfirm = async (requestEmail) => {

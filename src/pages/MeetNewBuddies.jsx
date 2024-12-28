@@ -1,18 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { UserContext } from '../context/UserContext'; // Importing UserContext for user information
 import '../css/MeetNewBuddies.css'; // Importing existing CSS for styling
 import DogCard from '../components/DogCard'; // Using DogCard component for each dog
 import CircularProgress from '@mui/material/CircularProgress'; // Importing MUI CircularProgress
-import {
-  Typography,
-  Select,
-  MenuItem,
-  TextField,
-  Tooltip,
-  Box,
-  Button,
-} from '@mui/material';
-import FilterAltIcon from '@mui/icons-material/FilterAlt'; // Import Filter Icon
+import { Typography, Select, MenuItem, Tooltip, Button } from '@mui/material';
 import EmptyState from '../components/EmptyState';
 
 function MeetNewBuddies() {
@@ -20,7 +11,6 @@ function MeetNewBuddies() {
   const [dogs, setDogs] = useState([]); // State for dog data
   const [loading, setLoading] = useState(true); // State to show spinner while loading
   const [error, setError] = useState(null); // State for handling errors
-  const [refresh, setRefresh] = useState(false); // Trigger re-fetching data
   const [filters, setFilters] = useState({ city: '', sex: '', breed: '' }); // Filters for user choise
   const [breeds, setBreeds] = useState([]);
   const [cities, setCities] = useState([]); // City list state
@@ -54,34 +44,35 @@ function MeetNewBuddies() {
       .catch((error) => console.error('Error fetching breeds:', error));
   }, []);
 
+  // Function to fetch data from the backend
+  const fetchNotFriendsDogsAndOwners = useCallback(
+    async (filters = {}) => {
+      try {
+        setLoading(true); // Show loading spinner
+        let url = `http://localhost:5000/api/dogs/not-friends-dogs-and-owners?email=${user.email}`;
+        if (filters.city) url += `&city=${encodeURIComponent(filters.city)}`;
+        if (filters.sex) url += `&sex=${encodeURIComponent(filters.sex)}`;
+        if (filters.breed) url += `&breed=${encodeURIComponent(filters.breed)}`;
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setDogs(data); // Update state with fetched data
+        setNoResults(data.length === 0); // Update noResults
+      } catch (err) {
+        setError(err.message); // Handle errors
+      } finally {
+        setLoading(false); // Hide spinner
+      }
+    },
+    [user.email] // Ensure dependency is stable
+  );
+
   // Fetch dogs on component load and whenever filters change
   useEffect(() => {
     fetchNotFriendsDogsAndOwners(filters);
-  }, [filters]);
-
-  // Function to fetch data from the backend
-  const fetchNotFriendsDogsAndOwners = async (filters = {}) => {
-    try {
-      setLoading(true); // Show loading spinner
-      // Construct the base URL with the email
-      let url = `http://localhost:5000/api/dogs/not-friends-dogs-and-owners?email=${user.email}`;
-      // Append filters manually
-      if (filters.city) url += `&city=${encodeURIComponent(filters.city)}`;
-      if (filters.sex) url += `&sex=${encodeURIComponent(filters.sex)}`;
-      if (filters.breed) url += `&breed=${encodeURIComponent(filters.breed)}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`); // Handle HTTP errors
-      }
-      const data = await response.json();
-      setDogs(data); // Update state with fetched data
-      setNoResults(data.length === 0); // Update noResults based on the response
-    } catch (err) {
-      setError(err.message); // Set error state if fetch fails
-    } finally {
-      setLoading(false); // Hide spinner
-    }
-  };
+  }, [filters, fetchNotFriendsDogsAndOwners]);
 
   // Function to trigger data refresh
   const refreshDogs = async () => {
@@ -138,9 +129,9 @@ function MeetNewBuddies() {
             ))}
           </Select>
         </Tooltip>
-        
+
         <Tooltip title="Filter by sex">
-        <Typography className="filter-label">Sex</Typography>
+          <Typography className="filter-label">Sex</Typography>
           <Select
             name="sex"
             value={filters.sex}
@@ -152,9 +143,9 @@ function MeetNewBuddies() {
             <MenuItem value="female">Female</MenuItem>
           </Select>
         </Tooltip>
-        
+
         <Tooltip title="Filter by breed">
-        <Typography className="filter-label">Breeds</Typography>
+          <Typography className="filter-label">Breeds</Typography>
           <Select
             name="breed"
             value={filters.breed}
