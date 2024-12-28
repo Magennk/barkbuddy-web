@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Avatar } from '@mui/material';
 import { UserContext } from '../context/UserContext';
-
+import EmptyState from '../components/EmptyState';
 import '../css/MyChat.css'; // Dedicated CSS file for styling
 import ChatIcon from '@mui/icons-material/Chat';
 
@@ -56,6 +56,11 @@ const MyChat = () => {
     }
   };
 
+  if (chatUsers.length === 0) {
+    // Render a message if no friends are found
+    return <EmptyState message="You don't have any chats yet!" />;
+  }
+
   return (
     <Box className="my-chat-container">
       {/* Page Title */}
@@ -65,42 +70,36 @@ const MyChat = () => {
 
       {/* User List */}
       <Box className="chat-list">
-        {chatUsers.length > 0 ? (
-          chatUsers.map((chatUser) => (
-            <Box key={chatUser.chatid} className="user-item">
-              {/* User Avatar */}
-              <Avatar
-                src={chatUser.image || '/data/images/default-dog.jpg'}
-                alt={`${chatUser.firstname} ${chatUser.lastname}`}
-                className="user-avatar"
-                sx={{ width: 130, height: 130 }} // Adjust avatar size
-              />
-              {/* User Details */}
-              <Box className="user-details">
-                <Typography variant="h6" className="user-name">
-                  {chatUser.firstname} {chatUser.lastname}
-                </Typography>
-                <Typography variant="body2" className="user-city">
-                  {chatUser.city}
-                </Typography>
-              </Box>
-              {/* Start Chat Button */}
-              <Button
-                variant="contained"
-                color="primary"
-                className="start-chat-btn"
-                startIcon={<ChatIcon />}
-                onClick={() => handleStartChat(chatUser)}
-              >
-                Start Chat
-              </Button>
+        {chatUsers.map((chatUser) => (
+          <Box key={chatUser.chatid} className="user-item">
+            {/* User Avatar */}
+            <Avatar
+              src={chatUser.image || '/data/images/default-dog.jpg'}
+              alt={`${chatUser.firstname} ${chatUser.lastname}`}
+              className="user-avatar"
+              sx={{ width: 130, height: 130 }} // Adjust avatar size
+            />
+            {/* User Details */}
+            <Box className="user-details">
+              <Typography variant="h6" className="user-name">
+                {chatUser.firstname} {chatUser.lastname}
+              </Typography>
+              <Typography variant="body2" className="user-city">
+                {chatUser.city}
+              </Typography>
             </Box>
-          ))
-        ) : (
-          <Typography className="no-chats-text">
-            No chats available yet!
-          </Typography>
-        )}
+            {/* Start Chat Button */}
+            <Button
+              variant="contained"
+              color="primary"
+              className="start-chat-btn"
+              startIcon={<ChatIcon />}
+              onClick={() => handleStartChat(chatUser)}
+            >
+              Start Chat
+            </Button>
+          </Box>
+        ))}
       </Box>
     </Box>
   );

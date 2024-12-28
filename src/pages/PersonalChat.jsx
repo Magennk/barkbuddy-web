@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  useRef,
+} from 'react';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import { Box, Typography, TextField, Button } from '@mui/material';
@@ -12,6 +18,9 @@ const PersonalChat = () => {
   const [newMessage, setNewMessage] = useState(''); // Input for new messages
   const [error, setError] = useState(''); // Error state
 
+  // To make chat scrolled down
+  const chatContainerRef = useRef(null);
+
   // Fetch chat messages
   const fetchMessages = useCallback(async () => {
     try {
@@ -24,7 +33,18 @@ const PersonalChat = () => {
       const data = await response.json();
 
       if (data.messages) {
-        setMessages(data.messages);
+        // Preprocess messages to format the time
+        const formattedMessages = data.messages.map((message) => ({
+          ...message,
+          readableTime: new Date(
+            `1970-01-01T${message.messagetime}Z`
+          ).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          }),
+        }));
+        setMessages(formattedMessages);
       } else {
         setMessages([]);
         console.warn('No messages found.');
@@ -100,6 +120,13 @@ const PersonalChat = () => {
     return () => clearInterval(interval); // Cleanup interval
   }, [fetchMessages, fetchReceiverDetails]);
 
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]); // Trigger whenever messages are updated
+
   return (
     <Box className="personal-chat-container">
       {/* Chat Header */}
@@ -108,7 +135,7 @@ const PersonalChat = () => {
       </Typography>
 
       {/* Chat History */}
-      <Box className="chat-history">
+      <Box className="chat-history" ref={chatContainerRef}>
         {messages.length > 0 ? (
           messages.map((message) => (
             <Box
@@ -125,7 +152,7 @@ const PersonalChat = () => {
               </Typography>
               <Typography className="message-timestamp">
                 {new Date(message.messagedate).toLocaleDateString()}{' '}
-                {message.messagetime}
+                {message.readableTime}
               </Typography>
             </Box>
           ))
@@ -147,7 +174,6 @@ const PersonalChat = () => {
             setError(''); // Clear error on input
           }}
           fullWidth
-          inputProps={{ maxLength: 200 }}
         />
         <Button
           variant="contained"
