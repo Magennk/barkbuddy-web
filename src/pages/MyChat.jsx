@@ -26,7 +26,7 @@ const MyChat = () => {
         }
 
         const data = await response.json();
-        setChatUsers(data); // Update state with chat users
+        setChatUsers(data.users); // Update state with chat users
       } catch (err) {
         setError(err.message); // Update error state
       } finally {
@@ -45,9 +45,15 @@ const MyChat = () => {
     return <p className="error-text">Error: {error}</p>; // Show error message
   }
 
-  const handleStartChat = (chatId) => {
-    // Redirect to the chat page with the selected chat ID
-    window.location.href = `/chat/${chatId}`;
+  // Navigate to the chat page
+  const handleStartChat = (chatUser) => {
+    if (chatUser?.chatid) {
+      navigate(`/personal-chat/${chatUser.chatid}`, {
+        state: { receiverEmail: chatUser.receiveremail }, // Pass receiverEmail
+      });
+    } else {
+      console.error('Chat User or Chat ID is undefined');
+    }
   };
 
   return (
@@ -84,7 +90,7 @@ const MyChat = () => {
                 color="primary"
                 className="start-chat-btn"
                 startIcon={<ChatIcon />}
-                onClick={() => handleStartChat(chatUser.chatid)}
+                onClick={() => handleStartChat(chatUser)}
               >
                 Start Chat
               </Button>

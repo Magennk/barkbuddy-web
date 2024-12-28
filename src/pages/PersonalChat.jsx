@@ -1,109 +1,175 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import "../css/PersonalChat.css"; 
+import React, { useState, useEffect, useContext, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
+import { Box, Typography, TextField, Button } from '@mui/material';
+import '../css/PersonalChat.css';
 
 const PersonalChat = () => {
-  const { userId } = useParams(); // The dog's owner email passed as a route parameter
-  const location = useLocation();
-  const { ownerEmail, ownerName } = location.state || {};
-  const loggedInUserEmail = "loggedInUser@example.com"; // Replace with logged-in user's email
+  const { user } = useContext(UserContext); // Logged-in user
+  const { chatid } = useParams(); // Get chat ID from the URL
+  const [receiverEmail, setReceiverEmail] = useState(''); // Receiver's email
+  const [messages, setMessages] = useState([]); // Chat messages
+  const [newMessage, setNewMessage] = useState(''); // Input for new messages
+  const [error, setError] = useState(''); // Error state
 
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("");
-
-  // Fetch chat history
-  useEffect(() => {
-    const fetchChatHistory = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/api/chat/init", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ownerEmail1: loggedInUserEmail,
-            ownerEmail2: userId,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch chat history");
-        }
-
-        const data = await response.json();
-        setMessages(data.chatHistory);
-      } catch (error) {
-        console.error("Error fetching chat history:", error.message);
+  // Fetch chat messages
+  const fetchMessages = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/chat/messages/${chatid}`
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch messages.');
       }
-    };
+      const data = await response.json();
 
-    fetchChatHistory();
-  }, [userId, loggedInUserEmail]);
+      if (data.messages) {
+        setMessages(data.messages);
+      } else {
+        setMessages([]);
+        console.warn('No messages found.');
+      }
+    } catch (err) {
+      console.error('Error fetching messages:', err);
+      setError('Failed to load messages.');
+    }
+  }, [chatid]);
 
-  // Send a new message
+  // Fetch receiver email (e.g., from backend or previous state)
+  const fetchReceiverDetails = useCallback(async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/chat/chat-users?email=${user.email}`
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch chat details.');
+      }
+      const data = await response.json();
+
+      const currentChat = data.users.find(
+        (chat) => chat.chatid === parseInt(chatid, 10)
+      );
+      if (currentChat) {
+        setReceiverEmail(currentChat.receiveremail);
+      }
+    } catch (err) {
+      console.error('Error fetching chat details:', err);
+    }
+  }, [chatid, user.email]);
+
+  // Handle sending a new message
   const handleSendMessage = async () => {
-    if (!newMessage.trim()) return;
+    if (newMessage.trim() === '') {
+      setError('Message cannot be empty.');
+      return;
+    }
 
     try {
-      const response = await fetch("http://localhost:5000/api/chat/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          senderEmail: loggedInUserEmail,
-          receiverEmail: userId,
-          messageText: newMessage,
-        }),
-      });
+      const response = await fetch(
+        'http://localhost:5000/api/chat/send-message',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chatId: parseInt(chatid, 10),
+            senderEmail: user.email,
+            receiverEmail: receiverEmail,
+            messageText: newMessage,
+          }),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error("Failed to send message");
+        throw new Error('Failed to send message.');
       }
 
-      const savedMessage = await response.json();
-      setMessages((prevMessages) => [...prevMessages, savedMessage]); // Append new message
-      setNewMessage(""); // Clear input field
-    } catch (error) {
-      console.error("Error sending message:", error.message);
+      setNewMessage(''); // Clear input
+      fetchMessages(); // Refresh messages
+    } catch (err) {
+      console.error('Error sending message:', err);
+      setError('Failed to send message.');
     }
   };
 
+  // Auto-refresh messages every 5 seconds
+  useEffect(() => {
+    fetchMessages();
+    fetchReceiverDetails();
+    const interval = setInterval(fetchMessages, 5000);
+
+    return () => clearInterval(interval); // Cleanup interval
+  }, [fetchMessages, fetchReceiverDetails]);
+
   return (
-    <div className="chat-container">
-      <h2 className="page-title">Chat with {ownerName || "Unknown User"}</h2>
+    <Box className="personal-chat-container">
+      {/* Chat Header */}
+      <Typography variant="h5" className="chat-header">
+        Chat with {receiverEmail || 'Loading...'}
+      </Typography>
 
-      <div className="chat-box">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={
-              msg.senderemail === loggedInUserEmail ? "my-message" : "partner-message"
-            }
-          >
-            <strong>
-              {msg.senderemail === loggedInUserEmail ? "You" : ownerName}:
-            </strong>{" "}
-            {msg.messagetext}
-          </div>
-        ))}
-      </div>
+      {/* Chat History */}
+      <Box className="chat-history">
+        {messages.length > 0 ? (
+          messages.map((message) => (
+            <Box
+              key={message.messageid}
+              className={`chat-message ${
+                message.senderemail === user.email ? 'sent' : 'received'
+              }`}
+            >
+              <Typography className="message-sender">
+                {message.senderemail === user.email ? 'You' : 'Them'}:
+              </Typography>
+              <Typography className="message-text">
+                {message.messagetext}
+              </Typography>
+              <Typography className="message-timestamp">
+                {new Date(message.messagedate).toLocaleDateString()}{' '}
+                {message.messagetime}
+              </Typography>
+            </Box>
+          ))
+        ) : (
+          <Typography className="no-messages-text">
+            No messages yet. Start the conversation!
+          </Typography>
+        )}
+      </Box>
 
-      <div>
-        <input
-          type="text"
-          className="message-input"
-          placeholder="Type your message..."
+      {/* Message Input */}
+      <Box className="message-input-container">
+        <TextField
+          variant="outlined"
+          placeholder="Type your message here..."
           value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
+          onChange={(e) => {
+            setNewMessage(e.target.value);
+            setError(''); // Clear error on input
+          }}
+          fullWidth
+          inputProps={{ maxLength: 200 }}
         />
-        <button onClick={handleSendMessage} className="send-button">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSendMessage}
+          disabled={!newMessage.trim()}
+        >
           Send
-        </button>
-      </div>
-    </div>
+        </Button>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => setNewMessage('')}
+        >
+          Clear
+        </Button>
+      </Box>
+
+      {/* Error Message */}
+      {error && <Typography className="error-text">{error}</Typography>}
+    </Box>
   );
 };
 
 export default PersonalChat;
-
-
-
-
-

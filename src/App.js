@@ -1,30 +1,29 @@
-import React, { Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import NotFound from "./components/NotFound"; // Page Not Found Component
-import Login from "./pages/Login"; // Login Page
-import ProtectedRoute from "./components/ProtectedRoute"; // Route Protection
-import { UserProvider } from "./context/UserContext"; // User Context for Global State
-import Register from "./pages/Register"; // Registration Page
-import MyBuddies from "./pages/MyBuddies"; // Registration Page
-import MyMeetings from "./pages/MyMeetings"; // MyMeetings Page
-import MyChat from "./pages/MyChat"; //MyChat Page
-import ScheduleAMeeting from "./pages/ScheduleAMeeting"; //Schedule a meeting Page
-import FriendRequests from "./pages/FriendRequests"; //My Friend Requests
-import "./css/global.css"; // Global Styles
-import "./css/Spinner.css"; // Modern Spinner Styles
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import PersonalChat from "./pages/PersonalChat";
-import ThankYou from "./pages/ThankYou";
-
+import React, { Suspense } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import NotFound from './components/NotFound'; // Page Not Found Component
+import Login from './pages/Login'; // Login Page
+import ProtectedRoute from './components/ProtectedRoute'; // Route Protection
+import { UserProvider } from './context/UserContext'; // User Context for Global State
+import Register from './pages/Register'; // Registration Page
+import MyBuddies from './pages/MyBuddies'; // Registration Page
+import MyMeetings from './pages/MyMeetings'; // MyMeetings Page
+import MyChat from './pages/MyChat'; //MyChat Page
+import ScheduleAMeeting from './pages/ScheduleAMeeting'; //Schedule a meeting Page
+import FriendRequests from './pages/FriendRequests'; //My Friend Requests
+import './css/global.css'; // Global Styles
+import './css/Spinner.css'; // Modern Spinner Styles
+import About from './pages/About';
+import Contact from './pages/Contact';
+import PersonalChat from './pages/PersonalChat';
+import ThankYou from './pages/ThankYou';
 
 // Lazy load components for performance optimization
-const HomePage = React.lazy(() => import("./pages/HomePage"));
-const MeetNewBuddies = React.lazy(() => import("./pages/MeetNewBuddies"));
-const DogProfile = React.lazy(() => import("./pages/DogProfile"));
-const MyProfile = React.lazy(() => import("./pages/MyProfile"));
+const HomePage = React.lazy(() => import('./pages/HomePage'));
+const MeetNewBuddies = React.lazy(() => import('./pages/MeetNewBuddies'));
+const DogProfile = React.lazy(() => import('./pages/DogProfile'));
+const MyProfile = React.lazy(() => import('./pages/MyProfile'));
 
 function App() {
   return (
@@ -59,13 +58,20 @@ function App() {
                     <Route path="/my-profile" element={<MyProfile />} />
                     <Route path="/my-buddies" element={<MyBuddies />} />
                     <Route path="/my-meetings" element={<MyMeetings />} />
-                    <Route path="/friend-requests" element={<FriendRequests />} />
+                    <Route
+                      path="/friend-requests"
+                      element={<FriendRequests />}
+                    />
                     <Route path="/my-chat" element={<MyChat />} />
-                    <Route path="/schedule-a-meeting" element={<ScheduleAMeeting />} />
-                    <Route path="/personal-chat/:userId" element={<PersonalChat />} />
+                    <Route
+                      path="/schedule-a-meeting"
+                      element={<ScheduleAMeeting />}
+                    />
+                    <Route
+                      path="/personal-chat/:chatid"
+                      element={<PersonalChat />}
+                    />
                     <Route path="/contact" element={<Contact />} />
-
-
                   </Routes>
                 </Suspense>
                 <Footer />
