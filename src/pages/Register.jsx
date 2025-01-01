@@ -124,7 +124,9 @@ const Register = () => {
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/get-cities');
+        const response = await fetch(
+          'http://vmedu382.mtacloud.co.il:5000/api/get-cities'
+        );
         if (!response.ok) throw new Error('Failed to fetch cities');
         const data = await response.json();
         setCities(data.cities); // Set cities list from response
@@ -389,8 +391,8 @@ const Register = () => {
 
     const endpoint =
       type === 'owner'
-        ? 'http://localhost:5000/api/images/upload-owner'
-        : 'http://localhost:5000/api/images/upload-dog';
+        ? 'http://vmedu382.mtacloud.co.il:5000/api/images/upload-owner'
+        : 'http://vmedu382.mtacloud.co.il:5000/api/images/upload-dog';
 
     try {
       const response = await fetch(endpoint, {
@@ -599,7 +601,7 @@ const Register = () => {
                 fullWidth
                 disabled={uploadStatus.owner}
               >
-                UPLOAD PROFILE PICTURE
+                UPLOAD PROFILE PICTURE (JPEG Only)
                 <input
                   type="file"
                   hidden
@@ -813,7 +815,7 @@ const Register = () => {
                 fullWidth
                 disabled={uploadStatus.dog}
               >
-                UPLOAD DOG PROFILE PICTURE
+                UPLOAD DOG PROFILE PICTURE (JPEG Only)
                 <input
                   type="file"
                   hidden

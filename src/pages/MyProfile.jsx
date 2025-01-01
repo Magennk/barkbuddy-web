@@ -225,8 +225,6 @@ const MyProfile = () => {
             ...prevDogData,
             ...data.dog, // Merge updated dog data
           }));
-
-          alert('Dog information updated successfully!');
         } catch (err) {
           console.error(err);
           alert('Failed to update dog information. Please try again.');
@@ -257,7 +255,6 @@ const MyProfile = () => {
             firstname: data.owner.firstname,
             lastname: data.owner.lastname,
           }));
-          alert('Owner information updated successfully!');
         } catch (err) {
           console.error(err);
           alert('Failed to update owner information. Please try again.');
@@ -602,13 +599,15 @@ const MyProfile = () => {
             {saveTarget === 'dog' ? 'Dog' : 'Owner'}?
           </DialogContent>
           <DialogActions>
-            <Button  onClick={() => handleSaveConfirm(false)} className="dialog-no-button">
+            <Button
+              onClick={() => handleSaveConfirm(false)}
+              className="dialog-no-button"
+            >
               No
             </Button>
             <Button
-            className="dialog-yes-button"
+              className="dialog-yes-button"
               variant="contained"
-              
               onClick={() => handleSaveConfirm(true)}
             >
               Yes
