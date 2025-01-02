@@ -36,11 +36,12 @@
 }
 
 .profile-image {
-  width: 300px;
+  width: 80%;
   height: 300px;
   object-fit: cover;
   border-radius: 8px;
   margin: 0 auto 16px;
+  display: block; /* Ensures the image is treated as a block-level element */
 }
 
 .edit-buttons {
@@ -66,16 +67,70 @@
   color: lightcoral;
 }
 
-.dialog-yes-button{
+.dialog-yes-button {
   background-color: #4caf50 !important; /* Green background */
   color: black !important; /* Black text */
   border-radius: 8px;
   transition: background-color 0.3s ease;
 }
 
-.dialog-no-button{
+.dialog-no-button {
   background-color: #d3d3d3 !important; /* Light grey background */
   color: black !important; /* Black text */
   border-radius: 8px;
   transition: background-color 0.3s ease;
+}
+
+/* General Styling for Mobile View */
+@media (max-width: 768px) {
+  .profile-container {
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center-align items */
+    gap: 16px; /* Add spacing between stacked items */
+  }
+
+  .profile-card {
+    width: 90%; /* Adjust the width to fit smaller screens */
+    max-width: none; /* Remove the max-width constraint */
+  }
+
+  .profile-image {
+    width: 100%; /* Make the image responsive */
+    height: auto; /* Maintain the aspect ratio */
+    max-width: 250px; /* Cap the width for smaller screens */
+    object-fit: cover; /* Ensure the image fills the container proportionally */
+  }
+
+  .profile-title {
+    font-size: 1.8rem; /* Adjust the font size */
+    margin-bottom: 16px;
+  }
+
+  .profile-card .card-header {
+    flex-direction: column; /* Stack header content */
+    align-items: center; /* Center-align header content */
+  }
+
+  .edit-buttons {
+    justify-content: center; /* Center-align edit buttons */
+    margin-top: 10px; /* Add spacing */
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-title {
+    font-size: 1.5rem; /* Further reduce title font size */
+  }
+
+  .profile-container {
+    padding: 10px; /* Reduce padding */
+  }
+
+  .profile-image {
+    max-width: 200px; /* Further reduce image size */
+  }
+
+  .profile-card {
+    padding: 8px; /* Reduce padding inside the card */
+  }
 }
