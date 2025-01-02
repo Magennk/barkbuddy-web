@@ -1,10 +1,20 @@
-import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "../context/UserContext"; // For user context
-import { useNavigate } from "react-router-dom"; // For navigation
-import { Box, Typography, Button, Avatar, CircularProgress, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
-import "../css/MyBuddies.css"; // For custom styling
-import EmptyState from "../components/EmptyState";
-
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../context/UserContext'; // For user context
+import { useNavigate } from 'react-router-dom'; // For navigation
+import {
+  Box,
+  Typography,
+  Button,
+  Avatar,
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material';
+import '../css/MyBuddies.css'; // For custom styling
+import EmptyState from '../components/EmptyState';
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 const MyBuddies = () => {
   const { user } = useContext(UserContext); // Get logged-in user's details
   const [friends, setFriends] = useState([]); // State to store friends
@@ -21,7 +31,9 @@ const MyBuddies = () => {
     const fetchMyFriends = async () => {
       try {
         setLoading(true); // Show spinner while loading
-        const response = await fetch(`http://localhost:5000/api/friends/my-friends?email=${user.email}`);
+        const response = await fetch(
+          `${API_URL}/api/friends/my-friends?email=${user.email}`
+        );
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`); // Handle HTTP errors
         }
@@ -42,7 +54,7 @@ const MyBuddies = () => {
     if (dogId) {
       navigate(`/dog-profile/${dogId}`); // Navigate to the dog's profile page
     } else {
-      console.error("Dog ID is undefined");
+      console.error('Dog ID is undefined');
     }
   };
 
@@ -55,10 +67,10 @@ const MyBuddies = () => {
   // Proceed with removing the buddy
   const handleRemoveBuddy = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/friends/remove", {
-        method: "DELETE",
+      const response = await fetch(`${API_URL}/api/friends/remove`, {
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           email1: user.email, // Logged-in user's email
@@ -70,10 +82,12 @@ const MyBuddies = () => {
         throw new Error(`Error: ${response.statusText}`);
       }
 
-      setFriends((prev) => prev.filter((friend) => friend.owner.email !== buddyToDelete)); // Remove buddy from state
+      setFriends((prev) =>
+        prev.filter((friend) => friend.owner.email !== buddyToDelete)
+      ); // Remove buddy from state
     } catch (err) {
-      console.error("Error removing buddy:", err.message);
-      alert("Could not remove the buddy. Please try again.");
+      console.error('Error removing buddy:', err.message);
+      alert('Could not remove the buddy. Please try again.');
     } finally {
       setDialogOpen(false); // Close the dialog
       setBuddyToDelete(null); // Clear the buddyToDelete state
@@ -112,7 +126,7 @@ const MyBuddies = () => {
           <Box key={dog.id} className="dog-item">
             {/* Dog Image */}
             <Avatar
-              src={dog.image || "/data/images/default-dog.jpg"}
+              src={dog.image || '/data/images/default-dog.jpg'}
               alt={dog.name}
               className="dog-avatar"
               // use sx mui to edit size
@@ -163,10 +177,7 @@ const MyBuddies = () => {
           >
             No
           </Button>
-          <Button
-            onClick={handleRemoveBuddy}
-            className="dialog-yes-button"
-          >
+          <Button onClick={handleRemoveBuddy} className="dialog-yes-button">
             Yes
           </Button>
         </DialogActions>
@@ -176,4 +187,3 @@ const MyBuddies = () => {
 };
 
 export default MyBuddies;
-

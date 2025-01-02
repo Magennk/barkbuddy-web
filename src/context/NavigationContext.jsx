@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { createContext, useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export const NavigationContext = createContext();
 
@@ -23,7 +23,8 @@ export const NavigationProvider = ({ children }) => {
   }, [location]);
 
   const backRoute = currentIndex > 0 ? history[currentIndex - 1] : null;
-  const forwardRoute = currentIndex < history.length - 1 ? history[currentIndex + 1] : null;
+  const forwardRoute =
+    currentIndex < history.length - 1 ? history[currentIndex + 1] : null;
 
   return (
     <NavigationContext.Provider value={{ backRoute, forwardRoute }}>

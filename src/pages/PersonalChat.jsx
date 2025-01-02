@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import { Box, Typography, TextField, Button } from '@mui/material';
 import '../css/PersonalChat.css';
-
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 const PersonalChat = () => {
   const { user } = useContext(UserContext); // Logged-in user
   const { chatid } = useParams(); // Get chat ID from the URL
@@ -24,9 +24,7 @@ const PersonalChat = () => {
   // Fetch chat messages
   const fetchMessages = useCallback(async () => {
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/chat/messages/${chatid}`
-      );
+      const response = await fetch(`${API_URL}/api/chat/messages/${chatid}`);
       if (!response.ok) {
         throw new Error('Failed to fetch messages.');
       }
@@ -59,7 +57,7 @@ const PersonalChat = () => {
   const fetchReceiverDetails = useCallback(async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/chat/chat-users?email=${user.email}`
+        `${API_URL}/api/chat/chat-users?email=${user.email}`
       );
       if (!response.ok) {
         throw new Error('Failed to fetch chat details.');
@@ -85,19 +83,16 @@ const PersonalChat = () => {
     }
 
     try {
-      const response = await fetch(
-        'http://localhost:5000/api/chat/send-message',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chatId: parseInt(chatid, 10),
-            senderEmail: user.email,
-            receiverEmail: receiverEmail,
-            messageText: newMessage,
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/chat/send-message`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chatId: parseInt(chatid, 10),
+          senderEmail: user.email,
+          receiverEmail: receiverEmail,
+          messageText: newMessage,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error('Failed to send message.');

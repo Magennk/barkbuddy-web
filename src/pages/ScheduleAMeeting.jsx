@@ -14,7 +14,7 @@ import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 import '../css/ScheduleAMeeting.css';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 const ScheduleAMeeting = () => {
   const location = useLocation();
   const { buddyName, ownerEmail } = location.state || {};
@@ -100,14 +100,11 @@ const ScheduleAMeeting = () => {
     console.log('Payload being sent to the backend:', formData);
 
     try {
-      const response = await fetch(
-        'http://localhost:5000/api/meetings/schedule-meeting',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/meetings/schedule-meeting`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);

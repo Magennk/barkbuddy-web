@@ -5,7 +5,7 @@ import { UserContext } from '../context/UserContext';
 import EmptyState from '../components/EmptyState';
 import '../css/MyChat.css'; // Dedicated CSS file for styling
 import ChatIcon from '@mui/icons-material/Chat';
-
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 const MyChat = () => {
   const { user } = useContext(UserContext); // Get the logged-in user's email
   const [chatUsers, setChatUsers] = useState([]); // State to store chat users
@@ -18,7 +18,7 @@ const MyChat = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:5000/api/chat/chat-users?email=${user.email}`
+          `${API_URL}/api/chat/chat-users?email=${user.email}`
         );
 
         if (!response.ok) {

@@ -25,33 +25,7 @@ import {
   DialogContent,
   DialogActions,
 } from '@mui/material';
-
-/*Example for JSON returing from http://localhost:5000/api/dogs/dog/${id}/with-owner
-{
-    "id": 1,
-    "name": "Cooper",
-    "breed": "Golden Retriever",
-    "age": "6",
-    "sex": "Male",
-    "region": "Shfela",
-    "isvaccinated": true,
-    "isgoodwithkids": true,
-    "isgoodwithanimals": true,
-    "isinrestrictedbreedscategory": false,
-    "description": "Friendly and playful dog",
-    "energylevel": "2",
-    "image": "/data/images/1.jpeg",
-    "owner": {
-        "firstname": "Matan",
-        "lastname": "Levi",
-        "email": "matan1@example.com",
-        "gender": "Male",
-        "age": "39",
-        "city": "Tel-Aviv",
-        "image": "http://example.com/profile1"
-    }
-}
-  */
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 function DogProfile() {
   const { user } = useContext(UserContext); // Access user context to get logged-in user's email
@@ -69,7 +43,7 @@ function DogProfile() {
       try {
         setLoading(true); // Start loading
         const response = await fetch(
-          `http://localhost:5000/api/dogs/dog/${id}/with-owner`
+          `${API_URL}/api/dogs/dog/${id}/with-owner`
         ); // Fetch dog data with id as variable
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`); // Handle HTTP errors
@@ -111,7 +85,7 @@ function DogProfile() {
       const ownerEmail2 = owner.email; // Owner's email
 
       // API call to create or fetch the chat
-      const response = await fetch('http://localhost:5000/api/chat/create', {
+      const response = await fetch(`${API_URL}/api/chat/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ownerEmail1, ownerEmail2 }),
@@ -283,7 +257,7 @@ function DogProfile() {
           onClick={async () => {
             try {
               const response = await fetch(
-                'http://localhost:5000/api/friends/send-request',
+                `${API_URL}/api/friends/send-request`,
                 {
                   method: 'POST',
                   headers: {

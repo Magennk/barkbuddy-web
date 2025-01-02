@@ -1,36 +1,46 @@
-import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "../context/UserContext";
-import "../css/MyMeetings.css";
-import CircularProgress from "@mui/material/CircularProgress";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import { Typography, Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
-import EmptyState from "../components/EmptyState";
-
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../context/UserContext';
+import '../css/MyMeetings.css';
+import CircularProgress from '@mui/material/CircularProgress';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import {
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+} from '@mui/material';
+import EmptyState from '../components/EmptyState';
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 function MyMeetings() {
   const { user } = useContext(UserContext);
-  const [meetings, setMeetings] = useState({ upcomingMeetings: [], pastMeetings: [] });
+  const [meetings, setMeetings] = useState({
+    upcomingMeetings: [],
+    pastMeetings: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState("");
+  const [dialogMessage, setDialogMessage] = useState('');
   const [onConfirmAction, setOnConfirmAction] = useState(null);
 
   const deleteMeeting = async (meeting) => {
-    setDialogMessage("Are you sure you want to cancel the meeting?");
+    setDialogMessage('Are you sure you want to cancel the meeting?');
     setDialogOpen(true);
 
     setOnConfirmAction(() => async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/meetings/delete-meeting/${meeting.meeting_id}`,
-          { method: "DELETE" }
+          `${API_URL}/api/meetings/delete-meeting/${meeting.meeting_id}`,
+          { method: 'DELETE' }
         );
 
         if (!response.ok) {
@@ -46,9 +56,9 @@ function MyMeetings() {
           ),
         }));
 
-        setDialogMessage("Meeting cancelled successfully.");
+        setDialogMessage('Meeting cancelled successfully.');
       } catch (err) {
-        setDialogMessage("Failed to cancel the meeting.");
+        setDialogMessage('Failed to cancel the meeting.');
         setError(err.message);
       }
     });
@@ -61,7 +71,7 @@ function MyMeetings() {
         setError(null);
 
         const response = await fetch(
-          `http://localhost:5000/api/meetings/get-my-meetings?email=${user.email}`
+          `${API_URL}/api/meetings/get-my-meetings?email=${user.email}`
         );
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
@@ -94,7 +104,10 @@ function MyMeetings() {
     return <p className="error-message">Error: {error}</p>;
   }
 
-  if (meetings.upcomingMeetings.length === 0 && meetings.pastMeetings.length === 0) {
+  if (
+    meetings.upcomingMeetings.length === 0 &&
+    meetings.pastMeetings.length === 0
+  ) {
     return <EmptyState message="You have no meetings scheduled." />;
   }
 
@@ -147,7 +160,7 @@ function MyMeetings() {
       </div>
 
       {/* Past Meetings Section */}
-      <div className="table-container" style={{ marginTop: "20px" }}>
+      <div className="table-container" style={{ marginTop: '20px' }}>
         <h2 className="table-title-meetings">Past Meetings</h2>
         {meetings.pastMeetings.length > 0 ? (
           <TableContainer component={Paper}>
@@ -188,9 +201,12 @@ function MyMeetings() {
           <Typography>{dialogMessage}</Typography>
         </DialogContent>
         <DialogActions>
-          {dialogMessage === "Are you sure you want to cancel the meeting?" ? (
+          {dialogMessage === 'Are you sure you want to cancel the meeting?' ? (
             <>
-              <Button onClick={() => setDialogOpen(false)} className="dialog-no-button">
+              <Button
+                onClick={() => setDialogOpen(false)}
+                className="dialog-no-button"
+              >
                 No
               </Button>
               <Button
@@ -199,14 +215,17 @@ function MyMeetings() {
                   setDialogOpen(false);
                 }}
                 className="dialog-yes-button"
-        
                 autoFocus
               >
                 Yes
               </Button>
             </>
           ) : (
-            <Button onClick={() => setDialogOpen(false)} color="primary" autoFocus>
+            <Button
+              onClick={() => setDialogOpen(false)}
+              color="primary"
+              autoFocus
+            >
               Close
             </Button>
           )}
@@ -217,5 +236,3 @@ function MyMeetings() {
 }
 
 export default MyMeetings;
-
-

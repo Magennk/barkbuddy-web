@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import '../css/FriendRequests.css';
 import EmptyState from '../components/EmptyState';
-
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 const FriendRequests = () => {
   const { user } = useContext(UserContext); // Access user context to get logged-in user's email
   const [requests, setRequests] = useState([]); // State to store friend requests
@@ -28,7 +28,7 @@ const FriendRequests = () => {
       try {
         setLoading(true); // Show spinner while loading
         const response = await fetch(
-          `http://localhost:5000/api/friends/my-friend-requests?email=${user.email}`
+          `${API_URL}/api/friends/my-friend-requests?email=${user.email}`
         );
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`); // Handle HTTP errors
@@ -48,19 +48,16 @@ const FriendRequests = () => {
   // Handle Confirm action
   const handleConfirm = async (requestEmail) => {
     try {
-      const response = await fetch(
-        'http://localhost:5000/api/friends/accept-request',
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            senderEmail: requestEmail,
-            recipientEmail: user.email, // Logged-in user's email
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/friends/accept-request`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          senderEmail: requestEmail,
+          recipientEmail: user.email, // Logged-in user's email
+        }),
+      });
 
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -78,7 +75,7 @@ const FriendRequests = () => {
   // Handle Delete action
   const handleDelete = async (requestEmail) => {
     try {
-      const response = await fetch('http://localhost:5000/api/friends/remove', {
+      const response = await fetch(`${API_URL}/api/friends/remove`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

@@ -23,7 +23,7 @@ import FlashOnIcon from '@mui/icons-material/FlashOn';
 import Badge from '@mui/material/Badge';
 import TermsConditions from '../components/TermsConditions'; // Import the new TermsConditions component
 import { useNavigate } from 'react-router-dom'; // React Router's navigate function
-
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 // Steps titles
 const steps = [
   'Account Information',
@@ -124,9 +124,7 @@ const Register = () => {
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const response = await fetch(
-          'http://vmedu382.mtacloud.co.il:5000/api/get-cities'
-        );
+        const response = await fetch(`${API_URL}/api/get-cities`);
         if (!response.ok) throw new Error('Failed to fetch cities');
         const data = await response.json();
         setCities(data.cities); // Set cities list from response
@@ -142,7 +140,7 @@ const Register = () => {
   const validateEmail = async (email) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/check-email?email=${email}`
+        `${API_URL}/api/users/check-email?email=${email}`
       );
       const data = await response.json();
       if (data.exists) {
@@ -173,14 +171,11 @@ const Register = () => {
   // Function to send all the formdata and register new user and new dog.
   const handleRegistration = async () => {
     try {
-      const response = await fetch(
-        'http://localhost:5000/api/users/register-owner-dog',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/users/register-owner-dog`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -389,10 +384,12 @@ const Register = () => {
       uploadData.append('ownerEmail', formData.owner.email); // Use the owner email for dog's image name
     }
 
-    const endpoint =
-      type === 'owner'
-        ? 'http://vmedu382.mtacloud.co.il:5000/api/images/upload-owner'
-        : 'http://vmedu382.mtacloud.co.il:5000/api/images/upload-dog';
+    let endpoint;
+    if (type === 'owner') {
+      endpoint = `${API_URL}/api/images/upload-owner`;
+    } else {
+      endpoint = `${API_URL}/api/images/upload-dog`;
+    }
 
     try {
       const response = await fetch(endpoint, {

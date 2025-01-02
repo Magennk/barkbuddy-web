@@ -5,6 +5,7 @@ import DogCard from '../components/DogCard'; // Using DogCard component for each
 import CircularProgress from '@mui/material/CircularProgress'; // Importing MUI CircularProgress
 import { Typography, Select, MenuItem, Tooltip, Button } from '@mui/material';
 import EmptyState from '../components/EmptyState';
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 function MeetNewBuddies() {
   const { user } = useContext(UserContext); // Getting the logged-in user from context
@@ -20,7 +21,7 @@ function MeetNewBuddies() {
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/get-cities');
+        const response = await fetch(`${API_URL}/api/get-cities`);
         if (!response.ok) throw new Error('Failed to fetch cities');
         const data = await response.json();
         setCities(data.cities); // Set cities list from response
@@ -49,7 +50,7 @@ function MeetNewBuddies() {
     async (filters = {}) => {
       try {
         setLoading(true); // Show loading spinner
-        let url = `http://localhost:5000/api/dogs/not-friends-dogs-and-owners?email=${user.email}`;
+        let url = `${API_URL}/api/dogs/not-friends-dogs-and-owners?email=${user.email}`;
         if (filters.city) url += `&city=${encodeURIComponent(filters.city)}`;
         if (filters.sex) url += `&sex=${encodeURIComponent(filters.sex)}`;
         if (filters.breed) url += `&breed=${encodeURIComponent(filters.breed)}`;

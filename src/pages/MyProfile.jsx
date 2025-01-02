@@ -28,6 +28,7 @@ import { UserContext } from '../context/UserContext';
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import '../css/MyProfile.css';
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const MyProfile = () => {
   const { user, setUser } = useContext(UserContext); // Get logged-in user's email from context
@@ -51,7 +52,7 @@ const MyProfile = () => {
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/get-cities');
+        const response = await fetch(`${API_URL}/api/get-cities`);
         if (!response.ok) throw new Error('Failed to fetch cities');
         const data = await response.json();
         setCities(data.cities); // Set cities list from response
@@ -85,7 +86,7 @@ const MyProfile = () => {
         setError(null); // Reset error state
 
         const response = await fetch(
-          `http://localhost:5000/api/dogs/owner-and-dog?email=${user.email}`
+          `${API_URL}/api/dogs/owner-and-dog?email=${user.email}`
         );
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`); // Handle HTTP errors
@@ -203,16 +204,13 @@ const MyProfile = () => {
       if (saveTarget === 'dog') {
         //setDogData(editedDogData); // Save changes to the dog
         try {
-          const response = await fetch(
-            'http://localhost:5000/api/dogs/update-dog',
-            {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ dogId: dogData.id, ...editedDogData }),
-            }
-          );
+          const response = await fetch(`${API_URL}/api/dogs/update-dog`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ dogId: dogData.id, ...editedDogData }),
+          });
 
           if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
@@ -232,16 +230,13 @@ const MyProfile = () => {
       } else if (saveTarget === 'owner') {
         //setDogData({ ...dogData, owner: editedOwnerData }); // Save changes to the owner
         try {
-          const response = await fetch(
-            'http://localhost:5000/api/users/update-owner',
-            {
-              method: 'PATCH',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ email: user.email, ...editedOwnerData }),
-            }
-          );
+          const response = await fetch(`${API_URL}/api/users/update-owner`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: user.email, ...editedOwnerData }),
+          });
 
           if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
