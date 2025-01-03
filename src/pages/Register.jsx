@@ -365,14 +365,26 @@ const Register = () => {
     }
 
     // Validate file type
-    else if (file.type !== 'image/jpeg') {
+    const allowedTypes = ['image/jpeg', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
       setAlert({
         open: true,
         severity: 'error',
-        message: 'Only JPEG images are allowed.',
+        message: 'Only JPEG or JPG images are allowed.',
       });
       e.target.value = ''; // Reset the file input
       return;
+    }
+
+    // Proceed with uploading if the file type is valid
+    try {
+      // Your existing upload logic here
+    } catch (error) {
+      setAlert({
+        open: true,
+        severity: 'error',
+        message: 'Failed to upload the image. Please try again.',
+      });
     }
 
     const uploadData = new FormData();
@@ -598,7 +610,7 @@ const Register = () => {
                 fullWidth
                 disabled={uploadStatus.owner}
               >
-                UPLOAD PROFILE PICTURE (JPEG Only)
+                UPLOAD PROFILE PICTURE (JPEG\JPG Only)
                 <input
                   type="file"
                   hidden
@@ -812,7 +824,7 @@ const Register = () => {
                 fullWidth
                 disabled={uploadStatus.dog}
               >
-                UPLOAD DOG PROFILE PICTURE (JPEG Only)
+                UPLOAD DOG PROFILE PICTURE (JPEG\JPG Only)
                 <input
                   type="file"
                   hidden

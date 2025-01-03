@@ -294,7 +294,7 @@ const ScheduleAMeeting = () => {
                 onClick={handleGoToMyMeetings}
                 className="custom-primary-button"
               >
-                Go to "My Meetings"
+                Go to My Meetings
               </Button>
               <a
                 href={isGmailUser() ? generateGoogleCalendarLink() : undefined}

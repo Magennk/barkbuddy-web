@@ -72,12 +72,12 @@
   background-color: #a200ff !important; /* Primary purple color */
   color: white !important; /* White font color */
   border: none; /* Remove any border */
-  padding: 10px 20px; /* Adjust padding */
-  font-size: 16px; /* Adjust font size */
-  border-radius: 5px; /* Optional: Add rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
-  text-transform: none; /* Prevent all-uppercase text */
-  transition: background-color 0.3s ease; /* Smooth background transition */
+  padding: 10px 20px !important; /* Adjust padding */
+  font-size: 16px !important; /* Adjust font size */
+  border-radius: 5px !important; /* Optional: Add rounded corners */
+  cursor: pointer !important; /* Pointer cursor on hover */
+  text-transform: none !important; /* Prevent all-uppercase text */
+  transition: background-color 0.3s ease !important; /* Smooth background transition */
 }
 
 .custom-primary-button-google.disabled-button {
