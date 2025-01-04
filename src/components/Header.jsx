@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -14,25 +14,24 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { Link, useLocation } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import GroupIcon from "@mui/icons-material/Group";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
-import "../css/Header.css";
-import logo from "../assets/logo.png"; // Update `logo.png` to the actual file name
-import BackButton from "./BackButton";
-
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { Link, useLocation } from 'react-router-dom';
+import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import GroupIcon from '@mui/icons-material/Group';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext';
+import '../css/Header.css';
+import logo from '../assets/logo.png'; // Update `logo.png` to the actual file name
+import BackButton from './BackButton';
 
 function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false); // State for logout dialog
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const location = useLocation();
   const { user, setUser } = useContext(UserContext); // Access UserContext
 
@@ -54,12 +53,13 @@ function Header() {
   const handleLogoutDialogClose = (confirm) => {
     if (confirm) {
       setUser(null); // Clear user context (simulate logout)
-      console.log("User logged out"); // Replace with actual logout logic
+      localStorage.removeItem('user');
+      console.log('User logged out'); // Replace with actual logout logic
     }
     setLogoutDialogOpen(false);
   };
 
-  const hideBackButtonRoutes = ["/"]; // Add any routes where the BackButton should not appear
+  const hideBackButtonRoutes = ['/']; // Add any routes where the BackButton should not appear
   const showBackButton = !hideBackButtonRoutes.includes(location.pathname);
 
   // Check if the button matches the current active page
@@ -70,15 +70,20 @@ function Header() {
       {/* Header Part A */}
       <Toolbar className="part-a">
         <Typography variant="h6" className="logo">
-        <img src={logo} alt="Logo" className="logo-image" />
-          BarkBuddy {user && <p>Welcome, {user?.firstname} {user?.lastname}!</p>}
+          <img src={logo} alt="Logo" className="logo-image" />
+          BarkBuddy{' '}
+          {user && (
+            <p>
+              Welcome, {user?.firstname} {user?.lastname}!
+            </p>
+          )}
         </Typography>
         <Box className="icons-container">
           <Tooltip title="My Profile">
             <IconButton
               component={Link}
               to="/my-profile"
-              color={isActive("/my-profile") ? "secondary" : "inherit"}
+              color={isActive('/my-profile') ? 'secondary' : 'inherit'}
             >
               <AccountCircleIcon />
             </IconButton>
@@ -87,7 +92,7 @@ function Header() {
             <IconButton
               component={Link}
               to="/my-buddies"
-              color={isActive("/my-buddies") ? "secondary" : "inherit"}
+              color={isActive('/my-buddies') ? 'secondary' : 'inherit'}
             >
               <GroupIcon />
             </IconButton>
@@ -117,37 +122,44 @@ function Header() {
           </IconButton>
         ) : (
           <Box className="buttons-container">
-  {showBackButton && (
-    <Tooltip title="Go Back">
-      <span> {/* Ensure valid DOM element wrapping BackButton */}
-        <BackButton />
-      </span>
-    </Tooltip>
-  )}
-  {[
-    "/", // Navigation paths
-    "/meet-buddies",
-    "/my-profile",
-    "/my-buddies",
-    "/my-meetings",
-    "/my-chat",
-    "/friend-requests",
-  ].map((path, index) => (
-    <Tooltip title={` ${path.replace("/", "").replace("-", " ").toUpperCase() || "Homepage"}`} key={index}>
-      <span>
-        <Button
-          component={Link}
-          to={path}
-          className={`nav-button ${isActive(path) ? "active" : ""}`}
-        >
-          {path.replace("/", "").replace("-", " ").toUpperCase() || "HOMEPAGE"}
-        </Button>
-      </span>
-    </Tooltip>
-  ))}
-</Box>
-
-        
+            {showBackButton && (
+              <Tooltip title="Go Back">
+                <span>
+                  {' '}
+                  {/* Ensure valid DOM element wrapping BackButton */}
+                  <BackButton />
+                </span>
+              </Tooltip>
+            )}
+            {[
+              '/', // Navigation paths
+              '/meet-buddies',
+              '/my-profile',
+              '/my-buddies',
+              '/my-meetings',
+              '/my-chat',
+              '/friend-requests',
+            ].map((path, index) => (
+              <Tooltip
+                title={` ${
+                  path.replace('/', '').replace('-', ' ').toUpperCase() ||
+                  'Homepage'
+                }`}
+                key={index}
+              >
+                <span>
+                  <Button
+                    component={Link}
+                    to={path}
+                    className={`nav-button ${isActive(path) ? 'active' : ''}`}
+                  >
+                    {path.replace('/', '').replace('-', ' ').toUpperCase() ||
+                      'HOMEPAGE'}
+                  </Button>
+                </span>
+              </Tooltip>
+            ))}
+          </Box>
         )}
         <Menu
           anchorEl={anchorEl}
@@ -156,13 +168,13 @@ function Header() {
         >
           {[
             // List of navigation paths in mobile menu
-            "/",
-            "/meet-buddies",
-            "/my-profile",
-            "/my-buddies",
-            "/my-meetings",
-            "/my-chat",
-            "/friend-requests",
+            '/',
+            '/meet-buddies',
+            '/my-profile',
+            '/my-buddies',
+            '/my-meetings',
+            '/my-chat',
+            '/friend-requests',
           ].map((path, index) => (
             <MenuItem
               key={index}
@@ -170,8 +182,8 @@ function Header() {
               to={path}
               onClick={handleMenuClose}
             >
-              {path.replace("/", "").replace("-", " ").toUpperCase() ||
-                "HOMEPAGE"}
+              {path.replace('/', '').replace('-', ' ').toUpperCase() ||
+                'HOMEPAGE'}
             </MenuItem>
           ))}
         </Menu>

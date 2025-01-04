@@ -30,7 +30,7 @@ function HomePage() {
             Get Started
           </Button>
         </Box>
-        <img src={backgroundImage} alt="Dogs" />
+        <img src={backgroundImage} alt="Dogs" className="homepage-image" />
       </Container>
     </div>
   );

@@ -131,3 +131,20 @@
   border-radius: 8px;
   transition: background-color 0.3s ease;
 }
+
+@media (max-width: 600px) {
+  .dog-item {
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center align all items */
+    gap: 15px; /* Add space between items */
+  }
+}
+
+@media (max-width: 600px) {
+  .view-profile-btn,
+  .delete-buddy-btn {
+    padding: 6px 8px; /* Compact padding */
+    font-size: 0.8em; /* Reduce font size */
+  }
+}
+

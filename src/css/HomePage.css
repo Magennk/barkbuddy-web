@@ -6,6 +6,8 @@
   height: 100vh;
   text-align: center;
   background-color: #fef0b9;
+  padding: 20px; /* Add padding for better spacing */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
 
 .welcome-section {
@@ -33,3 +35,12 @@
 .cta-button:hover {
   background-color: #1565c0;
 }
+
+.homepage-image {
+  max-width: 100%; /* Ensure the image does not exceed its container width */
+  height: auto; /* Maintain the aspect ratio */
+  margin-top: 20px; /* Optional: Add spacing above the image */
+}
+
+
+

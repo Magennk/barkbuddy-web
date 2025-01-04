@@ -1,126 +1,140 @@
 /* Overall container for the Friend Requests page */
 .friend-requests-container {
-    max-width: 900px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f8e28c;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Page title */
-  .page-title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-weight: bold;
-    color: #1565c0;
-  }
-  
-  /* List of friend requests */
-  .requests-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  /* Individual request item */
-  .request-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #ffffff;
-    padding: 10px 15px;
-    border-radius: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  
-  .request-item:hover {
-    transform: scale(1.01);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Dog avatar */
-  .dog-avatar {
-    border: 2px solid #1565c0;
-  }
-  
-  /* Dog details (name and city) */
-  .dog-details {
-    flex: 1;
-    margin-left: 15px;
-  }
-  
-  .dog-name {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .dog-city {
-    font-size: 0.9em;
-    color: #666;
-  }
-  
-  /* Confirm and Delete buttons */
-  .action-buttons {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .confirm-btn, .delete-btn {
-    font-size: 0.9em;
-    font-weight: bold;
-    text-transform: capitalize;
-    border-radius: 5px;
-    padding: 8px 16px;
-  }
-  
-  .confirm-btn {
-    background-color: #388e3c; /* Green color */
-    color: #fff;
-    &:hover {
-      background-color: #2c6e2d;
-    }
-  }
-  
-  .delete-btn {
-    background-color: #d32f2f; /* Red color */
-    color: #fff;
-    &:hover {
-      background-color: #b71c1c;
-    }
-  }
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f8e28c;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-  .spinner-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
+/* Page title */
+.page-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #1565c0;
+}
+
+/* List of friend requests */
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Individual request item */
+.request-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.request-item:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Dog avatar */
+.dog-avatar {
+  border: 2px solid #1565c0;
+}
+
+/* Dog details (name and city) */
+.dog-details {
+  flex: 1;
+  margin-left: 15px;
+}
+
+.dog-name {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+}
+
+.dog-city {
+  font-size: 0.9em;
+  color: #666;
+}
+
+/* Confirm and Delete buttons */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.confirm-btn, .delete-btn {
+  font-size: 0.9em;
+  font-weight: bold;
+  text-transform: capitalize;
+  border-radius: 5px;
+  padding: 8px 16px;
+}
+
+.confirm-btn {
+  background-color: #388e3c; /* Green color */
+  color: #fff;
+  &:hover {
+    background-color: #2c6e2d;
   }
+}
+
+.delete-btn {
+  background-color: #d32f2f; /* Red color */
+  color: #fff;
+  &:hover {
+    background-color: #b71c1c;
+  }
+}
+
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.no-requests-message {
+  text-align: center;
+  color: gray;
+  margin-top: 50px;
+}
+.dialog-yes-button {
+  background-color: #4caf50 !important; /* Green background */
+  color: black !important; /* Black text */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.dialog-no-button {
+  background-color: #d3d3d3 !important; /* Light grey background */
+  color: black !important; /* Black text */
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
   
-  .error-message {
-    color: red;
-    text-align: center;
-    margin-top: 50px;
+@media (max-width: 600px) {
+  .request-item {
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center align all items */
   }
-  
-  .no-requests-message {
-    text-align: center;
-    color: gray;
-    margin-top: 50px;
+}
+
+@media (max-width: 600px) {
+  .confirm-btn,
+  .delete-btn {
+    padding: 6px 8px; /* Reduce padding for smaller screens */
+    font-size: 0.8em; /* Adjust font size for smaller screens */
   }
-  .dialog-yes-button {
-    background-color: #4caf50 !important; /* Green background */
-    color: black !important; /* Black text */
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .dialog-no-button {
-    background-color: #d3d3d3 !important; /* Light grey background */
-    color: black !important; /* Black text */
-    border-radius: 8px;
-    transition: background-color 0.3s ease;
-  }
-  
+}

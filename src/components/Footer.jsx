@@ -43,13 +43,13 @@ function Footer() {
           <Grid item xs={12} sm={4}>
             <Typography className="footer-header">Follow Us</Typography>
             <Box className="footer-social-icons">
-              <IconButton className="footer-icon" href="#">
+              <IconButton className="footer-icon" href="https://facebook.com/barkbuddy">
                 <FacebookIcon />
               </IconButton>
-              <IconButton className="footer-icon" href="#">
+              <IconButton className="footer-icon" href="https://twitter.com/barkbuddy">
                 <TwitterIcon />
               </IconButton>
-              <IconButton className="footer-icon" href="#">
+              <IconButton className="footer-icon" href="https://www.linkedin.com/company/barkbuddy/?trk=public_post_feed-actor-image&originalSubdomain=uk">
                 <LinkedInIcon />
               </IconButton>
             </Box>

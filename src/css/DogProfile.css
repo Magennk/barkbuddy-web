@@ -127,8 +127,9 @@
 }
 
 .equal-button {
-  min-width: 200px;
-  height: 40px;
+  width: 90%; /* Make buttons take up most of the screen width */
+  min-width: unset; /* Remove the fixed min-width */
+  font-size: 14px; /* Adjust font size for smaller screens */
 }
 
 
@@ -142,4 +143,18 @@
   cursor: pointer; /* Pointer cursor on hover */
   text-transform: none; /* Prevent all-uppercase text */
   transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+@media (max-width: 768px) {
+  .profile-actions {
+    margin: 0 auto; /* Center the container */
+    padding: 0 10px; /* Add padding to prevent edge overflow */
+  }
+}
+@media (max-width: 768px) {
+  .profile-actions {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 15px; /* Add spacing between buttons */
+    align-items: center; /* Center-align buttons */
+  }
 }
