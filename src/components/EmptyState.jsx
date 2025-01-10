@@ -1,40 +1,27 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { Box, Typography, Button } from "@mui/material";
-import logo from "../assets/logo.png"; // Update `logo.png` to the actual file name
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Box, Typography, Button } from '@mui/material';
+import logo from '../assets/logo.png';
+import '../css/EmptyState.css'; // Importing the separated CSS file
 
 const EmptyState = ({ message }) => {
   const navigate = useNavigate();
 
   const handleGoHome = () => {
-    navigate("/");
+    navigate('/');
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-        textAlign: "center",
-        padding: 2,
-      }}
-    >
-      <img
-        src={logo}
-        alt="Logo"
-        style={{ width: "100px", height: "100px", marginBottom: "20px" }}
-      />
-      <Typography variant="h5" sx={{ marginBottom: "20px" }}>
+    <Box className="empty-state-container">
+      <img src={logo} alt="Logo" className="empty-state-logo" />
+      <Typography variant="h5" className="empty-state-message">
         {message}
       </Typography>
       <Button
         variant="contained"
         color="primary"
         onClick={handleGoHome}
-        sx={{ padding: "10px 20px" }}
+        className="empty-state-button"
       >
         Go to Homepage
       </Button>

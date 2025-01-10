@@ -1,0 +1,35 @@
+/* EmptyState CSS Styling */
+
+.empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.empty-state-logo {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+.empty-state-message {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.empty-state-button {
+  padding: 10px 20px;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.empty-state-button:hover {
+  background-color: #283593;
+}

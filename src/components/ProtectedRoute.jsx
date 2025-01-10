@@ -1,7 +1,7 @@
-import React from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useContext } from "react";
-import { UserContext } from "../context/UserContext"; // Import User Context
+import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from '../context/UserContext'; // Import User Context
 
 /**
  * A higher-order component to protect routes.

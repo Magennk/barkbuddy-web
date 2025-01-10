@@ -9,16 +9,23 @@
 }
 
 .register-header {
+  padding: 4%;
+  margin-top: 20px;
   margin-bottom: 20px;
   color: #1565c0;
 }
 
 .stepper {
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0;
 }
 
+/* Step Content Adjustments */
 .step-content {
-  margin: 20px 0;
+  margin: 20px 5px;
+  padding: 5px;
 }
 
 .error-text {
@@ -32,14 +39,22 @@
   color: #555;
 }
 
+/* Button Group Adjustments */
 .button-group {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-top: 20px;
 }
 
 button {
-  min-width: 100px;
+  flex: 1; /* Make buttons take up equal space */
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
 }
 
 /* Style for asterisk in required field labels */
@@ -112,3 +127,48 @@ button {
   margin-left: 10px;
 }
 
+/* Media Queries for Tablets */
+@media (max-width: 768px) {
+  .register-container {
+    padding: 15px;
+    width: 95%;
+  }
+
+  .stepper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
+/* Media Queries for Mobile Devices */
+@media (max-width: 480px) {
+  .register-container {
+    width: 95%;
+    padding: 1%;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .step-content {
+    padding: 10px;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+  }
+
+  .upload-container {
+    align-items: center;
+  }
+}
