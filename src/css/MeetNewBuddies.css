@@ -24,7 +24,7 @@
 .dog-card-container {
   flex: 1 1 35%; /* By default, 4 cards per row (25% width each) */
   max-width: 300px; /* Prevent the cards from becoming too wide */
-  margin: 10px; /* Add spacing between cards */
+  margin: 10px auto; /* Add spacing between cards */
   box-sizing: border-box; /* Include padding and borders in size calculation */
 }
 
@@ -97,7 +97,7 @@
 /* Individual filter items */
 .filter-item {
   margin-bottom: 15px; /* Space between filter dropdowns */
-  min-width: 200px  !important; /* Minimum width for each filter */
+  min-width: 200px !important; /* Minimum width for each filter */
   background-color: #b9dbfd;
 }
 
@@ -138,7 +138,10 @@
 
 .filters {
   display: grid; /* Use grid layout */
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Create columns for filters */
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(150px, 1fr)
+  ); /* Create columns for filters */
   gap: 10px; /* Add space between items */
   align-items: center; /* Center items vertically */
   justify-content: center; /* Horizontally center filters */
@@ -147,10 +150,10 @@
   margin-left: auto; /* Center horizontally */
   margin-right: auto; /* Center horizontally */
   background-color: #e8f2ff;
- padding: 15px;
- outline-style: solid;
- outline-width: thin;
- outline-color: darkgray;
+  padding: 15px;
+  outline-style: solid;
+  outline-width: thin;
+  outline-color: darkgray;
 }
 
 .filter-item .MuiOutlinedInput-root {
@@ -160,7 +163,7 @@
 }
 
 .filter-item .MuiSelect-root {
-  background-color: #b9dbfd  !important; /* Ensure the dropdown background matches */
+  background-color: #b9dbfd !important; /* Ensure the dropdown background matches */
 }
 
 .filter-item .MuiSelect-select {
@@ -176,4 +179,3 @@
   background-color: #a8c8ef; /* Slightly darker focus color */
   border: 1px solid #1976d2; /* Optional: Add a focus border */
 }
-

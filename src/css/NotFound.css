@@ -3,11 +3,11 @@
   margin: 0 auto;
   padding: 20px;
   background-color: #f9f9f9; /* Light background */
+  height: 100vh; /* Full viewport height */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px; /* Adds space between elements */
 }
 
 .not-found-container h1 {
@@ -21,7 +21,7 @@
   margin-bottom: 20px;
 }
 
-.back-button-not-found {
+.back-button {
   padding: 10px 20px;
   font-size: 1rem;
   background-color: #3f51b5; /* Primary color */
@@ -32,6 +32,6 @@
   transition: all 0.3s ease;
 }
 
-.back-button-not-found:hover {
+.back-button:hover {
   background-color: #283593; /* Darker primary */
 }
